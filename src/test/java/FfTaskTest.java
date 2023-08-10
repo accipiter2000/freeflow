@@ -92,7 +92,7 @@ public class FfTaskTest {
     @Test
     public void forwardTask() throws Exception {
         String taskId = "ab7399d31d5646eeb702d27c79c0d7e7";
-        FfResult ffResult = ffService.forwardTask(taskId, Arrays.asList("1", "2"), "action", null, 5, false, "exec");
+        FfResult ffResult = ffService.forwardTask(taskId, Arrays.asList("1", "2"), "action", null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, 5, "exec");
         System.out.println(ffResult);
     }
 

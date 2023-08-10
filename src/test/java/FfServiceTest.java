@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.opendynamic.OdUtils;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.Operation;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.RunningNodeDef;
 import com.opendynamic.ff.vo.RunningProcDef;
@@ -31,8 +32,9 @@ public class FfServiceTest {
         nodeVarMap.put("assignee", "zhang");
         nodeVarMap.put("INIT_COM_ID_", "259");
         nodeVarMap.put("initPosiEmpId", "abcde12345");
+        nodeVarMap.put("amountOfMoney", "2000");
 
-        FfResult ffResult = ffService.startProcByProcDefCode("stageDemo", "bizId", "bizType", "bizCode", "bizName", "li", nodeVarMap);
+        FfResult ffResult = ffService.startProcByProcDefCode("isolateSubProcDemo", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap);
 
         System.out.println(ffResult);
     }
@@ -44,14 +46,14 @@ public class FfServiceTest {
         nodeVarMap.put("INIT_COM_ID_", "259");
         nodeVarMap.put("initPosiEmpId", "abcde12345");
 
-        FfResult ffResult = ffService.startIsolateSubProc("b90fc95467e34eb78048bb882446d898", "bizId", "bizType", "bizCode", "bizName", "li", nodeVarMap);
+        FfResult ffResult = ffService.startIsolateSubProc("04ddee031d394751846296963316ba01", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap);
 
         System.out.println(ffResult);
     }
 
     @Test
     public void completeTask() throws Exception {
-        String taskId = "d317059b70fa4bf3acee92ce560667cb";
+        String taskId = "7acb4c300b2d418985be8dba79f28c03";
         Map<String, Object> branchNodeVar = new HashMap<>();
         branchNodeVar.put("assignee", "z3");
         // branchNodeVar.put("STEP", "3");
@@ -75,11 +77,12 @@ public class FfServiceTest {
         // List<String> assigneeList = Arrays.asList("z5");
         String action = "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}";
         Date dueDate = null;
+        String claim = FfService.BOOLEAN_FALSE;
+        String forwarable = FfService.BOOLEAN_FALSE;
         Integer priority = 5;
-        boolean forwarable = false;
         String executor = "SYSADMIN";
 
-        FfResult ffResult = ffService.forwardTask(taskId, assigneeList, action, dueDate, priority, forwarable, executor);
+        FfResult ffResult = ffService.forwardTask(taskId, assigneeList, action, dueDate, claim, forwarable, priority, executor);
         System.out.println(ffResult);
     }
 
@@ -135,7 +138,7 @@ public class FfServiceTest {
 
     @Test
     public void undo() throws Exception {
-        String operationId = "e91d72679898468db3e8c1f582e65740";
+        String operationId = "670c5e76de2449c9a588e83874c33c5a";
         FfResult ffResult = ffService.undo(operationId);
         System.out.println(ffResult);
     }
@@ -155,8 +158,8 @@ public class FfServiceTest {
     @Test
     public void getRunningProcDef() throws Exception {
         long startTime = System.currentTimeMillis();
-        String procId = "0fc78eb1c2fa4a9fb8b39a7605d202c9";
-        String taskId = "67bbb9c1de92425d9a3a878eccdddb66";
+        String procId = "44ebfcc770fb4f3e806af87280534f03";
+        String taskId = "7ea88adc2ab74151b5eecf09839c4701";
         boolean drawOptional = true;
         RunningProcDef runningProcDef = ffService.getRunningProcDef(procId, taskId, drawOptional);
 
@@ -197,5 +200,15 @@ public class FfServiceTest {
     @Test
     public void insertDelegate() {
         ffService.insertDelegate(OdUtils.getUuid(), null, null, "SYSADMIN", "系统管理员", null, null);
+    }
+
+    @Test
+    public void createOperationQuery() throws Exception {
+        String procId = "e277901ee99b43469678a7cc6ef7afe0";
+        List<Operation> operationList = ffService.createOperationQuery().setProcId(procId).queryForObjectList();
+
+        for (Operation operation : operationList) {
+            System.out.println(operation.getNodeId());
+        }
     }
 }

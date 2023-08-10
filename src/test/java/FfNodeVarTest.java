@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,21 +28,13 @@ public class FfNodeVarTest {
 
     @Test
     public void createNodeVarQuery() throws Exception {
-        NodeVarQuery nodeVarQuery = ffService.createNodeVarQuery().setNodeId("18f6467de2e549d1be91ef83fdd0fa0c");
+        NodeVarQuery nodeVarQuery = ffService.createNodeVarQuery().setNodeId("d7e4800ea6f948c7bac57fdd9e4cbfee").setRecursive(true);
 
         for (NodeVar nodeVar : nodeVarQuery.queryForObjectList()) {
             System.out.println(nodeVar.getCreationDate());
         }
         System.out.println(nodeVarQuery.count());
         System.out.println(nodeVarQuery.queryForMap());
-    }
-
-    @Test
-    public void selectNodeVarByIdList() throws Exception {
-        List<NodeVar> nodeVarList = ffService.selectNodeVarByIdList(Arrays.asList("c8455c9652894d4b8d7f7721d897efd8", "905ebc951f2d479c94b3c5755a4f6bc5"));
-        for (NodeVar nodeVar : nodeVarList) {
-            System.out.println(nodeVar.getCreationDate());
-        }
     }
 
     @Test

@@ -26,7 +26,8 @@ public class FfProcTest {
 
     @Test
     public void createProcQuery() throws Exception {
-        List<Proc> procList = ffService.createProcQuery().setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        // List<Proc> procList = ffService.createProcQuery().setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        List<Proc> procList = ffService.createProcQuery().setProcStatus(FfService.PROC_STATUS_ACTIVE).queryForObjectList();
         for (Proc proc : procList) {
             System.out.println(proc.getCreationDate());
         }
@@ -36,7 +37,8 @@ public class FfProcTest {
 
     @Test
     public void createInvolvedProcQuery() throws Exception {
-        List<Proc> procList = ffService.createInvolvedProcQuery().setAssigneeList(Arrays.asList("z34")).setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        // List<Proc> procList = ffService.createInvolvedProcQuery().setAssigneeList(Arrays.asList("z34")).setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        List<Proc> procList = ffService.createInvolvedProcQuery().setAssignee("bff006f0658e43748e1bf7e578fa7f80").queryForObjectList();
         for (Proc proc : procList) {
             System.out.println(proc.getCreationDate());
         }
@@ -45,17 +47,9 @@ public class FfProcTest {
     }
 
     @Test
-    public void selectProcByIdList() throws Exception {
-        List<Proc> procList = ffService.selectProcByIdList(Arrays.asList("266dd28c8eff43409596f5324f8ca99d", "3017bc554299420d97e91a811c63eef4"));
-        for (Proc proc : procList) {
-            System.out.println(proc.getCreationDate());
-        }
-    }
-
-    @Test
     public void updateProcBizInfo() throws Exception {
         String procId = "266dd28c8eff43409596f5324f8ca99d";
-        ffService.updateProcBizInfo(procId, "bizId4", "bizType2", "bizCode3", "bizName2");
+        ffService.updateProcBizInfo(procId, "bizId4", "bizType2", "bizCode3", "bizName2", "bizDesc5");
     }
 
     @Test

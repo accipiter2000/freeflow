@@ -28,19 +28,19 @@ public class FfNodeTest {
 
     @Test
     public void createNodeQuery() throws Exception {
-        List<Node> nodeList = ffService.createNodeQuery().setProcId("42648e28e9414965b36a1f5727b5fb0c").queryForObjectList();
+        List<Node> nodeList = ffService.createNodeQuery().setProcId("a8303781041e44c0b18d7d248e29b529").queryForObjectList();
         for (Node node : nodeList) {
             System.out.println(node.getCreationDate());
         }
-        System.out.println(ffService.createNodeQuery().setProcId("42648e28e9414965b36a1f5727b5fb0c").count());
+        System.out.println(ffService.createNodeQuery().setProcId("a8303781041e44c0b18d7d248e29b529").count());
 
-        Node node = ffService.createNodeQuery().setProcId("42648e28e9414965b36a1f5727b5fb0c").setNodeTypeList(Arrays.asList(FfService.NODE_TYPE_BRANCH)).queryForObject();
+        Node node = ffService.createNodeQuery().setProcId("a8303781041e44c0b18d7d248e29b529").setNodeType(FfService.NODE_TYPE_BRANCH).queryForObject();
         System.out.println(node.getCreationDate());
     }
 
     @Test
     public void createParentNodeQuery() throws Exception {
-        String nodeId = "b98c2598b5c4479e8bb4cbc4bdd1156f";
+        String nodeId = "d7e4800ea6f948c7bac57fdd9e4cbfee";
         ParentNodeQuery parentNodeQuery = ffService.createParentNodeQuery().setNodeId(nodeId);
         System.out.println(parentNodeQuery.queryForObject().getNodeId());
 
@@ -56,9 +56,9 @@ public class FfNodeTest {
 
     @Test
     public void createChildNodeQuery() throws Exception {
-        String nodeId = "3017bc554299420d97e91a811c63eef4";
+        String nodeId = "d7e4800ea6f948c7bac57fdd9e4cbfee";
         ChildNodeQuery childNodeQuery = ffService.createChildNodeQuery().setNodeId(nodeId).setNodeTypeList(Arrays.asList(FfService.NODE_TYPE_SUB_PROC));
-        System.out.println(childNodeQuery.queryForObject().getNodeId());
+        System.out.println(childNodeQuery.queryForObject());
 
         childNodeQuery.setNodeTypeList(null);
         childNodeQuery.setIncludeSelf(true);
@@ -69,14 +69,6 @@ public class FfNodeTest {
         }
 
         System.out.println(childNodeQuery.count());
-    }
-
-    @Test
-    public void selectNodeByIdList() throws Exception {
-        List<Node> nodeList = ffService.selectNodeByIdList(Arrays.asList("00e04b46546d4e46983a16e0d4684608", "a190f57a2ec74e8a9eb0e64384172050"));
-        for (Node node : nodeList) {
-            System.out.println(node.getCreationDate());
-        }
     }
 
     @Test
