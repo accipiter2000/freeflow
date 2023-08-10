@@ -1,5 +1,5 @@
 prompt PL/SQL Developer Export User Objects for user FF@FFOA
-prompt Created by Administrator on 2023Äê3ÔÂ29ÈÕ
+prompt Created by Administrator on 2023å¹´8æœˆ10æ—¥
 set define off
 spool 1.log
 
@@ -29,41 +29,41 @@ create table FF_PROC_DEF
 )
 ;
 comment on table FF_PROC_DEF
-  is 'Á÷³Ì¶¨Òå';
+  is 'æµç¨‹å®šä¹‰';
 comment on column FF_PROC_DEF.proc_def_id_
-  is 'Á÷³Ì¶¨ÒåID';
+  is 'æµç¨‹å®šä¹‰ID';
 comment on column FF_PROC_DEF.proc_def_code_
-  is 'Á÷³Ì¶¨Òå±àÂë';
+  is 'æµç¨‹å®šä¹‰ç¼–ç ';
 comment on column FF_PROC_DEF.proc_def_name_
-  is 'Á÷³Ì¶¨ÒåÃû³Æ';
+  is 'æµç¨‹å®šä¹‰åç§°';
 comment on column FF_PROC_DEF.proc_def_cat_
-  is 'Á÷³Ì¶¨Òå·ÖÀà';
+  is 'æµç¨‹å®šä¹‰åˆ†ç±»';
 comment on column FF_PROC_DEF.proc_def_model_
-  is 'Á÷³Ì¶¨ÒåÄ£ĞÍ';
+  is 'æµç¨‹å®šä¹‰æ¨¡å‹';
 comment on column FF_PROC_DEF.proc_def_diagram_file_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼ş';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶';
 comment on column FF_PROC_DEF.proc_def_diagram_file_name_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼şÃû³Æ';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶åç§°';
 comment on column FF_PROC_DEF.proc_def_diagram_file_length_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼ş³¤¶È';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶é•¿åº¦';
 comment on column FF_PROC_DEF.proc_def_diagram_width_
-  is 'Á÷³Ì¶¨ÒåÍ¼¿í¶È';
+  is 'æµç¨‹å®šä¹‰å›¾å®½åº¦';
 comment on column FF_PROC_DEF.proc_def_diagram_height_
-  is 'Á÷³Ì¶¨ÒåÍ¼¸ß¶È';
+  is 'æµç¨‹å®šä¹‰å›¾é«˜åº¦';
 comment on column FF_PROC_DEF.memo_
-  is '±¸×¢';
+  is 'å¤‡æ³¨';
 comment on column FF_PROC_DEF.version_
-  is '°æ±¾';
+  is 'ç‰ˆæœ¬';
 comment on column FF_PROC_DEF.proc_def_status_
-  is 'Á÷³Ì¶¨Òå×´Ì¬';
+  is 'æµç¨‹å®šä¹‰çŠ¶æ€';
 comment on column FF_PROC_DEF.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 comment on column FF_PROC_DEF.update_date_
-  is '¸üĞÂÈÕÆÚ';
+  is 'æ›´æ–°æ—¥æœŸ';
 comment on column FF_PROC_DEF.operator_id_
-  is '²Ù×÷ÈËÔ±ID';
+  is 'æ“ä½œäººå‘˜ID';
 comment on column FF_PROC_DEF.operator_name_
-  is '²Ù×÷ÈËÔ±Ãû³Æ';
+  is 'æ“ä½œäººå‘˜åç§°';
 alter table FF_PROC_DEF
   add constraint PK_FF_PROC_DEF primary key (PROC_DEF_ID_);
 alter table FF_PROC_DEF
@@ -90,31 +90,31 @@ create table FF_ADJUST_PROC_DEF
 )
 ;
 comment on table FF_ADJUST_PROC_DEF
-  is 'µ÷ÕûÁ÷³Ì¶¨Òå';
+  is 'è°ƒæ•´æµç¨‹å®šä¹‰';
 comment on column FF_ADJUST_PROC_DEF.adjust_proc_def_id_
-  is 'µ÷ÕûÁ÷³Ì¶¨ÒåID';
+  is 'è°ƒæ•´æµç¨‹å®šä¹‰ID';
 comment on column FF_ADJUST_PROC_DEF.proc_def_id_
-  is 'Á÷³Ì¶¨ÒåID';
+  is 'æµç¨‹å®šä¹‰ID';
 comment on column FF_ADJUST_PROC_DEF.proc_def_model_
-  is 'Á÷³Ì¶¨ÒåÄ£ĞÍ';
+  is 'æµç¨‹å®šä¹‰æ¨¡å‹';
 comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼ş';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶';
 comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_name_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼şÃû³Æ';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶åç§°';
 comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_length_
-  is 'Á÷³Ì¶¨ÒåÍ¼ÎÄ¼ş³¤¶È';
+  is 'æµç¨‹å®šä¹‰å›¾æ–‡ä»¶é•¿åº¦';
 comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_width_
-  is 'Á÷³Ì¶¨ÒåÍ¼¿í¶È';
+  is 'æµç¨‹å®šä¹‰å›¾å®½åº¦';
 comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_height_
-  is 'Á÷³Ì¶¨ÒåÍ¼¸ß¶È';
+  is 'æµç¨‹å®šä¹‰å›¾é«˜åº¦';
 comment on column FF_ADJUST_PROC_DEF.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 comment on column FF_ADJUST_PROC_DEF.update_date_
-  is '¸üĞÂÈÕÆÚ';
+  is 'æ›´æ–°æ—¥æœŸ';
 comment on column FF_ADJUST_PROC_DEF.operator_id_
-  is '²Ù×÷ÈËÔ±ID';
+  is 'æ“ä½œäººå‘˜ID';
 comment on column FF_ADJUST_PROC_DEF.operator_name_
-  is '²Ù×÷ÈËÔ±Ãû³Æ';
+  is 'æ“ä½œäººå‘˜åç§°';
 alter table FF_ADJUST_PROC_DEF
   add constraint PK_FF_ADJUST_PROC_DEF primary key (ADJUST_PROC_DEF_ID_);
 alter table FF_ADJUST_PROC_DEF
@@ -137,23 +137,88 @@ create table FF_DELEGATE
 )
 ;
 comment on table FF_DELEGATE
-  is '´úÀí';
+  is 'ä»£ç†';
 comment on column FF_DELEGATE.delegate_id_
-  is '´úÀíID';
+  is 'ä»£ç†ID';
 comment on column FF_DELEGATE.assignee_
-  is '°ìÀíÈË';
+  is 'åŠç†äºº';
 comment on column FF_DELEGATE.assignee_name_
-  is '°ìÀíÈËÃû³Æ';
+  is 'åŠç†äººåç§°';
 comment on column FF_DELEGATE.delegator_
-  is '´úÀíÈË';
+  is 'ä»£ç†äºº';
 comment on column FF_DELEGATE.delegator_name_
-  is '´úÀíÈËÃû³Æ';
+  is 'ä»£ç†äººåç§°';
 comment on column FF_DELEGATE.start_date_
-  is '¿ªÊ¼ÈÕÆÚ';
+  is 'å¼€å§‹æ—¥æœŸ';
 comment on column FF_DELEGATE.end_date_
-  is '½áÊøÈÕÆÚ';
+  is 'ç»“æŸæ—¥æœŸ';
 alter table FF_DELEGATE
   add constraint PK_FF_DELEGATE primary key (DELEGATE_ID_);
+
+prompt
+prompt Creating table FF_PROC
+prompt ======================
+prompt
+create table FF_PROC
+(
+  proc_id_                  VARCHAR2(40) not null,
+  proc_def_id_              VARCHAR2(40) not null,
+  adjust_proc_def_id_       VARCHAR2(40),
+  isolate_sub_proc_node_id_ VARCHAR2(40),
+  biz_id_                   VARCHAR2(40),
+  biz_type_                 VARCHAR2(60),
+  biz_code_                 VARCHAR2(100),
+  biz_name_                 VARCHAR2(100),
+  biz_desc_                 VARCHAR2(300),
+  proc_start_user_          VARCHAR2(40),
+  proc_start_user_name_     VARCHAR2(60),
+  proc_end_user_            VARCHAR2(40),
+  proc_end_user_name_       VARCHAR2(60),
+  proc_end_date_            TIMESTAMP(6),
+  proc_status_              VARCHAR2(20) not null,
+  creation_date_            TIMESTAMP(6) not null
+)
+;
+comment on table FF_PROC
+  is 'æµç¨‹';
+comment on column FF_PROC.proc_id_
+  is 'æµç¨‹ID';
+comment on column FF_PROC.proc_def_id_
+  is 'æµç¨‹å®šä¹‰ID';
+comment on column FF_PROC.adjust_proc_def_id_
+  is 'è°ƒæ•´æµç¨‹å®šä¹‰ID';
+comment on column FF_PROC.isolate_sub_proc_node_id_
+  is 'ç‹¬ç«‹å­æµç¨‹æ‰€å±èŠ‚ç‚¹ID';
+comment on column FF_PROC.biz_id_
+  is 'ä¸šåŠ¡ä¸»é”®';
+comment on column FF_PROC.biz_type_
+  is 'ä¸šåŠ¡ç±»å‹';
+comment on column FF_PROC.biz_code_
+  is 'ä¸šåŠ¡ç¼–ç ';
+comment on column FF_PROC.biz_name_
+  is 'ä¸šåŠ¡åç§°';
+comment on column FF_PROC.biz_desc_
+  is 'ä¸šåŠ¡å¤‡æ³¨';
+comment on column FF_PROC.proc_start_user_
+  is 'æµç¨‹å¼€å§‹äººå‘˜';
+comment on column FF_PROC.proc_start_user_name_
+  is 'æµç¨‹å¼€å§‹äººå‘˜åç§°';
+comment on column FF_PROC.proc_end_user_
+  is 'æµç¨‹å®Œæˆäººå‘˜';
+comment on column FF_PROC.proc_end_user_name_
+  is 'æµç¨‹å®Œæˆäººå‘˜åç§°';
+comment on column FF_PROC.proc_end_date_
+  is 'æµç¨‹å®Œæˆæ—¥æœŸ';
+comment on column FF_PROC.proc_status_
+  is 'æµç¨‹çŠ¶æ€';
+comment on column FF_PROC.creation_date_
+  is 'åˆ›å»ºæ—¥æœŸ';
+create index FK_PROC_DEF on FF_PROC (PROC_DEF_ID_);
+alter table FF_PROC
+  add constraint PK_FF_PROC primary key (PROC_ID_);
+alter table FF_PROC
+  add constraint FK_FF_PROC_PROC_DEF foreign key (PROC_DEF_ID_)
+  references FF_PROC_DEF (PROC_DEF_ID_);
 
 prompt
 prompt Creating table FF_NODE
@@ -172,18 +237,19 @@ create table FF_NODE
   node_code_                    VARCHAR2(60),
   node_name_                    VARCHAR2(60),
   parent_node_code_             VARCHAR2(100),
-  assignee_                     VARCHAR2(500),
-  candidate_                    VARCHAR2(500),
-  action_                       VARCHAR2(500),
-  due_date_                     VARCHAR2(200),
+  candidate_                    VARCHAR2(200),
   complete_expression_          VARCHAR2(200),
-  complete_return_              VARCHAR2(20) not null,
-  exclusive_                    VARCHAR2(20) not null,
-  forwardable_                  VARCHAR2(20) not null,
-  auto_complete_same_assignee_  VARCHAR2(20) not null,
-  auto_complete_empty_assignee_ VARCHAR2(20) not null,
-  inform_                       VARCHAR2(20) not null,
-  priority_                     INTEGER not null,
+  complete_return_              VARCHAR2(200),
+  exclusive_                    VARCHAR2(200),
+  auto_complete_same_assignee_  VARCHAR2(200),
+  auto_complete_empty_assignee_ VARCHAR2(200),
+  inform_                       VARCHAR2(200),
+  assignee_                     VARCHAR2(200),
+  action_                       VARCHAR2(300),
+  due_date_                     VARCHAR2(200),
+  claim_                        VARCHAR2(200),
+  forwardable_                  VARCHAR2(200),
+  priority_                     VARCHAR2(200),
   node_end_user_                VARCHAR2(40),
   node_end_user_name_           VARCHAR2(60),
   node_end_date_                TIMESTAMP(6),
@@ -194,67 +260,69 @@ create table FF_NODE
 )
 ;
 comment on table FF_NODE
-  is '½Úµã';
+  is 'èŠ‚ç‚¹';
 comment on column FF_NODE.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_NODE.parent_node_id_
-  is 'ÉÏ¼¶½ÚµãID';
+  is 'ä¸Šçº§èŠ‚ç‚¹ID';
 comment on column FF_NODE.proc_id_
-  is 'Á÷³ÌID';
+  is 'æµç¨‹ID';
 comment on column FF_NODE.previous_node_ids_
-  is 'Ç°½ÚµãIDs';
+  is 'å‰èŠ‚ç‚¹IDs';
 comment on column FF_NODE.last_complete_node_ids_
-  is '×îºóÍê³É½ÚµãIDs';
+  is 'æœ€åå®ŒæˆèŠ‚ç‚¹IDs';
 comment on column FF_NODE.sub_proc_def_id_
-  is '×ÓÁ÷³Ì¶¨ÒåID';
+  is 'å­æµç¨‹å®šä¹‰ID';
 comment on column FF_NODE.adjust_sub_proc_def_id_
-  is 'µ÷Õû×ÓÁ÷³Ì¶¨ÒåID';
+  is 'è°ƒæ•´å­æµç¨‹å®šä¹‰ID';
 comment on column FF_NODE.node_type_
-  is '½ÚµãÀàĞÍ';
+  is 'èŠ‚ç‚¹ç±»å‹';
 comment on column FF_NODE.node_code_
-  is '½Úµã±àÂë';
+  is 'èŠ‚ç‚¹ç¼–ç ';
 comment on column FF_NODE.node_name_
-  is '½ÚµãÃû³Æ';
+  is 'èŠ‚ç‚¹åç§°';
 comment on column FF_NODE.parent_node_code_
-  is 'ÉÏ¼¶½Úµã±àÂë';
-comment on column FF_NODE.assignee_
-  is '°ìÀíÈË';
+  is 'ä¸Šçº§èŠ‚ç‚¹ç¼–ç ';
 comment on column FF_NODE.candidate_
-  is 'ºòÑ¡ÈË';
-comment on column FF_NODE.action_
-  is 'ÒµÎñĞĞÎª';
-comment on column FF_NODE.due_date_
-  is '½ØÖ¹ÈÕÆÚ';
+  is 'å€™é€‰äºº';
 comment on column FF_NODE.complete_expression_
-  is 'Íê³É±í´ïÊ½';
+  is 'å®Œæˆè¡¨è¾¾å¼';
 comment on column FF_NODE.complete_return_
-  is 'Íê³Éºó·µ»ØÇ°Ò»¸ö½Úµã';
+  is 'å®Œæˆåè¿”å›å‰ä¸€ä¸ªèŠ‚ç‚¹';
 comment on column FF_NODE.exclusive_
-  is 'ÅÅËû';
-comment on column FF_NODE.forwardable_
-  is '¿É×ª·¢';
+  is 'æ’ä»–';
 comment on column FF_NODE.auto_complete_same_assignee_
-  is '×Ô¶¯Íê³ÉÏàÍ¬°ìÀíÈËÈÎÎñ';
+  is 'è‡ªåŠ¨å®Œæˆç›¸åŒåŠç†äººä»»åŠ¡';
 comment on column FF_NODE.auto_complete_empty_assignee_
-  is '×Ô¶¯Íê³É¿Õ½Úµã';
+  is 'è‡ªåŠ¨å®Œæˆæ²¡æœ‰åŠç†äººèŠ‚ç‚¹';
 comment on column FF_NODE.inform_
-  is 'Í¨Öª';
+  is 'é€šçŸ¥';
+comment on column FF_NODE.assignee_
+  is 'åŠç†äºº';
+comment on column FF_NODE.action_
+  is 'ä¸šåŠ¡è¡Œä¸º';
+comment on column FF_NODE.due_date_
+  is 'æˆªæ­¢æ—¥æœŸ';
+comment on column FF_NODE.claim_
+  is 'è®¤é¢†';
+comment on column FF_NODE.forwardable_
+  is 'å¯è½¬å‘';
 comment on column FF_NODE.priority_
-  is 'ÓÅÏÈ¼¶';
+  is 'ä¼˜å…ˆçº§';
 comment on column FF_NODE.node_end_user_
-  is '½ÚµãÍê³ÉÈËÔ±';
+  is 'èŠ‚ç‚¹å®Œæˆäººå‘˜';
 comment on column FF_NODE.node_end_user_name_
-  is '½ÚµãÍê³ÉÈËÔ±Ãû³Æ';
+  is 'èŠ‚ç‚¹å®Œæˆäººå‘˜åç§°';
 comment on column FF_NODE.node_end_date_
-  is '½ÚµãÍê³ÉÈÕÆÚ';
+  is 'èŠ‚ç‚¹å®Œæˆæ—¥æœŸ';
 comment on column FF_NODE.isolate_sub_proc_def_code_
-  is '¶ÀÁ¢×ÓÁ÷³Ì¶¨Òå±àÂë';
+  is 'ç‹¬ç«‹å­æµç¨‹å®šä¹‰ç¼–ç ';
 comment on column FF_NODE.isolate_sub_proc_status_
-  is '¶ÀÁ¢×ÓÁ÷³Ì×´Ì¬';
+  is 'ç‹¬ç«‹å­æµç¨‹çŠ¶æ€';
 comment on column FF_NODE.node_status_
-  is '½Úµã×´Ì¬';
+  is 'èŠ‚ç‚¹çŠ¶æ€';
 comment on column FF_NODE.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_NODE
   add constraint PK_FF_NODE primary key (NODE_ID_);
 alter table FF_NODE
@@ -271,83 +339,13 @@ alter table FF_NODE
   references FF_PROC_DEF (PROC_DEF_ID_);
 
 prompt
-prompt Creating table FF_PROC
-prompt ======================
-prompt
-create table FF_PROC
-(
-  proc_id_                  VARCHAR2(40) not null,
-  proc_def_id_              VARCHAR2(40) not null,
-  adjust_proc_def_id_       VARCHAR2(40),
-  isolate_sub_proc_node_id_ VARCHAR2(40),
-  biz_id_                   VARCHAR2(40),
-  biz_type_                 VARCHAR2(20),
-  biz_code_                 VARCHAR2(100),
-  biz_name_                 VARCHAR2(100),
-  proc_start_user_          VARCHAR2(40),
-  proc_start_user_name_     VARCHAR2(60),
-  proc_start_date_          TIMESTAMP(6),
-  proc_end_user_            VARCHAR2(40),
-  proc_end_user_name_       VARCHAR2(60),
-  proc_end_date_            TIMESTAMP(6),
-  proc_status_              VARCHAR2(20) not null,
-  creation_date_            TIMESTAMP(6) not null
-)
-;
-comment on table FF_PROC
-  is 'Á÷³Ì';
-comment on column FF_PROC.proc_id_
-  is 'Á÷³ÌID';
-comment on column FF_PROC.proc_def_id_
-  is 'Á÷³Ì¶¨ÒåID';
-comment on column FF_PROC.adjust_proc_def_id_
-  is 'µ÷ÕûÁ÷³Ì¶¨ÒåID';
-comment on column FF_PROC.isolate_sub_proc_node_id_
-  is '¶ÀÁ¢×ÓÁ÷³ÌËùÊô½ÚµãID';
-comment on column FF_PROC.biz_id_
-  is 'ÒµÎñÖ÷¼ü';
-comment on column FF_PROC.biz_type_
-  is 'ÒµÎñÀàĞÍ';
-comment on column FF_PROC.biz_code_
-  is 'ÒµÎñ±àÂë';
-comment on column FF_PROC.biz_name_
-  is 'ÒµÎñÃû³Æ';
-comment on column FF_PROC.proc_start_user_
-  is 'Á÷³Ì¿ªÊ¼ÈËÔ±';
-comment on column FF_PROC.proc_start_user_name_
-  is 'Á÷³Ì¿ªÊ¼ÈËÔ±Ãû³Æ';
-comment on column FF_PROC.proc_start_date_
-  is 'Á÷³Ì¿ªÊ¼ÈÕÆÚ';
-comment on column FF_PROC.proc_end_user_
-  is 'Á÷³ÌÍê³ÉÈËÔ±';
-comment on column FF_PROC.proc_end_user_name_
-  is 'Á÷³ÌÍê³ÉÈËÔ±Ãû³Æ';
-comment on column FF_PROC.proc_end_date_
-  is 'Á÷³ÌÍê³ÉÈÕÆÚ';
-comment on column FF_PROC.proc_status_
-  is 'Á÷³Ì×´Ì¬';
-comment on column FF_PROC.creation_date_
-  is '´´½¨ÈÕÆÚ';
-create index FK_PROC_DEF on FF_PROC (PROC_DEF_ID_);
-alter table FF_PROC
-  add constraint PK_FF_PROC primary key (PROC_ID_);
-alter table FF_PROC
-  add constraint FK_FF_PROC_ISOLATE_NODE foreign key (ISOLATE_SUB_PROC_NODE_ID_)
-  references FF_NODE (NODE_ID_)
-  disable
-  novalidate;
-alter table FF_PROC
-  add constraint FK_FF_PROC_PROC_DEF foreign key (PROC_DEF_ID_)
-  references FF_PROC_DEF (PROC_DEF_ID_);
-
-prompt
 prompt Creating table FF_OPERATION
 prompt ===========================
 prompt
 create table FF_OPERATION
 (
   operation_id_     VARCHAR2(40) not null,
-  operation_        VARCHAR2(40),
+  operation_        VARCHAR2(40) not null,
   proc_id_          VARCHAR2(40),
   node_id_          VARCHAR2(40),
   task_id_          VARCHAR2(40),
@@ -359,27 +357,27 @@ create table FF_OPERATION
 )
 ;
 comment on table FF_OPERATION
-  is '²Ù×÷';
+  is 'æ“ä½œ';
 comment on column FF_OPERATION.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_OPERATION.operation_
-  is '²Ù×÷';
+  is 'æ“ä½œ';
 comment on column FF_OPERATION.proc_id_
-  is 'Á÷³ÌID';
+  is 'æµç¨‹ID';
 comment on column FF_OPERATION.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_OPERATION.task_id_
-  is 'ÈÎÎñID';
+  is 'ä»»åŠ¡ID';
 comment on column FF_OPERATION.memo_
-  is '±¸×¢';
+  is 'å¤‡æ³¨';
 comment on column FF_OPERATION.operator_
-  is '²Ù×÷ÈË';
+  is 'æ“ä½œäºº';
 comment on column FF_OPERATION.operator_name_
-  is '²Ù×÷ÈËÃû³Æ';
+  is 'æ“ä½œäººåç§°';
 comment on column FF_OPERATION.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 comment on column FF_OPERATION.operation_status_
-  is '²Ù×÷×´Ì¬';
+  is 'æ“ä½œçŠ¶æ€';
 alter table FF_OPERATION
   add constraint FF_FF_OPERATION primary key (OPERATION_ID_);
 
@@ -390,8 +388,8 @@ prompt
 create table FF_NODE_OP
 (
   node_op_id_                   VARCHAR2(40) not null,
-  operation_id_                 VARCHAR2(40),
-  operation_type_               VARCHAR2(20),
+  operation_id_                 VARCHAR2(40) not null,
+  operation_type_               VARCHAR2(20) not null,
   operation_order_              INTEGER,
   operation_date_               TIMESTAMP(6),
   operation_status_             VARCHAR2(20),
@@ -406,18 +404,19 @@ create table FF_NODE_OP
   node_code_                    VARCHAR2(60),
   node_name_                    VARCHAR2(60),
   parent_node_code_             VARCHAR2(60),
-  assignee_                     VARCHAR2(500),
-  candidate_                    VARCHAR2(500),
-  action_                       VARCHAR2(500),
-  due_date_                     VARCHAR2(200),
+  candidate_                    VARCHAR2(200),
   complete_expression_          VARCHAR2(200),
-  complete_return_              VARCHAR2(20),
-  exclusive_                    VARCHAR2(20),
-  forwardable_                  VARCHAR2(20),
-  auto_complete_same_assignee_  VARCHAR2(20),
-  auto_complete_empty_assignee_ VARCHAR2(20),
-  inform_                       VARCHAR2(20),
-  priority_                     INTEGER,
+  complete_return_              VARCHAR2(200),
+  exclusive_                    VARCHAR2(200),
+  auto_complete_same_assignee_  VARCHAR2(200),
+  auto_complete_empty_assignee_ VARCHAR2(200),
+  inform_                       VARCHAR2(200),
+  assignee_                     VARCHAR2(200),
+  action_                       VARCHAR2(200),
+  due_date_                     VARCHAR2(200),
+  claim_                        VARCHAR2(200),
+  forwardable_                  VARCHAR2(200),
+  priority_                     VARCHAR2(200),
   node_end_user_                VARCHAR2(40),
   node_end_user_name_           VARCHAR2(60),
   node_end_date_                TIMESTAMP(6),
@@ -428,79 +427,81 @@ create table FF_NODE_OP
 )
 ;
 comment on table FF_NODE_OP
-  is '½Úµã²Ù×÷';
+  is 'èŠ‚ç‚¹æ“ä½œ';
 comment on column FF_NODE_OP.node_op_id_
-  is '½Úµã²Ù×÷ID';
+  is 'èŠ‚ç‚¹æ“ä½œID';
 comment on column FF_NODE_OP.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_NODE_OP.operation_type_
-  is '²Ù×÷ÀàĞÍ';
+  is 'æ“ä½œç±»å‹';
 comment on column FF_NODE_OP.operation_order_
-  is '²Ù×÷Ë³Ğò';
+  is 'æ“ä½œé¡ºåº';
 comment on column FF_NODE_OP.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 comment on column FF_NODE_OP.operation_status_
-  is '²Ù×÷×´Ì¬';
+  is 'æ“ä½œçŠ¶æ€';
 comment on column FF_NODE_OP.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_NODE_OP.parent_node_id_
-  is 'ÉÏ¼¶½ÚµãID';
+  is 'ä¸Šçº§èŠ‚ç‚¹ID';
 comment on column FF_NODE_OP.proc_id_
-  is 'Á÷³ÌID';
+  is 'æµç¨‹ID';
 comment on column FF_NODE_OP.previous_node_ids_
-  is 'Ç°½ÚµãIDs';
+  is 'å‰èŠ‚ç‚¹IDs';
 comment on column FF_NODE_OP.last_complete_node_ids_
-  is '×îºóÍê³É½ÚµãIDs';
+  is 'æœ€åå®ŒæˆèŠ‚ç‚¹IDs';
 comment on column FF_NODE_OP.sub_proc_def_id_
-  is '×ÓÁ÷³Ì¶¨ÒåID';
+  is 'å­æµç¨‹å®šä¹‰ID';
 comment on column FF_NODE_OP.adjust_sub_proc_def_id_
-  is 'µ÷Õû×ÓÁ÷³Ì¶¨ÒåID';
+  is 'è°ƒæ•´å­æµç¨‹å®šä¹‰ID';
 comment on column FF_NODE_OP.node_type_
-  is '½ÚµãÀàĞÍ';
+  is 'èŠ‚ç‚¹ç±»å‹';
 comment on column FF_NODE_OP.node_code_
-  is '½Úµã±àÂë';
+  is 'èŠ‚ç‚¹ç¼–ç ';
 comment on column FF_NODE_OP.node_name_
-  is '½ÚµãÃû³Æ';
+  is 'èŠ‚ç‚¹åç§°';
 comment on column FF_NODE_OP.parent_node_code_
-  is 'ÉÏ¼¶½Úµã±àÂë';
-comment on column FF_NODE_OP.assignee_
-  is '°ìÀíÈË';
+  is 'ä¸Šçº§èŠ‚ç‚¹ç¼–ç ';
 comment on column FF_NODE_OP.candidate_
-  is 'ºòÑ¡ÈË';
-comment on column FF_NODE_OP.action_
-  is 'ÒµÎñĞĞÎª';
-comment on column FF_NODE_OP.due_date_
-  is '½ØÖ¹ÈÕÆÚ';
+  is 'å€™é€‰äºº';
 comment on column FF_NODE_OP.complete_expression_
-  is 'Íê³É±í´ïÊ½';
+  is 'å®Œæˆè¡¨è¾¾å¼';
 comment on column FF_NODE_OP.complete_return_
-  is 'Íê³Éºó·µ»ØÇ°Ò»¸ö½Úµã';
+  is 'å®Œæˆåè¿”å›å‰ä¸€ä¸ªèŠ‚ç‚¹';
 comment on column FF_NODE_OP.exclusive_
-  is 'ÅÅËû';
-comment on column FF_NODE_OP.forwardable_
-  is '¿É×ª·¢';
+  is 'æ’ä»–';
 comment on column FF_NODE_OP.auto_complete_same_assignee_
-  is '×Ô¶¯Íê³ÉÏàÍ¬°ìÀíÈËÈÎÎñ';
+  is 'è‡ªåŠ¨å®Œæˆç›¸åŒåŠç†äººä»»åŠ¡';
 comment on column FF_NODE_OP.auto_complete_empty_assignee_
-  is '×Ô¶¯Íê³ÉÃ»ÓĞ°ìÀíÈË½Úµã';
+  is 'è‡ªåŠ¨å®Œæˆæ²¡æœ‰åŠç†äººèŠ‚ç‚¹';
 comment on column FF_NODE_OP.inform_
-  is 'Í¨Öª';
+  is 'é€šçŸ¥';
+comment on column FF_NODE_OP.assignee_
+  is 'åŠç†äºº';
+comment on column FF_NODE_OP.action_
+  is 'ä¸šåŠ¡è¡Œä¸º';
+comment on column FF_NODE_OP.due_date_
+  is 'æˆªæ­¢æ—¥æœŸ';
+comment on column FF_NODE_OP.claim_
+  is 'è®¤é¢†';
+comment on column FF_NODE_OP.forwardable_
+  is 'å¯è½¬å‘';
 comment on column FF_NODE_OP.priority_
-  is 'ÓÅÏÈ¼¶';
+  is 'ä¼˜å…ˆçº§';
 comment on column FF_NODE_OP.node_end_user_
-  is '½ÚµãÍê³ÉÈËÔ±';
+  is 'èŠ‚ç‚¹å®Œæˆäººå‘˜';
 comment on column FF_NODE_OP.node_end_user_name_
-  is '½ÚµãÍê³ÉÈËÔ±Ãû³Æ';
+  is 'èŠ‚ç‚¹å®Œæˆäººå‘˜åç§°';
 comment on column FF_NODE_OP.node_end_date_
-  is '½ÚµãÍê³ÉÈÕÆÚ';
+  is 'èŠ‚ç‚¹å®Œæˆæ—¥æœŸ';
 comment on column FF_NODE_OP.isolate_sub_proc_def_code_
-  is '¶ÀÁ¢×ÓÁ÷³Ì¶¨Òå±àÂë';
+  is 'ç‹¬ç«‹å­æµç¨‹å®šä¹‰ç¼–ç ';
 comment on column FF_NODE_OP.isolate_sub_proc_status_
-  is '¶ÀÁ¢×ÓÁ÷³Ì×´Ì¬';
+  is 'ç‹¬ç«‹å­æµç¨‹çŠ¶æ€';
 comment on column FF_NODE_OP.node_status_
-  is '½Úµã×´Ì¬';
+  is 'èŠ‚ç‚¹çŠ¶æ€';
 comment on column FF_NODE_OP.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_NODE_OP
   add constraint PK_FF_NODE_OP primary key (NODE_OP_ID_);
 alter table FF_NODE_OP
@@ -523,28 +524,25 @@ create table FF_NODE_VAR
 )
 ;
 comment on table FF_NODE_VAR
-  is '½Úµã±äÁ¿';
+  is 'èŠ‚ç‚¹å˜é‡';
 comment on column FF_NODE_VAR.node_var_id_
-  is '½Úµã±äÁ¿ID';
+  is 'èŠ‚ç‚¹å˜é‡ID';
 comment on column FF_NODE_VAR.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_NODE_VAR.var_type_
-  is '±äÁ¿ÀàĞÍ';
+  is 'å˜é‡ç±»å‹';
 comment on column FF_NODE_VAR.var_name_
-  is '±äÁ¿Ãû³Æ';
+  is 'å˜é‡åç§°';
 comment on column FF_NODE_VAR.value_
-  is 'Öµ';
+  is 'å€¼';
 comment on column FF_NODE_VAR.obj_
-  is '¶ÔÏó';
+  is 'å¯¹è±¡';
 comment on column FF_NODE_VAR.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 create index IX_SUB_PROC_VAR_NAME on FF_NODE_VAR (VAR_NAME_);
 create index IX_SUB_PROC_VAR_VALUE on FF_NODE_VAR (VALUE_);
 alter table FF_NODE_VAR
   add constraint PK_FF_NODE_VAR primary key (NODE_VAR_ID_);
-alter table FF_NODE_VAR
-  add constraint FK_FF_NODE_VAR_NODE foreign key (NODE_ID_)
-  references FF_NODE (NODE_ID_);
 
 prompt
 prompt Creating table FF_NODE_VAR_OP
@@ -553,8 +551,8 @@ prompt
 create table FF_NODE_VAR_OP
 (
   node_var_op_id_   VARCHAR2(40) not null,
-  operation_id_     VARCHAR2(40),
-  operation_type_   VARCHAR2(20),
+  operation_id_     VARCHAR2(40) not null,
+  operation_type_   VARCHAR2(20) not null,
   operation_order_  INTEGER,
   operation_date_   TIMESTAMP(6),
   operation_status_ VARCHAR2(20),
@@ -568,33 +566,33 @@ create table FF_NODE_VAR_OP
 )
 ;
 comment on table FF_NODE_VAR_OP
-  is '½Úµã±äÁ¿²Ù×÷';
+  is 'èŠ‚ç‚¹å˜é‡æ“ä½œ';
 comment on column FF_NODE_VAR_OP.node_var_op_id_
-  is '½Úµã±äÁ¿²Ù×÷ID';
+  is 'èŠ‚ç‚¹å˜é‡æ“ä½œID';
 comment on column FF_NODE_VAR_OP.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_NODE_VAR_OP.operation_type_
-  is '²Ù×÷ÀàĞÍ';
+  is 'æ“ä½œç±»å‹';
 comment on column FF_NODE_VAR_OP.operation_order_
-  is '²Ù×÷Ë³Ğò';
+  is 'æ“ä½œé¡ºåº';
 comment on column FF_NODE_VAR_OP.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 comment on column FF_NODE_VAR_OP.operation_status_
-  is '²Ù×÷×´Ì¬';
+  is 'æ“ä½œçŠ¶æ€';
 comment on column FF_NODE_VAR_OP.node_var_id_
-  is '½Úµã±äÁ¿ID';
+  is 'èŠ‚ç‚¹å˜é‡ID';
 comment on column FF_NODE_VAR_OP.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_NODE_VAR_OP.var_type_
-  is '±äÁ¿ÀàĞÍ';
+  is 'å˜é‡ç±»å‹';
 comment on column FF_NODE_VAR_OP.var_name_
-  is '±äÁ¿Ãû³Æ';
+  is 'å˜é‡åç§°';
 comment on column FF_NODE_VAR_OP.value_
-  is 'Öµ';
+  is 'å€¼';
 comment on column FF_NODE_VAR_OP.obj_
-  is '¶ÔÏó';
+  is 'å¯¹è±¡';
 comment on column FF_NODE_VAR_OP.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_NODE_VAR_OP
   add constraint PK_FF_NODE_VAR_OP primary key (NODE_VAR_OP_ID_);
 alter table FF_NODE_VAR_OP
@@ -614,15 +612,15 @@ create table FF_OPERATION_FOLLOW_UP
 )
 ;
 comment on table FF_OPERATION_FOLLOW_UP
-  is '²Ù×÷ºóĞø';
+  is 'æ“ä½œåç»­';
 comment on column FF_OPERATION_FOLLOW_UP.operation_follow_up_id_
-  is '²Ù×÷ºóĞøID';
+  is 'æ“ä½œåç»­ID';
 comment on column FF_OPERATION_FOLLOW_UP.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_OPERATION_FOLLOW_UP.follow_up_operation_id_
-  is 'ºóĞø²Ù×÷ID';
+  is 'åç»­æ“ä½œID';
 comment on column FF_OPERATION_FOLLOW_UP.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 alter table FF_OPERATION_FOLLOW_UP
   add constraint PK_FF_OPERATION_FOLOW_UP primary key (OPERATION_FOLLOW_UP_ID_);
 alter table FF_OPERATION_FOLLOW_UP
@@ -639,8 +637,8 @@ prompt
 create table FF_PROC_OP
 (
   proc_op_id_               VARCHAR2(40) not null,
-  operation_id_             VARCHAR2(40),
-  operation_type_           VARCHAR2(20),
+  operation_id_             VARCHAR2(40) not null,
+  operation_type_           VARCHAR2(20) not null,
   operation_order_          INTEGER,
   operation_date_           TIMESTAMP(6),
   operation_status_         VARCHAR2(20),
@@ -649,12 +647,12 @@ create table FF_PROC_OP
   adjust_proc_def_id_       VARCHAR2(40),
   isolate_sub_proc_node_id_ VARCHAR2(40),
   biz_id_                   VARCHAR2(40),
-  biz_type_                 VARCHAR2(20),
+  biz_type_                 VARCHAR2(60),
   biz_code_                 VARCHAR2(100),
   biz_name_                 VARCHAR2(100),
+  biz_desc_                 VARCHAR2(300),
   proc_start_user_          VARCHAR2(40),
   proc_start_user_name_     VARCHAR2(60),
-  proc_start_date_          TIMESTAMP(6),
   proc_end_user_            VARCHAR2(40),
   proc_end_user_name_       VARCHAR2(60),
   proc_end_date_            TIMESTAMP(6),
@@ -663,51 +661,51 @@ create table FF_PROC_OP
 )
 ;
 comment on table FF_PROC_OP
-  is 'Á÷³Ì²Ù×÷';
+  is 'æµç¨‹æ“ä½œ';
 comment on column FF_PROC_OP.proc_op_id_
-  is 'Á÷³Ì²Ù×÷ID';
+  is 'æµç¨‹æ“ä½œID';
 comment on column FF_PROC_OP.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_PROC_OP.operation_type_
-  is '²Ù×÷ÀàĞÍ';
+  is 'æ“ä½œç±»å‹';
 comment on column FF_PROC_OP.operation_order_
-  is '²Ù×÷Ë³Ğò';
+  is 'æ“ä½œé¡ºåº';
 comment on column FF_PROC_OP.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 comment on column FF_PROC_OP.operation_status_
-  is '²Ù×÷×´Ì¬';
+  is 'æ“ä½œçŠ¶æ€';
 comment on column FF_PROC_OP.proc_id_
-  is 'Á÷³ÌID';
+  is 'æµç¨‹ID';
 comment on column FF_PROC_OP.proc_def_id_
-  is 'Á÷³Ì¶¨ÒåID';
+  is 'æµç¨‹å®šä¹‰ID';
 comment on column FF_PROC_OP.adjust_proc_def_id_
-  is 'µ÷ÕûÁ÷³Ì¶¨ÒåID';
+  is 'è°ƒæ•´æµç¨‹å®šä¹‰ID';
 comment on column FF_PROC_OP.isolate_sub_proc_node_id_
-  is '¶ÀÁ¢×ÓÁ÷³ÌËùÊô½ÚµãID';
+  is 'ç‹¬ç«‹å­æµç¨‹æ‰€å±èŠ‚ç‚¹ID';
 comment on column FF_PROC_OP.biz_id_
-  is 'ÒµÎñÖ÷¼ü';
+  is 'ä¸šåŠ¡ä¸»é”®';
 comment on column FF_PROC_OP.biz_type_
-  is 'ÒµÎñÀàĞÍ';
+  is 'ä¸šåŠ¡ç±»å‹';
 comment on column FF_PROC_OP.biz_code_
-  is 'ÒµÎñ±àÂë';
+  is 'ä¸šåŠ¡ç¼–ç ';
 comment on column FF_PROC_OP.biz_name_
-  is 'ÒµÎñÃû³Æ';
+  is 'ä¸šåŠ¡åç§°';
+comment on column FF_PROC_OP.biz_desc_
+  is 'ä¸šåŠ¡å¤‡æ³¨';
 comment on column FF_PROC_OP.proc_start_user_
-  is 'Á÷³Ì¿ªÊ¼ÈËÔ±';
+  is 'æµç¨‹å¼€å§‹äººå‘˜';
 comment on column FF_PROC_OP.proc_start_user_name_
-  is 'Á÷³Ì¿ªÊ¼ÈËÔ±Ãû³Æ';
-comment on column FF_PROC_OP.proc_start_date_
-  is 'Á÷³Ì¿ªÊ¼ÈÕÆÚ';
+  is 'æµç¨‹å¼€å§‹äººå‘˜åç§°';
 comment on column FF_PROC_OP.proc_end_user_
-  is 'Á÷³ÌÍê³ÉÈËÔ±';
+  is 'æµç¨‹å®Œæˆäººå‘˜';
 comment on column FF_PROC_OP.proc_end_user_name_
-  is 'Á÷³ÌÍê³ÉÈËÔ±Ãû³Æ';
+  is 'æµç¨‹å®Œæˆäººå‘˜åç§°';
 comment on column FF_PROC_OP.proc_end_date_
-  is 'Á÷³ÌÍê³ÉÈÕÆÚ';
+  is 'æµç¨‹å®Œæˆæ—¥æœŸ';
 comment on column FF_PROC_OP.proc_status_
-  is 'Á÷³Ì×´Ì¬';
+  is 'æµç¨‹çŠ¶æ€';
 comment on column FF_PROC_OP.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_PROC_OP
   add constraint PK_FF_PROC_OP primary key (PROC_OP_ID_);
 alter table FF_PROC_OP
@@ -720,61 +718,61 @@ prompt ======================
 prompt
 create table FF_TASK
 (
-  task_id_          VARCHAR2(40) not null,
-  node_id_          VARCHAR2(40),
-  previous_task_id_ VARCHAR2(40),
-  task_type_        VARCHAR2(20) not null,
-  assignee_         VARCHAR2(40),
-  assignee_name_    VARCHAR2(60),
-  executor_         VARCHAR2(40),
-  executor_name_    VARCHAR2(60),
-  action_           VARCHAR2(600),
-  claim_date_       TIMESTAMP(6),
-  due_date_         TIMESTAMP(6),
-  complete_date_    TIMESTAMP(6),
-  priority_         INTEGER not null,
-  forwardable_      VARCHAR2(20) not null,
-  forward_status_   VARCHAR2(20) not null,
-  task_status_      VARCHAR2(20) not null,
-  creation_date_    TIMESTAMP(6) not null
+  task_id_            VARCHAR2(40) not null,
+  node_id_            VARCHAR2(40),
+  previous_task_id_   VARCHAR2(40),
+  task_type_          VARCHAR2(20) not null,
+  assignee_           VARCHAR2(40),
+  assignee_name_      VARCHAR2(60),
+  action_             VARCHAR2(300),
+  due_date_           TIMESTAMP(6),
+  claim_              VARCHAR2(20) not null,
+  forwardable_        VARCHAR2(20) not null,
+  priority_           INTEGER not null,
+  forward_status_     VARCHAR2(20) not null,
+  task_end_user_      VARCHAR2(40),
+  task_end_user_name_ VARCHAR2(60),
+  task_end_date_      TIMESTAMP(6),
+  task_status_        VARCHAR2(20) not null,
+  creation_date_      TIMESTAMP(6) not null
 )
 ;
 comment on table FF_TASK
-  is 'ÈÎÎñ';
+  is 'ä»»åŠ¡';
 comment on column FF_TASK.task_id_
-  is 'ÈÎÎñID';
+  is 'ä»»åŠ¡ID';
 comment on column FF_TASK.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_TASK.previous_task_id_
-  is 'Ç°Ò»¸öÈÎÎñID';
+  is 'å‰ä¸€ä¸ªä»»åŠ¡ID';
 comment on column FF_TASK.task_type_
-  is 'ÈÎÎñÀàĞÍ';
+  is 'ä»»åŠ¡ç±»å‹';
 comment on column FF_TASK.assignee_
-  is '°ìÀíÈË';
+  is 'åŠç†äºº';
 comment on column FF_TASK.assignee_name_
-  is '°ìÀíÈËÃû³Æ';
-comment on column FF_TASK.executor_
-  is 'Ö´ĞĞÈË';
-comment on column FF_TASK.executor_name_
-  is 'Ö´ĞĞÈËÃû³Æ';
+  is 'åŠç†äººåç§°';
 comment on column FF_TASK.action_
-  is 'ÒµÎñĞĞÎª';
-comment on column FF_TASK.claim_date_
-  is 'ÈÏÁìÈÕÆÚ';
+  is 'ä¸šåŠ¡è¡Œä¸º';
 comment on column FF_TASK.due_date_
-  is '½ØÖ¹ÈÕÆÚ';
-comment on column FF_TASK.complete_date_
-  is 'Íê³ÉÈÕÆÚ';
-comment on column FF_TASK.priority_
-  is 'ÓÅÏÈ¼¶';
+  is 'æˆªæ­¢æ—¥æœŸ';
+comment on column FF_TASK.claim_
+  is 'è®¤é¢†';
 comment on column FF_TASK.forwardable_
-  is '¿É×ª·¢';
+  is 'å¯è½¬å‘';
+comment on column FF_TASK.priority_
+  is 'ä¼˜å…ˆçº§';
 comment on column FF_TASK.forward_status_
-  is '×ª·¢×´Ì¬';
+  is 'è½¬å‘çŠ¶æ€';
+comment on column FF_TASK.task_end_user_
+  is 'ä»»åŠ¡å®Œæˆäººå‘˜';
+comment on column FF_TASK.task_end_user_name_
+  is 'ä»»åŠ¡å®Œæˆäººå‘˜åç§°';
+comment on column FF_TASK.task_end_date_
+  is 'ä»»åŠ¡å®Œæˆæ—¥æœŸ';
 comment on column FF_TASK.task_status_
-  is 'ÈÎÎñ×´Ì¬';
+  is 'ä»»åŠ¡çŠ¶æ€';
 comment on column FF_TASK.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_TASK
   add constraint PK_FF_TASK primary key (TASK_ID_);
 alter table FF_TASK
@@ -790,79 +788,79 @@ prompt =========================
 prompt
 create table FF_TASK_OP
 (
-  task_op_id_       VARCHAR2(40) not null,
-  operation_id_     VARCHAR2(40),
-  operation_type_   VARCHAR2(20),
-  operation_order_  INTEGER,
-  operation_date_   TIMESTAMP(6),
-  operation_status_ VARCHAR2(20),
-  task_id_          VARCHAR2(40) not null,
-  node_id_          VARCHAR2(40),
-  previous_task_id_ VARCHAR2(40),
-  task_type_        VARCHAR2(20),
-  assignee_         VARCHAR2(40),
-  assignee_name_    VARCHAR2(60),
-  executor_         VARCHAR2(40),
-  executor_name_    VARCHAR2(60),
-  action_           VARCHAR2(600),
-  claim_date_       TIMESTAMP(6),
-  due_date_         TIMESTAMP(6),
-  complete_date_    TIMESTAMP(6),
-  priority_         INTEGER,
-  forwardable_      VARCHAR2(20),
-  forward_status_   VARCHAR2(20),
-  task_status_      VARCHAR2(20),
-  creation_date_    TIMESTAMP(6)
+  task_op_id_         VARCHAR2(40) not null,
+  operation_id_       VARCHAR2(40) not null,
+  operation_type_     VARCHAR2(20) not null,
+  operation_order_    INTEGER,
+  operation_date_     TIMESTAMP(6),
+  operation_status_   VARCHAR2(20),
+  task_id_            VARCHAR2(40) not null,
+  node_id_            VARCHAR2(40),
+  previous_task_id_   VARCHAR2(40),
+  task_type_          VARCHAR2(20),
+  assignee_           VARCHAR2(40),
+  assignee_name_      VARCHAR2(60),
+  action_             VARCHAR2(300),
+  due_date_           TIMESTAMP(6),
+  claim_              VARCHAR2(20),
+  forwardable_        VARCHAR2(20),
+  priority_           INTEGER,
+  forward_status_     VARCHAR2(20),
+  task_end_user_      VARCHAR2(40),
+  task_end_user_name_ VARCHAR2(60),
+  task_end_date_      TIMESTAMP(6),
+  task_status_        VARCHAR2(20),
+  creation_date_      TIMESTAMP(6)
 )
 ;
 comment on table FF_TASK_OP
-  is 'ÈÎÎñ²Ù×÷';
+  is 'ä»»åŠ¡æ“ä½œ';
 comment on column FF_TASK_OP.task_op_id_
-  is 'ÈÎÎñ²Ù×÷ID';
+  is 'ä»»åŠ¡æ“ä½œID';
 comment on column FF_TASK_OP.operation_id_
-  is '²Ù×÷ID';
+  is 'æ“ä½œID';
 comment on column FF_TASK_OP.operation_type_
-  is '²Ù×÷ÀàĞÍ';
+  is 'æ“ä½œç±»å‹';
 comment on column FF_TASK_OP.operation_order_
-  is '²Ù×÷Ë³Ğò';
+  is 'æ“ä½œé¡ºåº';
 comment on column FF_TASK_OP.operation_date_
-  is '²Ù×÷ÈÕÆÚ';
+  is 'æ“ä½œæ—¥æœŸ';
 comment on column FF_TASK_OP.operation_status_
-  is '²Ù×÷×´Ì¬';
+  is 'æ“ä½œçŠ¶æ€';
 comment on column FF_TASK_OP.task_id_
-  is 'ÈÎÎñID';
+  is 'ä»»åŠ¡ID';
 comment on column FF_TASK_OP.node_id_
-  is '½ÚµãID';
+  is 'èŠ‚ç‚¹ID';
 comment on column FF_TASK_OP.previous_task_id_
-  is 'Ç°Ò»¸öÈÎÎñID';
+  is 'å‰ä¸€ä¸ªä»»åŠ¡ID';
 comment on column FF_TASK_OP.task_type_
-  is 'ÈÎÎñÀàĞÍ';
+  is 'ä»»åŠ¡ç±»å‹';
 comment on column FF_TASK_OP.assignee_
-  is '°ìÀíÈË';
+  is 'åŠç†äºº';
 comment on column FF_TASK_OP.assignee_name_
-  is '°ìÀíÈËÃû³Æ';
-comment on column FF_TASK_OP.executor_
-  is 'Ö´ĞĞÈË';
-comment on column FF_TASK_OP.executor_name_
-  is 'Ö´ĞĞÈËÃû³Æ';
+  is 'åŠç†äººåç§°';
 comment on column FF_TASK_OP.action_
-  is 'ÒµÎñĞĞÎª';
-comment on column FF_TASK_OP.claim_date_
-  is 'ÈÏÁìÈÕÆÚ';
+  is 'ä¸šåŠ¡è¡Œä¸º';
 comment on column FF_TASK_OP.due_date_
-  is '½ØÖ¹ÈÕÆÚ';
-comment on column FF_TASK_OP.complete_date_
-  is 'Íê³ÉÈÕÆÚ';
-comment on column FF_TASK_OP.priority_
-  is 'ÓÅÏÈ¼¶';
+  is 'æˆªæ­¢æ—¥æœŸ';
+comment on column FF_TASK_OP.claim_
+  is 'è®¤é¢†';
 comment on column FF_TASK_OP.forwardable_
-  is '¿É×ª·¢';
+  is 'å¯è½¬å‘';
+comment on column FF_TASK_OP.priority_
+  is 'ä¼˜å…ˆçº§';
 comment on column FF_TASK_OP.forward_status_
-  is '×ª·¢×´Ì¬';
+  is 'è½¬å‘çŠ¶æ€';
+comment on column FF_TASK_OP.task_end_user_
+  is 'ä»»åŠ¡å®Œæˆäººå‘˜';
+comment on column FF_TASK_OP.task_end_user_name_
+  is 'ä»»åŠ¡å®Œæˆäººå‘˜åç§°';
+comment on column FF_TASK_OP.task_end_date_
+  is 'ä»»åŠ¡å®Œæˆæ—¥æœŸ';
 comment on column FF_TASK_OP.task_status_
-  is 'ÈÎÎñ×´Ì¬';
+  is 'ä»»åŠ¡çŠ¶æ€';
 comment on column FF_TASK_OP.creation_date_
-  is '´´½¨ÈÕÆÚ';
+  is 'åˆ›å»ºæ—¥æœŸ';
 alter table FF_TASK_OP
   add constraint PK_FF_TASK_OP primary key (TASK_OP_ID_);
 alter table FF_TASK_OP
@@ -888,10 +886,29 @@ prompt Creating view FFV_NODE
 prompt ======================
 prompt
 create or replace force view ffv_node as
-select N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.ASSIGNEE_, N.CANDIDATE_, N.ACTION_, N.DUE_DATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.FORWARDABLE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_START_DATE_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ from FF_NODE N;
+
+prompt
+prompt Creating view FFV_NODE_P
+prompt ========================
+prompt
+create or replace force view ffv_node_p as
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
   from FF_NODE N
  inner join FF_PROC P
     on P.PROC_ID_ = N.PROC_ID_;
+
+prompt
+prompt Creating view FFV_NODE_PD
+prompt =========================
+prompt
+create or replace force view ffv_node_pd as
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_
+  from FF_NODE N
+ inner join FF_PROC P
+    on P.PROC_ID_ = N.PROC_ID_
+ inner join FF_PROC_DEF PD
+    on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
 
 prompt
 prompt Creating view FFV_NODE_VAR
@@ -901,18 +918,32 @@ create or replace force view ffv_node_var as
 select PV.NODE_VAR_ID_, PV.NODE_ID_, PV.VAR_TYPE_, PV.VAR_NAME_, PV.VALUE_, PV.OBJ_, PV.CREATION_DATE_, N.PARENT_NODE_ID_, N.PROC_ID_ from FF_NODE_VAR PV inner join FF_NODE N on N.NODE_ID_ = PV.NODE_ID_;
 
 prompt
-prompt Creating view FFV_PROC
-prompt ======================
-prompt
-create or replace force view ffv_proc as
-select P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_START_DATE_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_ from FF_PROC P inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
-
-prompt
 prompt Creating view FFV_OPERATION
 prompt ===========================
 prompt
 create or replace force view ffv_operation as
-select O.OPERATION_ID_, O.OPERATION_, O.PROC_ID_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.PROC_DEF_ID_, P.PROC_DEF_CODE_, P.PROC_DEF_NAME_, P.PROC_DEF_CAT_ from FF_OPERATION O left outer join FFV_PROC P on P.PROC_ID_ = O.PROC_ID_;
+select O.OPERATION_ID_, O.OPERATION_, O.PROC_ID_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_ from FF_OPERATION O;
+
+prompt
+prompt Creating view FFV_PROC
+prompt ======================
+prompt
+create or replace force view ffv_proc as
+select P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ from FF_PROC P;
+
+prompt
+prompt Creating view FFV_OPERATION_P
+prompt =============================
+prompt
+create or replace force view ffv_operation_p as
+select O.OPERATION_ID_, O.OPERATION_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ from FF_OPERATION O left outer join FFV_PROC P on P.PROC_ID_ = O.PROC_ID_;
+
+prompt
+prompt Creating view FFV_OPERATION_PD
+prompt ==============================
+prompt
+create or replace force view ffv_operation_pd as
+select O.OPERATION_ID_, O.OPERATION_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_ from FF_OPERATION O left outer join FFV_PROC P on P.PROC_ID_ = O.PROC_ID_ inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
 
 prompt
 prompt Creating view FFV_PROC_DEF
@@ -922,11 +953,54 @@ create or replace force view ffv_proc_def as
 select PROC_DEF_ID_, PROC_DEF_CODE_, PROC_DEF_NAME_, PROC_DEF_CAT_, PROC_DEF_MODEL_, PROC_DEF_DIAGRAM_FILE_, PROC_DEF_DIAGRAM_FILE_NAME_, PROC_DEF_DIAGRAM_FILE_LENGTH_, PROC_DEF_DIAGRAM_WIDTH_, PROC_DEF_DIAGRAM_HEIGHT_, MEMO_, VERSION_, PROC_DEF_STATUS_, CREATION_DATE_, UPDATE_DATE_, OPERATOR_ID_, OPERATOR_NAME_ from FF_PROC_DEF;
 
 prompt
+prompt Creating view FFV_PROC_PD
+prompt =========================
+prompt
+create or replace force view ffv_proc_pd as
+select P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_ from FF_PROC P inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
+
+prompt
 prompt Creating view FFV_TASK
 prompt ======================
 prompt
 create or replace force view ffv_task as
-select T.TASK_ID_, T.NODE_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.EXECUTOR_, T.EXECUTOR_NAME_, T.ACTION_, T.CLAIM_DATE_, T.DUE_DATE_, T.COMPLETE_DATE_, T.PRIORITY_, T.FORWARDABLE_, T.FORWARD_STATUS_, T.TASK_STATUS_, T.CREATION_DATE_, N.PARENT_NODE_ID_, N.PROC_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.EXCLUSIVE_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.NODE_STATUS_, N.BIZ_ID_, N.BIZ_TYPE_, N.BIZ_CODE_, N.BIZ_NAME_, N.PROC_START_USER_, N.PROC_START_USER_NAME_, N.PROC_START_DATE_, N.PROC_END_USER_, N.PROC_END_USER_NAME_, N.PROC_END_DATE_, N.PROC_STATUS_ from FF_TASK T inner join FFV_NODE N on N.NODE_ID_ = T.NODE_ID_;
+select T.TASK_ID_, T.NODE_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_ from FF_TASK T;
+
+prompt
+prompt Creating view FFV_TASK_N
+prompt ========================
+prompt
+create or replace force view ffv_task_n as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_
+  from FF_TASK T
+ inner join FF_NODE N
+    on N.NODE_ID_ = T.NODE_ID_;
+
+prompt
+prompt Creating view FFV_TASK_P
+prompt ========================
+prompt
+create or replace force view ffv_task_p as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
+  from FF_TASK T
+ inner join FF_NODE N
+    on N.NODE_ID_ = T.NODE_ID_
+ inner join FF_PROC P
+    on P.PROC_ID_ = N.PROC_ID_;
+
+prompt
+prompt Creating view FFV_TASK_PD
+prompt =========================
+prompt
+create or replace force view ffv_task_pd as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_
+  from FF_TASK T
+ inner join FF_NODE N
+    on N.NODE_ID_ = T.NODE_ID_
+ inner join FF_PROC P
+    on P.PROC_ID_ = N.PROC_ID_
+ inner join FF_PROC_DEF PD
+    on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
 
 
 prompt Done
