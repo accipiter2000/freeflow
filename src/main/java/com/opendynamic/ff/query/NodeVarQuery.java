@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.opendynamic.OdUtils;
@@ -18,9 +17,13 @@ public class NodeVarQuery {
     private FfNodeVarService ffNodeVarService;
 
     private String nodeVarId;
+    private List<String> nodeVarIdList;
     private String nodeId;
+    private List<String> nodeIdList;
+    private String varType;
     private List<String> varTypeList;
     private String varName;
+    private List<String> varNameList;
     private Boolean recursive;
     private Integer page;
     private Integer limit;
@@ -35,16 +38,23 @@ public class NodeVarQuery {
         return this;
     }
 
+    public NodeVarQuery setNodeVarIdList(List<String> nodeVarIdList) {
+        this.nodeVarIdList = nodeVarIdList;
+        return this;
+    }
+
     public NodeVarQuery setNodeId(String nodeId) {
         this.nodeId = nodeId;
         return this;
     }
 
+    public NodeVarQuery setNodeIdList(List<String> nodeIdList) {
+        this.nodeIdList = nodeIdList;
+        return this;
+    }
+
     public NodeVarQuery setVarType(String varType) {
-        if (StringUtils.isNotEmpty(varType)) {
-            this.varTypeList = new ArrayList<>();
-            this.varTypeList.add(varType);
-        }
+        this.varType = varType;
         return this;
     }
 
@@ -55,6 +65,11 @@ public class NodeVarQuery {
 
     public NodeVarQuery setVarName(String varName) {
         this.varName = varName;
+        return this;
+    }
+
+    public NodeVarQuery setVarNameList(List<String> varNameList) {
+        this.varNameList = varNameList;
         return this;
     }
 
@@ -79,7 +94,7 @@ public class NodeVarQuery {
      * @return
      */
     public List<Map<String, Object>> queryForMapList() {
-        return ffNodeVarService.selectNodeVar(nodeVarId, nodeId, varTypeList, varName, recursive, page, limit);
+        return ffNodeVarService.selectNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, recursive, page, limit);
     }
 
     /**
@@ -141,6 +156,6 @@ public class NodeVarQuery {
      * @return
      */
     public int count() {
-        return ffNodeVarService.countNodeVar(nodeVarId, nodeId, varTypeList, varName, recursive);
+        return ffNodeVarService.countNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, recursive);
     }
 }

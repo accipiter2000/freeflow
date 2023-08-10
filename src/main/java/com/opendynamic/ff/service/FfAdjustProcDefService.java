@@ -25,12 +25,12 @@ public interface FfAdjustProcDefService {
     /**
      * 通用查询，返回对象列表。
      */
-    public List<Map<String, Object>> selectAdjustProcDef(String ADJUST_PROC_DEF_ID_, String PROC_DEF_ID_, Integer page, Integer limit);
+    public List<Map<String, Object>> selectAdjustProcDef(String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, Integer page, Integer limit);
 
     /**
      * 总数查询，在分页时与通用查询配套使用。
      */
-    public int countAdjustProcDef(String ADJUST_PROC_DEF_ID_, String PROC_DEF_ID_);
+    public int countAdjustProcDef(String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST);
 
     /**
      * 按主键列表查询，返回对象列表，按主键列表顺序排序。

@@ -20,12 +20,12 @@ public interface FfNodeVarService {
     /**
      * 通用查询，返回对象列表。
      */
-    public List<Map<String, Object>> selectNodeVar(String NODE_VAR_ID_, String NODE_ID_, List<String> VAR_TYPE_LIST, String VAR_NAME_, Boolean recursive, Integer page, Integer limit);
+    public List<Map<String, Object>> selectNodeVar(String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, Boolean recursive, Integer page, Integer limit);
 
     /**
      * 总数查询，在分页时与通用查询配套使用。
      */
-    public int countNodeVar(String NODE_VAR_ID_, String NODE_ID_, List<String> VAR_TYPE_LIST, String VAR_NAME_, Boolean recursive);
+    public int countNodeVar(String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, Boolean recursive);
 
     /**
      * 按主键列表查询，返回对象列表，按主键列表顺序排序。

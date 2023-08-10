@@ -36,8 +36,8 @@ public class FfDelegateServiceImpl implements FfDelegateService {
     }
 
     @Override
-    public List<Map<String, Object>> selectDelegate(String DELEGATE_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_, String DELEGATOR_, String DELEGATOR_NAME_, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_, Integer page, Integer limit) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaDelegate(false, DELEGATE_ID_, ASSIGNEE_, ASSIGNEE_NAME_, DELEGATOR_, DELEGATOR_NAME_, FROM_START_DATE_, TO_START_DATE_, FROM_END_DATE_, TO_END_DATE_);// 根据查询条件组装查询SQL语句
+    public List<Map<String, Object>> selectDelegate(String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_, Integer page, Integer limit) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaDelegate(false, DELEGATE_ID_, DELEGATE_ID_LIST, ASSIGNEE_, ASSIGNEE_LIST, ASSIGNEE_NAME_, ASSIGNEE_NAME_LIST, DELEGATOR_, DELEGATOR_LIST, DELEGATOR_NAME_, DELEGATOR_NAME_LIST, FROM_START_DATE_, TO_START_DATE_, FROM_END_DATE_, TO_END_DATE_);// 根据查询条件组装查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -52,8 +52,8 @@ public class FfDelegateServiceImpl implements FfDelegateService {
     }
 
     @Override
-    public int countDelegate(String DELEGATE_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_, String DELEGATOR_, String DELEGATOR_NAME_, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaDelegate(true, DELEGATE_ID_, ASSIGNEE_, ASSIGNEE_NAME_, DELEGATOR_, DELEGATOR_NAME_, FROM_START_DATE_, TO_START_DATE_, FROM_END_DATE_, TO_END_DATE_);// 根据查询条件组装总数查询SQL语句
+    public int countDelegate(String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaDelegate(true, DELEGATE_ID_, DELEGATE_ID_LIST, ASSIGNEE_, ASSIGNEE_LIST, ASSIGNEE_NAME_, ASSIGNEE_NAME_LIST, DELEGATOR_, DELEGATOR_LIST, DELEGATOR_NAME_, DELEGATOR_NAME_LIST, FROM_START_DATE_, TO_START_DATE_, FROM_END_DATE_, TO_END_DATE_);// 根据查询条件组装总数查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -61,7 +61,7 @@ public class FfDelegateServiceImpl implements FfDelegateService {
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    private OdSqlCriteria buildSqlCriteriaDelegate(boolean count, String DELEGATE_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_, String DELEGATOR_, String DELEGATOR_NAME_, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {// 组装查询SQL语句
+    private OdSqlCriteria buildSqlCriteriaDelegate(boolean count, String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {// 组装查询SQL语句
         String sql;
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -76,21 +76,41 @@ public class FfDelegateServiceImpl implements FfDelegateService {
             sql += " and DELEGATE_ID_ = :DELEGATE_ID_";
             paramMap.put("DELEGATE_ID_", DELEGATE_ID_);
         }
+        if (DELEGATE_ID_LIST != null && DELEGATE_ID_LIST.size() > 0) {
+            sql += " and DELEGATE_ID_ in (:DELEGATE_ID_LIST)";
+            paramMap.put("DELEGATE_ID_LIST", DELEGATE_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(ASSIGNEE_)) {
             sql += " and ASSIGNEE_ = :ASSIGNEE_";
             paramMap.put("ASSIGNEE_", ASSIGNEE_);
+        }
+        if (ASSIGNEE_LIST != null && ASSIGNEE_LIST.size() > 0) {
+            sql += " and ASSIGNEE_ in (:ASSIGNEE_LIST)";
+            paramMap.put("ASSIGNEE_LIST", ASSIGNEE_LIST);
         }
         if (StringUtils.isNotEmpty(ASSIGNEE_NAME_)) {
             sql += " and ASSIGNEE_NAME_ like '%' || :ASSIGNEE_NAME_ || '%'";
             paramMap.put("ASSIGNEE_NAME_", ASSIGNEE_NAME_);
         }
+        if (ASSIGNEE_NAME_LIST != null && ASSIGNEE_NAME_LIST.size() > 0) {
+            sql += " and ASSIGNEE_NAME_ in (:ASSIGNEE_NAME_LIST)";
+            paramMap.put("ASSIGNEE_NAME_LIST", ASSIGNEE_NAME_LIST);
+        }
         if (StringUtils.isNotEmpty(DELEGATOR_)) {
             sql += " and DELEGATOR_ = :DELEGATOR_";
             paramMap.put("DELEGATOR_", DELEGATOR_);
         }
+        if (DELEGATOR_LIST != null && DELEGATOR_LIST.size() > 0) {
+            sql += " and DELEGATOR_ in (:DELEGATOR_LIST)";
+            paramMap.put("DELEGATOR_LIST", DELEGATOR_LIST);
+        }
         if (StringUtils.isNotEmpty(DELEGATOR_NAME_)) {
             sql += " and DELEGATOR_NAME_ like '%' || :DELEGATOR_NAME_ || '%'";
             paramMap.put("DELEGATOR_NAME_", DELEGATOR_NAME_);
+        }
+        if (DELEGATOR_NAME_LIST != null && DELEGATOR_NAME_LIST.size() > 0) {
+            sql += " and DELEGATOR_NAME_ in (:DELEGATOR_NAME_LIST)";
+            paramMap.put("DELEGATOR_NAME_LIST", DELEGATOR_NAME_LIST);
         }
         if (FROM_START_DATE_ != null) {
             sql += " and START_DATE_ >= :FROM_START_DATE_";

@@ -24,6 +24,7 @@ import com.opendynamic.ff.vo.NodeDef;
 import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.ProcDef;
 
+import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -50,17 +51,24 @@ public class ServiceTaskNodeHandler implements NodeHandler {
 
         // 新增节点
         String serviceTaskNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(serviceTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SERVICE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getAssignee(), nodeDef.getCandidate(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getForwardable(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(serviceTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SERVICE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         serviceTaskNode = ffService.loadNode(serviceTaskNodeId);
         ffResult.addCreateNode(serviceTaskNode);
 
         // 执行服务
-        ExpressionFactory expressionFactory = ffService.getExpressionFactory();
-        SimpleContext simpleContext = ffService.getSimpleContext(ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap());
-        simpleContext.setVariable("proc", expressionFactory.createValueExpression(proc, Object.class));
-        simpleContext.setVariable("branch", expressionFactory.createValueExpression(branchNode, Object.class));
-        simpleContext.setVariable("node", expressionFactory.createValueExpression(serviceTaskNode, Object.class));
-
+        // 设置JUEL解析环境
+        Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        nodeVarMap.putAll(ffService.getInternalServiceMap());
+        nodeVarMap.putAll(ffService.getExternalServiceMap());
+        nodeVarMap.put("proc", proc);
+        nodeVarMap.put("branch", branchNode);
+        nodeVarMap.put("node", serviceTaskNode);
+        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+        SimpleContext simpleContext = new SimpleContext();
+        for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+        }
+        // JUEL解析
         ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
         expression.getValue(simpleContext);
 
@@ -88,11 +96,27 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
         ffResult.addCompleteNode(node);
 
+        // 设置JUEL解析环境
         Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        nodeVarMap.putAll(ffService.getInternalServiceMap());
+        nodeVarMap.putAll(ffService.getExternalServiceMap());
         nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
         nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
         nodeVarMap.put("node", node);
         nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
+        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+        SimpleContext simpleContext = new SimpleContext();
+        for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+        }
+        // JUEL解析
+        String completeReturn = FfService.BOOLEAN_FALSE;
+        ValueExpression expression;
+        if (StringUtils.isNotEmpty(node.getCompleteReturn())) {
+            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
+            completeReturn = (String) expression.getValue(simpleContext);
+        }
+
         ProcDef procDef = ffService.getNodeProcDef(node); // 获取当前节点所属流程定义
         NodeDef nodeDef = procDef.getNodeDef((node.getNodeCode()));// 获取当前节点所属节点定义
         List<? extends NodeDef> nextNodeDefList = nodeDef.getNextNodeDefList(nodeVarMap);// 查找下一个节点定义
@@ -103,7 +127,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
             }
         }
         else// 无后续节点定义。
-            if (node.getCompleteReturn().equals(FfService.BOOLEAN_TRUE)) {// 完成返回节点，激活前一个节点。
+            if (FfService.BOOLEAN_TRUE.equals(completeReturn)) {// 完成返回节点，激活前一个节点。
                 Node previousNode = ffService.loadNode(node.getPreviousNodeIds());// 获取前一个节点。
                 NodeDef previousNodeDef = ffService.getNodeProcDef(previousNode).getNodeDef((previousNode.getNodeCode()));// 获取当前节点所属节点定义
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), FfService.OPERATION_COMPLETE, executor));

@@ -23,9 +23,9 @@ import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.FlowDef;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
-import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.ProcDef;
 
+import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -50,7 +50,7 @@ public class GatewayNodeHandler implements NodeHandler {
         Node gatewayNode = ffService.createChildNodeQuery().setNodeId(branchNode.getNodeId()).setNodeCode(nodeDef.getNodeCode()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE)).queryForObject();
         if (gatewayNode == null) {// 新增节点
             String gatewayNodeId = OdUtils.getUuid();
-            ffNodeService.insertNode(gatewayNodeId, branchNode.getNodeId(), branchNode.getProcId(), null, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_GATEWAY, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getAssignee(), nodeDef.getCandidate(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getForwardable(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            ffNodeService.insertNode(gatewayNodeId, branchNode.getNodeId(), branchNode.getProcId(), null, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_GATEWAY, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
             gatewayNode = ffService.loadNode(gatewayNodeId);
             ffResult.addCreateNode(gatewayNode);
         }
@@ -88,16 +88,22 @@ public class GatewayNodeHandler implements NodeHandler {
         if (StringUtils.isNotEmpty(node.getPreviousNodeIds())) {
             COMPLETE = node.getPreviousNodeIds().split(",").length;
         }
+        // 设置JUEL解析环境
         Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
-        Proc proc = ffService.loadProc(node.getProcId());
-        nodeVarMap.put("proc", proc);
+        nodeVarMap.putAll(ffService.getInternalServiceMap());
+        nodeVarMap.putAll(ffService.getExternalServiceMap());
+        nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
         nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
         nodeVarMap.put("node", node);
         nodeVarMap.put("TOTAL", TOTAL);
         nodeVarMap.put("COMPLETE", COMPLETE);
         if (!nodeVarMap.get("TOTAL").equals(0)) {
-            ExpressionFactory expressionFactory = ffService.getExpressionFactory();
-            SimpleContext simpleContext = ffService.getSimpleContext(nodeVarMap);
+            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+            SimpleContext simpleContext = new SimpleContext();
+            for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+                simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            }
+            // JUEL解析
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
@@ -145,7 +151,7 @@ public class GatewayNodeHandler implements NodeHandler {
             previousNodeIds = node.getPreviousNodeIds();
             if (StringUtils.isNotEmpty(previousNodeIds)) {
                 ffNodeService.updateNodePreviousNodeIds(node.getNodeId(), null);
-                List<Node> previousNodeList = ffService.selectNodeByIdList(Arrays.asList(previousNodeIds.split(",")));
+                List<Node> previousNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(previousNodeIds.split(","))).queryForObjectList();
                 for (Node _previousNode : previousNodeList) {
                     ffResult.addAll(ffService.getNodeHandler(_previousNode.getNodeType()).activateNode(_previousNode, null, triggerOperation, executor));
                 }

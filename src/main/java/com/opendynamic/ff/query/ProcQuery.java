@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.opendynamic.ff.service.FfProcService;
@@ -16,26 +15,50 @@ public class ProcQuery {
     private FfProcService ffProcService;
 
     private String procId;
-    private String procDefId;
+    private List<String> procIdList;
     private String adjustProcDefId;
+    private List<String> adjustProcDefIdList;
     private String isolateSubProcNodeId;
+    private List<String> isolateSubProcNodeIdList;
     private String bizId;
+    private List<String> bizIdList;
+    private String bizType;
     private List<String> bizTypeList;
     private String bizCode;
+    private List<String> bizCodeList;
     private String bizName;
+    private List<String> bizNameList;
+    private String bizDesc;
+    private List<String> bizDescList;
+    private String procStartUser;
     private List<String> procStartUserList;
-    private Date fromProcStartDate;
-    private Date toProcStartDate;
+    private String procStartUserName;
+    private List<String> procStartUserNameList;
+    private String procEndUser;
     private List<String> procEndUserList;
+    private String procEndUserName;
+    private List<String> procEndUserNameList;
     private Date fromProcEndDate;
     private Date toProcEndDate;
+    private String procStatus;
     private List<String> procStatusList;
     private Date fromCreationDate;
     private Date toCreationDate;
+    private String procDefId;
+    private List<String> procDefIdList;
+    private String procDefCode;
     private List<String> procDefCodeList;
+    private String procDefName;
+    private List<String> procDefNameList;
     private String procDefCat;
+    private List<String> procDefCatList;
+    private Integer version;
+    private List<Integer> versionList;
+    private String procDefStatus;
+    private List<String> procDefStatusList;
     private Integer page;
     private Integer limit;
+    private String dataScope;
 
     public ProcQuery(FfProcService ffProcService) {
         super();
@@ -47,8 +70,8 @@ public class ProcQuery {
         return this;
     }
 
-    public ProcQuery setProcDefId(String procDefId) {
-        this.procDefId = procDefId;
+    public ProcQuery setProcIdList(List<String> procIdList) {
+        this.procIdList = procIdList;
         return this;
     }
 
@@ -57,8 +80,18 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setAdjustProcDefIdList(List<String> adjustProcDefIdList) {
+        this.adjustProcDefIdList = adjustProcDefIdList;
+        return this;
+    }
+
     public ProcQuery setIsolateSubProcNodeId(String isolateSubProcNodeId) {
         this.isolateSubProcNodeId = isolateSubProcNodeId;
+        return this;
+    }
+
+    public ProcQuery setIsolateSubProcNodeIdList(List<String> isolateSubProcNodeIdList) {
+        this.isolateSubProcNodeIdList = isolateSubProcNodeIdList;
         return this;
     }
 
@@ -67,11 +100,13 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setBizIdList(List<String> bizIdList) {
+        this.bizIdList = bizIdList;
+        return this;
+    }
+
     public ProcQuery setBizType(String bizType) {
-        if (StringUtils.isNotEmpty(bizType)) {
-            this.bizTypeList = new ArrayList<>();
-            this.bizTypeList.add(bizType);
-        }
+        this.bizType = bizType;
         return this;
     }
 
@@ -85,16 +120,33 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setBizCodeList(List<String> bizCodeList) {
+        this.bizCodeList = bizCodeList;
+        return this;
+    }
+
     public ProcQuery setBizName(String bizName) {
         this.bizName = bizName;
         return this;
     }
 
+    public ProcQuery setBizNameList(List<String> bizNameList) {
+        this.bizNameList = bizNameList;
+        return this;
+    }
+
+    public ProcQuery setBizDesc(String bizDesc) {
+        this.bizDesc = bizDesc;
+        return this;
+    }
+
+    public ProcQuery setBizDescList(List<String> bizDescList) {
+        this.bizDescList = bizDescList;
+        return this;
+    }
+
     public ProcQuery setProcStartUser(String procStartUser) {
-        if (StringUtils.isNotEmpty(procStartUser)) {
-            this.procStartUserList = new ArrayList<>();
-            this.procStartUserList.add(procStartUser);
-        }
+        this.procStartUser = procStartUser;
         return this;
     }
 
@@ -103,26 +155,33 @@ public class ProcQuery {
         return this;
     }
 
-    public ProcQuery setFromProcStartDate(Date fromProcStartDate) {
-        this.fromProcStartDate = fromProcStartDate;
+    public ProcQuery setProcStartUserName(String procStartUserName) {
+        this.procStartUserName = procStartUserName;
         return this;
     }
 
-    public ProcQuery setToProcStartDate(Date toProcStartDate) {
-        this.toProcStartDate = toProcStartDate;
+    public ProcQuery setProcStartUserNameList(List<String> procStartUserNameList) {
+        this.procStartUserNameList = procStartUserNameList;
         return this;
     }
 
     public ProcQuery setProcEndUser(String procEndUser) {
-        if (StringUtils.isNotEmpty(procEndUser)) {
-            this.procEndUserList = new ArrayList<>();
-            this.procEndUserList.add(procEndUser);
-        }
+        this.procEndUser = procEndUser;
         return this;
     }
 
     public ProcQuery setProcEndUserList(List<String> procEndUserList) {
         this.procEndUserList = procEndUserList;
+        return this;
+    }
+
+    public ProcQuery setProcEndUserName(String procEndUserName) {
+        this.procEndUserName = procEndUserName;
+        return this;
+    }
+
+    public ProcQuery setProcEndUserNameList(List<String> procEndUserNameList) {
+        this.procEndUserNameList = procEndUserNameList;
         return this;
     }
 
@@ -137,10 +196,7 @@ public class ProcQuery {
     }
 
     public ProcQuery setProcStatus(String procStatus) {
-        if (StringUtils.isNotEmpty(procStatus)) {
-            this.procStatusList = new ArrayList<>();
-            this.procStatusList.add(procStatus);
-        }
+        this.procStatus = procStatus;
         return this;
     }
 
@@ -159,11 +215,18 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setProcDefId(String procDefId) {
+        this.procDefId = procDefId;
+        return this;
+    }
+
+    public ProcQuery setProcDefIdList(List<String> procDefIdList) {
+        this.procDefIdList = procDefIdList;
+        return this;
+    }
+
     public ProcQuery setProcDefCode(String procDefCode) {
-        if (StringUtils.isNotEmpty(procDefCode)) {
-            this.procDefCodeList = new ArrayList<>();
-            this.procDefCodeList.add(procDefCode);
-        }
+        this.procDefCode = procDefCode;
         return this;
     }
 
@@ -172,8 +235,43 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setProcDefName(String procDefName) {
+        this.procDefName = procDefName;
+        return this;
+    }
+
+    public ProcQuery setProcDefNameList(List<String> procDefNameList) {
+        this.procDefNameList = procDefNameList;
+        return this;
+    }
+
     public ProcQuery setProcDefCat(String procDefCat) {
         this.procDefCat = procDefCat;
+        return this;
+    }
+
+    public ProcQuery setProcDefCatList(List<String> procDefCatList) {
+        this.procDefCatList = procDefCatList;
+        return this;
+    }
+
+    public ProcQuery setVersion(Integer version) {
+        this.version = version;
+        return this;
+    }
+
+    public ProcQuery setVersionList(List<Integer> versionList) {
+        this.versionList = versionList;
+        return this;
+    }
+
+    public ProcQuery setProcDefStatus(String procDefStatus) {
+        this.procDefStatus = procDefStatus;
+        return this;
+    }
+
+    public ProcQuery setProcDefStatusList(List<String> procDefStatusList) {
+        this.procDefStatusList = procDefStatusList;
         return this;
     }
 
@@ -187,13 +285,18 @@ public class ProcQuery {
         return this;
     }
 
+    public ProcQuery setDataScope(String dataScope) {
+        this.dataScope = dataScope;
+        return this;
+    }
+
     /**
      * 查询对象列表。对象格式为Map。
      * 
      * @return
      */
     public List<Map<String, Object>> queryForMapList() {
-        return ffProcService.selectProc(procId, procDefId, adjustProcDefId, isolateSubProcNodeId, bizId, bizTypeList, bizCode, bizName, procStartUserList, fromProcStartDate, toProcStartDate, procEndUserList, fromProcEndDate, toProcEndDate, procStatusList, fromCreationDate, toCreationDate, procDefCodeList, procDefCat, page, limit);
+        return ffProcService.selectProc(procId, procIdList, adjustProcDefId, adjustProcDefIdList, isolateSubProcNodeId, isolateSubProcNodeIdList, bizId, bizIdList, bizType, bizTypeList, bizCode, bizCodeList, bizName, bizNameList, bizDesc, bizDescList, procStartUser, procStartUserList, procStartUserName, procStartUserNameList, procEndUser, procEndUserList, procEndUserName, procEndUserNameList, fromProcEndDate, toProcEndDate, procStatus, procStatusList, fromCreationDate, toCreationDate, procDefId, procDefIdList, procDefCode, procDefCodeList, procDefName, procDefNameList, procDefCat, procDefCatList, version, versionList, procDefStatus, procDefStatusList, page, limit, dataScope);
     }
 
     /**
@@ -247,6 +350,6 @@ public class ProcQuery {
      * @return
      */
     public int count() {
-        return ffProcService.countProc(procId, procDefId, adjustProcDefId, isolateSubProcNodeId, bizId, bizTypeList, bizCode, bizName, procStartUserList, fromProcStartDate, toProcStartDate, procEndUserList, fromProcEndDate, toProcEndDate, procStatusList, fromCreationDate, toCreationDate, procDefCodeList, procDefCat);
+        return ffProcService.countProc(procId, procIdList, adjustProcDefId, adjustProcDefIdList, isolateSubProcNodeId, isolateSubProcNodeIdList, bizId, bizIdList, bizType, bizTypeList, bizCode, bizCodeList, bizName, bizNameList, bizDesc, bizDescList, procStartUser, procStartUserList, procStartUserName, procStartUserNameList, procEndUser, procEndUserList, procEndUserName, procEndUserNameList, fromProcEndDate, toProcEndDate, procStatus, procStatusList, fromCreationDate, toCreationDate, procDefId, procDefIdList, procDefCode, procDefCodeList, procDefName, procDefNameList, procDefCat, procDefCatList, version, versionList, procDefStatus, procDefStatusList, dataScope);
     }
 }

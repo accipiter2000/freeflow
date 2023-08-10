@@ -11,10 +11,10 @@ public class RunningNodeDef extends NodeDef implements Serializable {
     private String nodeStatus;// 节点状态
     private Integer centerForwardStep;// 中心转发步骤
     private Map<String, Object> nodeVarMap;// 节点变量
-    private List<FfUser> assigneeList;// 解析后办理人列表
     private List<FfUser> candidateList;// 解析后候选人列表
-    private List<ProcDef> assignSubProcDefList;// 解析后办理子流程定义列表
     private List<ProcDef> candidateSubProcDefList;// 解析后候选子流程定义列表
+    private List<FfUser> assigneeList;// 解析后办理人列表
+    private List<ProcDef> assignSubProcDefList;// 解析后办理子流程定义列表
     private List<RunningProcDef> subProcRunningProcDefList;// 子流程运行期流程定义
 
     public RunningNodeDef(NodeDef nodeDef, RunningProcDef runningProcDef) {
@@ -22,17 +22,22 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.nodeCode = nodeDef.getNodeCode();
         this.nodeName = nodeDef.getNodeName();
         this.parentNodeCode = nodeDef.getParentNodeCode();
-        this.assignee = nodeDef.getAssignee();
         this.candidate = nodeDef.getCandidate();
-        this.assignSubProcDef = nodeDef.getAssignSubProcDef();
         this.candidateSubProcDef = nodeDef.getCandidateSubProcDef();
-        this.action = nodeDef.getAction();
-        this.dueDate = nodeDef.getDueDate();
         this.completeExpression = nodeDef.getCompleteExpression();
         this.completeReturn = nodeDef.getCompleteReturn();
         this.exclusive = nodeDef.getExclusive();
+        this.autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
+        this.autoCompleteEmptyAssignee = nodeDef.getAutoCompleteEmptyAssignee();
+        this.inform = nodeDef.getInform();
+        this.assignee = nodeDef.getAssignee();
+        this.assignSubProcDef = nodeDef.getAssignSubProcDef();
+        this.action = nodeDef.getAction();
+        this.dueDate = nodeDef.getDueDate();
+        this.claim = nodeDef.getClaim();
         this.forwardable = nodeDef.getForwardable();
         this.priority = nodeDef.getPriority();
+
         this.shape = nodeDef.getShape();
 
         this.procDef = runningProcDef;
@@ -54,20 +59,12 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.parentNodeCode = parentNodeCode;
     }
 
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
-    }
-
     public void setCandidate(String candidate) {
         this.candidate = candidate;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
+    public void setCandidateSubProcDef(String candidateSubProcDef) {
+        this.candidateSubProcDef = candidateSubProcDef;
     }
 
     public void setCompleteExpression(String completeExpression) {
@@ -82,11 +79,43 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.exclusive = exclusive;
     }
 
+    public void setAutoCompleteSameAssignee(String autoCompleteSameAssignee) {
+        this.autoCompleteSameAssignee = autoCompleteSameAssignee;
+    }
+
+    public void setAutoCompleteEmptyAssignee(String autoCompleteEmptyAssignee) {
+        this.autoCompleteEmptyAssignee = autoCompleteEmptyAssignee;
+    }
+
+    public void setInform(String inform) {
+        this.inform = inform;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public void setAssignSubProcDef(String assignSubProcDef) {
+        this.assignSubProcDef = assignSubProcDef;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setClaim(String claim) {
+        this.claim = claim;
+    }
+
     public void setForwardable(String forwardable) {
         this.forwardable = forwardable;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -142,14 +171,6 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.nodeVarMap = nodeVarMap;
     }
 
-    public List<FfUser> getAssigneeList() {
-        return assigneeList;
-    }
-
-    public void setAssigneeList(List<FfUser> assigneeList) {
-        this.assigneeList = assigneeList;
-    }
-
     public List<FfUser> getCandidateList() {
         return candidateList;
     }
@@ -158,20 +179,28 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.candidateList = candidateList;
     }
 
-    public List<ProcDef> getAssignSubProcDefList() {
-        return assignSubProcDefList;
-    }
-
-    public void setAssignSubProcDefList(List<ProcDef> assignSubProcDefList) {
-        this.assignSubProcDefList = assignSubProcDefList;
-    }
-
     public List<ProcDef> getCandidateSubProcDefList() {
         return candidateSubProcDefList;
     }
 
     public void setCandidateSubProcDefList(List<ProcDef> candidateSubProcDefList) {
         this.candidateSubProcDefList = candidateSubProcDefList;
+    }
+
+    public List<FfUser> getAssigneeList() {
+        return assigneeList;
+    }
+
+    public void setAssigneeList(List<FfUser> assigneeList) {
+        this.assigneeList = assigneeList;
+    }
+
+    public List<ProcDef> getAssignSubProcDefList() {
+        return assignSubProcDefList;
+    }
+
+    public void setAssignSubProcDefList(List<ProcDef> assignSubProcDefList) {
+        this.assignSubProcDefList = assignSubProcDefList;
     }
 
     public List<RunningProcDef> getSubProcRunningProcDefList() {

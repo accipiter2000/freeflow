@@ -54,8 +54,8 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
     }
 
     @Override
-    public List<Map<String, Object>> selectAdjustProcDef(String ADJUST_PROC_DEF_ID_, String PROC_DEF_ID_, Integer page, Integer limit) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaAdjustProcDef(false, ADJUST_PROC_DEF_ID_, PROC_DEF_ID_);// 根据查询条件组装查询SQL语句
+    public List<Map<String, Object>> selectAdjustProcDef(String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, Integer page, Integer limit) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaAdjustProcDef(false, ADJUST_PROC_DEF_ID_, ADJUST_PROC_DEF_ID_LIST, PROC_DEF_ID_, PROC_DEF_ID_LIST);// 根据查询条件组装查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -70,8 +70,8 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
     }
 
     @Override
-    public int countAdjustProcDef(String ADJUST_PROC_DEF_ID_, String PROC_DEF_ID_) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaAdjustProcDef(true, ADJUST_PROC_DEF_ID_, PROC_DEF_ID_);// 根据查询条件组装总数查询SQL语句
+    public int countAdjustProcDef(String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaAdjustProcDef(true, ADJUST_PROC_DEF_ID_, ADJUST_PROC_DEF_ID_LIST, PROC_DEF_ID_, PROC_DEF_ID_LIST);// 根据查询条件组装总数查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -79,7 +79,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    private OdSqlCriteria buildSqlCriteriaAdjustProcDef(boolean count, String ADJUST_PROC_DEF_ID_, String PROC_DEF_ID_) {// 组装查询SQL语句
+    private OdSqlCriteria buildSqlCriteriaAdjustProcDef(boolean count, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST) {// 组装查询SQL语句
         String sql;
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -94,9 +94,17 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
             sql += " and ADJUST_PROC_DEF_ID_ = :ADJUST_PROC_DEF_ID_";
             paramMap.put("ADJUST_PROC_DEF_ID_", ADJUST_PROC_DEF_ID_);
         }
+        if (ADJUST_PROC_DEF_ID_LIST != null && ADJUST_PROC_DEF_ID_LIST.size() > 0) {
+            sql += " and ADJUST_PROC_DEF_ID_ in (:ADJUST_PROC_DEF_ID_LIST)";
+            paramMap.put("ADJUST_PROC_DEF_ID_LIST", ADJUST_PROC_DEF_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(PROC_DEF_ID_)) {
             sql += " and PROC_DEF_ID_ = :PROC_DEF_ID_";
             paramMap.put("PROC_DEF_ID_", PROC_DEF_ID_);
+        }
+        if (PROC_DEF_ID_LIST != null && PROC_DEF_ID_LIST.size() > 0) {
+            sql += " and PROC_DEF_ID_ in (:PROC_DEF_ID_LIST)";
+            paramMap.put("PROC_DEF_ID_LIST", PROC_DEF_ID_LIST);
         }
 
         return new OdSqlCriteria(sql, paramMap);

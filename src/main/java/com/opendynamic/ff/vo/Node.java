@@ -10,7 +10,6 @@ public class Node implements Serializable {
 
     private String nodeId; // 节点ID
     private String parentNodeId; // 上级节点ID
-    private String procId; // 流程ID
     private String previousNodeIds; // 前节点IDs
     private String lastCompleteNodeIds; // 最后完成节点IDs
     private String subProcDefId; // 子流程定义ID
@@ -19,18 +18,19 @@ public class Node implements Serializable {
     private String nodeCode; // 节点编码
     private String nodeName; // 节点名称
     private String parentNodeCode; // 上级节点编码
-    private String assignee; // 办理人
     private String candidate; // 候选人
-    private String action; // 业务行为
-    private String dueDate; // 截止日期
     private String completeExpression; // 完成表达式
     private String completeReturn; // 完成后返回前一个节点
     private String exclusive; // 排他
-    private String forwardable; // 可转发
     private String autoCompleteSameAssignee; // 自动完成相同办理人任务
     private String autoCompleteEmptyAssignee; // 自动完成没有办理人节点
     private String inform; // 通知
-    private Integer priority; // 优先级
+    private String assignee; // 办理人
+    private String action; // 业务行为
+    private String dueDate; // 截止日期
+    private String claim; // 认领
+    private String forwardable; // 可转发
+    private String priority; // 优先级
     private String nodeEndUser; // 节点完成人员
     private String nodeEndUserName; // 节点完成人员名称
     private Date nodeEndDate; // 节点完成日期
@@ -38,17 +38,27 @@ public class Node implements Serializable {
     private String isolateSubProcStatus; // 独立子流程状态
     private String nodeStatus; // 节点状态
     private Date creationDate; // 创建日期
+    private String procId; // 流程ID
+    private String adjustProcDefId; // 调整流程定义ID
+    private String isolateSubProcNodeId; // 独立子流程所属节点ID
     private String bizId; // 业务主键
     private String bizType; // 业务类型
     private String bizCode; // 业务编码
     private String bizName; // 业务名称
+    private String bizDesc; // 业务备注
     private String procStartUser; // 流程开始人员
     private String procStartUserName; // 流程开始人员名称
-    private Date procStartDate; // 流程开始日期
     private String procEndUser; // 流程完成人员
     private String procEndUserName; // 流程完成人员名称
     private Date procEndDate; // 流程完成日期
     private String procStatus; // 流程状态
+    private Date procCreationDate; // 流程创建日期
+    private String procDefId; // 流程定义ID
+    private String procDefCode; // 流程定义编码
+    private String procDefName; // 流程定义名称
+    private String procDefCat; // 流程定义分类
+    private Integer version; // 版本
+    private String procDefStatus; // 流程定义状态
 
     public Node() {
     }
@@ -61,7 +71,6 @@ public class Node implements Serializable {
     public Node(Map<String, Object> data) {
         this.nodeId = (String) data.get("NODE_ID_");
         this.parentNodeId = (String) data.get("PARENT_NODE_ID_");
-        this.procId = (String) data.get("PROC_ID_");
         this.previousNodeIds = (String) data.get("PREVIOUS_NODE_IDS_");
         this.lastCompleteNodeIds = (String) data.get("LAST_COMPLETE_NODE_IDS_");
         this.subProcDefId = (String) data.get("SUB_PROC_DEF_ID_");
@@ -70,18 +79,19 @@ public class Node implements Serializable {
         this.nodeCode = (String) data.get("NODE_CODE_");
         this.nodeName = (String) data.get("NODE_NAME_");
         this.parentNodeCode = (String) data.get("PARENT_NODE_CODE_");
-        this.assignee = (String) data.get("ASSIGNEE_");
         this.candidate = (String) data.get("CANDIDATE_");
-        this.action = (String) data.get("ACTION_");
-        this.dueDate = (String) data.get("DUE_DATE_");
         this.completeExpression = (String) data.get("COMPLETE_EXPRESSION_");
         this.completeReturn = (String) data.get("COMPLETE_RETURN_");
         this.exclusive = (String) data.get("EXCLUSIVE_");
-        this.forwardable = (String) data.get("FORWARDABLE_");
         this.autoCompleteSameAssignee = (String) data.get("AUTO_COMPLETE_SAME_ASSIGNEE_");
         this.autoCompleteEmptyAssignee = (String) data.get("AUTO_COMPLETE_EMPTY_ASSIGNEE_");
         this.inform = (String) data.get("INFORM_");
-        this.priority = ((BigDecimal) data.get("PRIORITY_")).intValue();
+        this.assignee = (String) data.get("ASSIGNEE_");
+        this.action = (String) data.get("ACTION_");
+        this.dueDate = (String) data.get("DUE_DATE_");
+        this.claim = (String) data.get("CLAIM_");
+        this.forwardable = (String) data.get("FORWARDABLE_");
+        this.priority = (String) data.get("PRIORITY_");
         this.nodeEndUser = (String) data.get("NODE_END_USER_");
         this.nodeEndUserName = (String) data.get("NODE_END_USER_NAME_");
         this.nodeEndDate = (Date) data.get("NODE_END_DATE_");
@@ -89,17 +99,27 @@ public class Node implements Serializable {
         this.isolateSubProcStatus = (String) data.get("ISOLATE_SUB_PROC_STATUS_");
         this.nodeStatus = (String) data.get("NODE_STATUS_");
         this.creationDate = (Date) data.get("CREATION_DATE_");
+        this.procId = (String) data.get("PROC_ID_");
+        this.adjustProcDefId = (String) data.get("ADJUST_PROC_DEF_ID_");
+        this.isolateSubProcNodeId = (String) data.get("ISOLATE_SUB_PROC_NODE_ID_");
         this.bizId = (String) data.get("BIZ_ID_");
         this.bizType = (String) data.get("BIZ_TYPE_");
         this.bizCode = (String) data.get("BIZ_CODE_");
         this.bizName = (String) data.get("BIZ_NAME_");
+        this.bizDesc = (String) data.get("BIZ_DESC_");
         this.procStartUser = (String) data.get("PROC_START_USER_");
         this.procStartUserName = (String) data.get("PROC_START_USER_NAME_");
-        this.procStartDate = (Date) data.get("PROC_START_DATE_");
         this.procEndUser = (String) data.get("PROC_END_USER_");
         this.procEndUserName = (String) data.get("PROC_END_USER_NAME_");
         this.procEndDate = (Date) data.get("PROC_END_DATE_");
         this.procStatus = (String) data.get("PROC_STATUS_");
+        this.procCreationDate = (Date) data.get("PROC_CREATION_DATE_");
+        this.procDefId = (String) data.get("PROC_DEF_ID_");
+        this.procDefCode = (String) data.get("PROC_DEF_CODE_");
+        this.procDefName = (String) data.get("PROC_DEF_NAME_");
+        this.procDefCat = (String) data.get("PROC_DEF_CAT_");
+        this.version = (data.get("VERSION_") != null) ? (((BigDecimal) data.get("VERSION_")).intValue()) : null;
+        this.procDefStatus = (String) data.get("PROC_DEF_STATUS_");
     }
 
     public String getNodeId() {
@@ -116,14 +136,6 @@ public class Node implements Serializable {
 
     public void setParentNodeId(String parentNodeId) {
         this.parentNodeId = parentNodeId;
-    }
-
-    public String getProcId() {
-        return procId;
-    }
-
-    public void setProcId(String procId) {
-        this.procId = procId;
     }
 
     public String getPreviousNodeIds() {
@@ -190,36 +202,12 @@ public class Node implements Serializable {
         this.parentNodeCode = parentNodeCode;
     }
 
-    public String getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
-    }
-
     public String getCandidate() {
         return candidate;
     }
 
     public void setCandidate(String candidate) {
         this.candidate = candidate;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
     }
 
     public String getCompleteExpression() {
@@ -246,14 +234,6 @@ public class Node implements Serializable {
         this.exclusive = exclusive;
     }
 
-    public String getForwardable() {
-        return forwardable;
-    }
-
-    public void setForwardable(String forwardable) {
-        this.forwardable = forwardable;
-    }
-
     public String getAutoCompleteSameAssignee() {
         return autoCompleteSameAssignee;
     }
@@ -278,11 +258,51 @@ public class Node implements Serializable {
         this.inform = inform;
     }
 
-    public Integer getPriority() {
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getClaim() {
+        return claim;
+    }
+
+    public void setClaim(String claim) {
+        this.claim = claim;
+    }
+
+    public String getForwardable() {
+        return forwardable;
+    }
+
+    public void setForwardable(String forwardable) {
+        this.forwardable = forwardable;
+    }
+
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -342,6 +362,30 @@ public class Node implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public String getProcId() {
+        return procId;
+    }
+
+    public void setProcId(String procId) {
+        this.procId = procId;
+    }
+
+    public String getAdjustProcDefId() {
+        return adjustProcDefId;
+    }
+
+    public void setAdjustProcDefId(String adjustProcDefId) {
+        this.adjustProcDefId = adjustProcDefId;
+    }
+
+    public String getIsolateSubProcNodeId() {
+        return isolateSubProcNodeId;
+    }
+
+    public void setIsolateSubProcNodeId(String isolateSubProcNodeId) {
+        this.isolateSubProcNodeId = isolateSubProcNodeId;
+    }
+
     public String getBizId() {
         return bizId;
     }
@@ -374,6 +418,14 @@ public class Node implements Serializable {
         this.bizName = bizName;
     }
 
+    public String getBizDesc() {
+        return bizDesc;
+    }
+
+    public void setBizDesc(String bizDesc) {
+        this.bizDesc = bizDesc;
+    }
+
     public String getProcStartUser() {
         return procStartUser;
     }
@@ -388,14 +440,6 @@ public class Node implements Serializable {
 
     public void setProcStartUserName(String procStartUserName) {
         this.procStartUserName = procStartUserName;
-    }
-
-    public Date getProcStartDate() {
-        return procStartDate;
-    }
-
-    public void setProcStartDate(Date procStartDate) {
-        this.procStartDate = procStartDate;
     }
 
     public String getProcEndUser() {
@@ -428,5 +472,61 @@ public class Node implements Serializable {
 
     public void setProcStatus(String procStatus) {
         this.procStatus = procStatus;
+    }
+
+    public Date getProcCreationDate() {
+        return procCreationDate;
+    }
+
+    public void setProcCreationDate(Date procCreationDate) {
+        this.procCreationDate = procCreationDate;
+    }
+
+    public String getProcDefId() {
+        return procDefId;
+    }
+
+    public void setProcDefId(String procDefId) {
+        this.procDefId = procDefId;
+    }
+
+    public String getProcDefCode() {
+        return procDefCode;
+    }
+
+    public void setProcDefCode(String procDefCode) {
+        this.procDefCode = procDefCode;
+    }
+
+    public String getProcDefName() {
+        return procDefName;
+    }
+
+    public void setProcDefName(String procDefName) {
+        this.procDefName = procDefName;
+    }
+
+    public String getProcDefCat() {
+        return procDefCat;
+    }
+
+    public void setProcDefCat(String procDefCat) {
+        this.procDefCat = procDefCat;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public String getProcDefStatus() {
+        return procDefStatus;
+    }
+
+    public void setProcDefStatus(String procDefStatus) {
+        this.procDefStatus = procDefStatus;
     }
 }

@@ -15,10 +15,15 @@ public class DelegateQuery {
     private FfDelegateService ffDelegateService;
 
     String delegateId;
+    private List<String> delegateIdList;
     String assignee;
+    private List<String> assigneeList;
     String assigneeName;
+    private List<String> assigneeNameList;
     String delegator;
+    private List<String> delegatorList;
     String delegatorName;
+    private List<String> delegatorNameList;
     Date fromStartDate;
     Date toStartDate;
     Date fromEndDate;
@@ -36,8 +41,18 @@ public class DelegateQuery {
         return this;
     }
 
+    public DelegateQuery setDelegateIdList(List<String> delegateIdList) {
+        this.delegateIdList = delegateIdList;
+        return this;
+    }
+
     public DelegateQuery setAssignee(String assignee) {
         this.assignee = assignee;
+        return this;
+    }
+
+    public DelegateQuery setAssigneeList(List<String> assigneeList) {
+        this.assigneeList = assigneeList;
         return this;
     }
 
@@ -46,13 +61,28 @@ public class DelegateQuery {
         return this;
     }
 
+    public DelegateQuery setAssigneeNameList(List<String> assigneeNameList) {
+        this.assigneeNameList = assigneeNameList;
+        return this;
+    }
+
     public DelegateQuery setDelegator(String delegator) {
         this.delegator = delegator;
         return this;
     }
 
+    public DelegateQuery setDelegatorList(List<String> delegatorList) {
+        this.delegatorList = delegatorList;
+        return this;
+    }
+
     public DelegateQuery setDelegatorName(String delegatorName) {
         this.delegatorName = delegatorName;
+        return this;
+    }
+
+    public DelegateQuery setDelegatorNameList(List<String> delegatorNameList) {
+        this.delegatorNameList = delegatorNameList;
         return this;
     }
 
@@ -92,7 +122,7 @@ public class DelegateQuery {
      * @return
      */
     public List<Map<String, Object>> queryForMapList() {
-        return ffDelegateService.selectDelegate(delegateId, assignee, assigneeName, delegator, delegatorName, fromStartDate, toStartDate, fromEndDate, toEndDate, page, limit);
+        return ffDelegateService.selectDelegate(delegateId, delegateIdList, assignee, assigneeList, assigneeName, assigneeNameList, delegator, delegatorList, delegatorName, delegatorNameList, fromStartDate, toStartDate, fromEndDate, toEndDate, page, limit);
     }
 
     /**
@@ -146,6 +176,6 @@ public class DelegateQuery {
      * @return
      */
     public int count() {
-        return ffDelegateService.countDelegate(delegateId, assignee, assigneeName, delegator, delegatorName, fromStartDate, toStartDate, fromEndDate, toEndDate);
+        return ffDelegateService.countDelegate(delegateId, delegateIdList, assignee, assigneeList, assigneeName, assigneeNameList, delegator, delegatorList, delegatorName, delegatorNameList, fromStartDate, toStartDate, fromEndDate, toEndDate);
     }
 }

@@ -29,25 +29,27 @@ public class LineShape extends Shape implements Serializable {
     private void initPointList() {
         pointList = new ArrayList<>();
 
-        NodeDef sourceNode = ((FlowDef) owner).getSourceNodeDef();
-        NodeDef targetNode = ((FlowDef) owner).getTargetNodeDef();
+        NodeDef sourceNodeDef = ((FlowDef) owner).getSourceNodeDef();
+        NodeDef targetNodeDef = ((FlowDef) owner).getTargetNodeDef();
 
-        int sourceNodeLeft = sourceNode.getShape().getLeft();
-        int sourceNodeTop = sourceNode.getShape().getTop();
-        int sourceNodeWidth = sourceNode.getShape().getWidth();
-        int sourceNodeHeight = sourceNode.getShape().getHeight();
-        int targetNodeLeft = targetNode.getShape().getLeft();
-        int targetNodeTop = targetNode.getShape().getTop();
-        int targetNodeWidth = targetNode.getShape().getWidth();
-        int targetNodeHeight = targetNode.getShape().getHeight();
+        int sourceNodeLeft = sourceNodeDef.getShape().getLeft();
+        int sourceNodeTop = sourceNodeDef.getShape().getTop();
+        int sourceNodeWidth = sourceNodeDef.getShape().getWidth();
+        int sourceNodeHeight = sourceNodeDef.getShape().getHeight();
+        int targetNodeLeft = targetNodeDef.getShape().getLeft();
+        int targetNodeTop = targetNodeDef.getShape().getTop();
+        int targetNodeWidth = targetNodeDef.getShape().getWidth();
+        int targetNodeHeight = targetNodeDef.getShape().getHeight();
 
         String startDirection = null;
         String endDirection = null;
         Point startPoint = null;
-        Point startStretchPoint = null;
+        Point startStubPoint = null;
         Point m1Point = null;
         Point m2Point = null;
-        Point endStretchPoint = null;
+        Point m3Point = null;
+        Point m4Point = null;
+        Point endStubPoint = null;
         Point endPoint = null;
         if (getLinePath().equals("D")) {// 直线
             if (Math.abs(sourceNodeLeft - targetNodeLeft) <= Math.abs(sourceNodeTop - targetNodeTop)) {
@@ -80,109 +82,150 @@ public class LineShape extends Shape implements Serializable {
 
             if (startDirection.equals("N")) {// 计算起点，终点和各自的延长点
                 startPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop);
-                startStretchPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop - getStub());
+                startStubPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop - getStub());
             }
             if (startDirection.equals("E")) {
                 startPoint = new Point(sourceNodeLeft + sourceNodeWidth, sourceNodeTop + sourceNodeHeight / 2);
-                startStretchPoint = new Point(sourceNodeLeft + sourceNodeWidth + getStub(), sourceNodeTop + sourceNodeHeight / 2);
+                startStubPoint = new Point(sourceNodeLeft + sourceNodeWidth + getStub(), sourceNodeTop + sourceNodeHeight / 2);
             }
             if (startDirection.equals("S")) {
                 startPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop + sourceNodeHeight);
-                startStretchPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop + sourceNodeHeight + getStub());
+                startStubPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop + sourceNodeHeight + getStub());
             }
             if (startDirection.equals("W")) {
                 startPoint = new Point(sourceNodeLeft, sourceNodeTop + sourceNodeHeight / 2);
-                startStretchPoint = new Point(sourceNodeLeft - getStub(), sourceNodeTop + sourceNodeHeight / 2);
+                startStubPoint = new Point(sourceNodeLeft - getStub(), sourceNodeTop + sourceNodeHeight / 2);
             }
             if (endDirection.equals("N")) {
                 endPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop);
-                endStretchPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop - getStub());
+                endStubPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop - getStub());
             }
             if (endDirection.equals("E")) {
                 endPoint = new Point(targetNodeLeft + targetNodeWidth, targetNodeTop + targetNodeHeight / 2);
-                endStretchPoint = new Point(targetNodeLeft + targetNodeWidth + getStub(), targetNodeTop + targetNodeHeight / 2);
+                endStubPoint = new Point(targetNodeLeft + targetNodeWidth + getStub(), targetNodeTop + targetNodeHeight / 2);
             }
             if (endDirection.equals("S")) {
                 endPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop + targetNodeHeight);
-                endStretchPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop + targetNodeHeight + getStub());
+                endStubPoint = new Point(targetNodeLeft + targetNodeWidth / 2, targetNodeTop + targetNodeHeight + getStub());
             }
             if (endDirection.equals("W")) {
                 endPoint = new Point(targetNodeLeft, targetNodeTop + targetNodeHeight / 2);
-                endStretchPoint = new Point(targetNodeLeft - getStub(), targetNodeTop + targetNodeHeight / 2);
+                endStubPoint = new Point(targetNodeLeft - getStub(), targetNodeTop + targetNodeHeight / 2);
             }
 
             // 计算中间折点
-            if (isSameDirection(startStretchPoint, endStretchPoint, startDirection)) {// 与开始方向相同
-                if (isSameRotation(startPoint, endPoint, startDirection, endDirection)) {// 同向折线
+            if (isSameDirection(startStubPoint, endStubPoint, startDirection)) {// 与开始方向相同
+                if (isSubjectToEndStub(startStubPoint, endStubPoint, startDirection, endDirection)) {// 以终点折点为准
                     if (startDirection.equals("N") || startDirection.equals("S")) {
-                        m1Point = new Point(startStretchPoint.x, endStretchPoint.y);
+                        m1Point = new Point(startStubPoint.x, endStubPoint.y);// 计算起点折点
+                        if (!m1Point.equals(endStubPoint) && (endDirection.equals("N") || endDirection.equals("S"))) {// 计算终点折点
+                            m4Point = endStubPoint;
+                        }
                     }
                     else {
-                        m1Point = new Point(endStretchPoint.x, startStretchPoint.y);
-                    }
-
-                    if (startDirection.equals(endDirection)) {
-                        m2Point = endStretchPoint;
+                        m1Point = new Point(endStubPoint.x, startStubPoint.y);// 计算起点折点
+                        if (!m1Point.equals(endStubPoint) && (endDirection.equals("E") || endDirection.equals("W"))) {// 计算终点折点
+                            m4Point = endStubPoint;
+                        }
                     }
                 }
                 else {// 反向折线
                     if (startDirection.equals(reverseDirection(endDirection))) {// 中点双折
                         if (startDirection.equals("N") || startDirection.equals("S")) {
-                            m1Point = new Point(startStretchPoint.x, (startStretchPoint.y + endStretchPoint.y) / 2);
-                            m2Point = new Point(endStretchPoint.x, (startStretchPoint.y + endStretchPoint.y) / 2);
+                            m1Point = new Point(startStubPoint.x, (startStubPoint.y + endStubPoint.y) / 2);
+                            m4Point = new Point(endStubPoint.x, (startStubPoint.y + endStubPoint.y) / 2);
                         }
                         else {
-                            m1Point = new Point((startStretchPoint.x + endStretchPoint.x) / 2, startStretchPoint.y);
-                            m2Point = new Point((startStretchPoint.x + endStretchPoint.x) / 2, endStretchPoint.y);
+                            m1Point = new Point((startStubPoint.x + endStubPoint.x) / 2, startStubPoint.y);
+                            m4Point = new Point((startStubPoint.x + endStubPoint.x) / 2, endStubPoint.y);
+                        }
+
+                        if (m1Point.equals(m4Point)) {// 起终折点在一条直线上，取消折点
+                            m1Point = null;
+                            m4Point = null;
                         }
                     }
                     else {// 反向单折
-                        if (startDirection.equals("N") || startDirection.equals("S")) {
-                            m1Point = new Point(endStretchPoint.x, startStretchPoint.y);
+                        if (!startStubPoint.equals(endStubPoint)) {// 起终折点不在一条直线上，添加折点
+                            m1Point = startStubPoint;
+                            m4Point = endStubPoint;
+                        }
+
+                        if (startDirection.equals("N") || startDirection.equals("S")) {// 计算单折折点
+                            m2Point = new Point(endStubPoint.x, startStubPoint.y);
                         }
                         else {
-                            m1Point = new Point(startStretchPoint.x, endStretchPoint.y);
+                            m2Point = new Point(startStubPoint.x, endStubPoint.y);
+                        }
+
+                        if (m2Point.equals(m1Point) || m2Point.equals(m4Point)) {// 与折点重合取消
+                            m2Point = null;
                         }
                     }
                 }
             }
             else {// 与开始方向相反
-                if (startDirection.equals(reverseDirection(endDirection))) {// 中点双折
+                if (startDirection.equals(endDirection)) {// 同向单折
+                    m1Point = startStubPoint;
+
                     if (startDirection.equals("N") || startDirection.equals("S")) {
-                        m1Point = new Point((startStretchPoint.x + endStretchPoint.x) / 2, startStretchPoint.y);
-                        m2Point = new Point((startStretchPoint.x + endStretchPoint.x) / 2, endStretchPoint.y);
+                        m4Point = new Point(endStubPoint.x, startStubPoint.y);
                     }
                     else {
-                        m1Point = new Point(startStretchPoint.x, (startStretchPoint.y + endStretchPoint.y) / 2);
-                        m2Point = new Point(endStretchPoint.x, (startStretchPoint.y + endStretchPoint.y) / 2);
+                        m4Point = new Point(startStubPoint.x, endStubPoint.y);
+                    }
+
+                    if (m4Point.equals(m1Point)) {// 与折点重合取消
+                        m4Point = null;
                     }
                 }
-                else {// 单折
-                    if (startDirection.equals("N") || startDirection.equals("S")) {
-                        m1Point = new Point(endStretchPoint.x, startStretchPoint.y);
+                else
+                    if (startDirection.equals(reverseDirection(endDirection))) {// 反向中点双折
+                        m1Point = startStubPoint;
+                        m4Point = endStubPoint;
+
+                        if (startDirection.equals("N") || startDirection.equals("S")) {
+                            m2Point = new Point((startStubPoint.x + endStubPoint.x) / 2, startStubPoint.y);
+                            m3Point = new Point((startStubPoint.x + endStubPoint.x) / 2, endStubPoint.y);
+                        }
+                        else {
+                            m2Point = new Point(startStubPoint.x, (startStubPoint.y + endStubPoint.y) / 2);
+                            m3Point = new Point(endStubPoint.x, (startStubPoint.y + endStubPoint.y) / 2);
+                        }
+
+                        // 与折点重合取消
+                        if (m2Point.equals(m1Point)) {
+                            m2Point = null;
+                        }
+                        if (m3Point.equals(m4Point)) {
+                            m3Point = null;
+                        }
                     }
-                    else {
-                        m1Point = new Point(startStretchPoint.x, endStretchPoint.y);
+                    else {// 单折
+                        m1Point = startStubPoint;
+                        m4Point = endStubPoint;
+
+                        if (startDirection.equals("N") || startDirection.equals("S")) {
+                            m2Point = new Point(endStubPoint.x, startStubPoint.y);
+                        }
+                        else {
+                            m2Point = new Point(startStubPoint.x, endStubPoint.y);
+                        }
                     }
-                }
             }
 
             pointList.add(startPoint);
             if (m1Point != null) {
-                if (startPoint.x != m1Point.x && startPoint.y != m1Point.y) {
-                    pointList.add(startStretchPoint);
-                }
-                if (!((startPoint.x == m1Point.x && m1Point.x == endPoint.x) || (startPoint.y == m1Point.y && m1Point.y == endPoint.y))) {
-                    pointList.add(m1Point);
-                }
+                pointList.add(m1Point);
             }
             if (m2Point != null) {
-                if (!((startPoint.x == m2Point.x && m2Point.x == endPoint.x) || (startPoint.y == m2Point.y && m2Point.y == endPoint.y))) {
-                    pointList.add(m2Point);
-                }
-                if (endPoint.x != m2Point.x && endPoint.y != m2Point.y) {
-                    pointList.add(endStretchPoint);
-                }
+                pointList.add(m2Point);
+            }
+            if (m3Point != null) {
+                pointList.add(m3Point);
+            }
+            if (m4Point != null) {
+                pointList.add(m4Point);
             }
             pointList.add(endPoint);
         }
@@ -206,40 +249,40 @@ public class LineShape extends Shape implements Serializable {
     }
 
     private boolean isSameDirection(Point startPoint, Point endPoint, String startDirection) {// 终点是否在起点方向的同向一侧
-        if (startDirection.equals("N") && endPoint.y < startPoint.y) {
+        if (startDirection.equals("N") && endPoint.y <= startPoint.y) {
             return true;
         }
-        if (startDirection.equals("E") && endPoint.x > startPoint.x) {
+        if (startDirection.equals("E") && endPoint.x >= startPoint.x) {
             return true;
         }
-        if (startDirection.equals("S") && endPoint.y > startPoint.y) {
+        if (startDirection.equals("S") && endPoint.y >= startPoint.y) {
             return true;
         }
-        if (startDirection.equals("W") && endPoint.x < startPoint.x) {
+        if (startDirection.equals("W") && endPoint.x <= startPoint.x) {
             return true;
         }
 
         return false;
     }
 
-    private boolean isSameRotation(Point startPoint, Point endPoint, String startDirection, String endDirection) {// 折线是否为同一旋转方向
+    private boolean isSubjectToEndStub(Point startStubPoint, Point endStubPoint, String startDirection, String endDirection) {// 以终点折点为准
         if (startDirection.equals("N")) {
-            if ((endDirection.equals("N") && endPoint.y < startPoint.y) || (endDirection.equals("E") && endPoint.x < startPoint.x) || (endDirection.equals("W") && endPoint.x > startPoint.x)) {
+            if ((endDirection.equals("N")) || (endDirection.equals("E") && endStubPoint.x <= startStubPoint.x) || (endDirection.equals("W") && endStubPoint.x >= startStubPoint.x)) {
                 return true;
             }
         }
         if (startDirection.equals("E")) {
-            if ((endDirection.equals("E") && endPoint.x > startPoint.x) || (endDirection.equals("N") && endPoint.y > startPoint.y) || (endDirection.equals("S") && endPoint.y < startPoint.y)) {
+            if ((endDirection.equals("E")) || (endDirection.equals("N") && endStubPoint.y >= startStubPoint.y) || (endDirection.equals("S") && endStubPoint.y <= startStubPoint.y)) {
                 return true;
             }
         }
         if (startDirection.equals("S")) {
-            if ((endDirection.equals("S") && endPoint.y > startPoint.y) || (endDirection.equals("E") && endPoint.x < startPoint.x) || (endDirection.equals("W") && endPoint.x > startPoint.x)) {
+            if ((endDirection.equals("S")) || (endDirection.equals("E") && endStubPoint.x <= startStubPoint.x) || (endDirection.equals("W") && endStubPoint.x >= startStubPoint.x)) {
                 return true;
             }
         }
         if (startDirection.equals("W")) {
-            if ((endDirection.equals("W") && endPoint.x < startPoint.x) || (endDirection.equals("N") && endPoint.y > startPoint.y) || (endDirection.equals("S") && endPoint.y < startPoint.y)) {
+            if ((endDirection.equals("W")) || (endDirection.equals("N") && endStubPoint.y >= startStubPoint.y) || (endDirection.equals("S") && endStubPoint.y <= startStubPoint.y)) {
                 return true;
             }
         }
@@ -296,6 +339,7 @@ public class LineShape extends Shape implements Serializable {
             Point endPoint = pointList.get(getTextLineIndex() + 1);
             int x = (int) (startPoint.getX() + endPoint.getX()) / 2 - getTextWidth() / 2 + getTextOffsetX();
             int y = (int) (startPoint.getY() + endPoint.getY()) / 2 - getTextHeight() / 2 + getTextOffsetY();
+            g2d.setColor(getColor());// 绘制文字
             Font font = new Font(getFontFamily(), getFontWeight(), getFontSize());
             OdUtils.drawStringInCell(g2d, text, x, y, getTextWidth(), getTextHeight(), Shape.VERTICAL_ALIGN_MIDDLE, font);
         }

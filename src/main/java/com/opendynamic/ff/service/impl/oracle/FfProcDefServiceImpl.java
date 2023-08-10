@@ -67,8 +67,8 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
     }
 
     @Override
-    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaProcDef(false, PROC_DEF_ID_, PROC_DEF_CODE_, PROC_DEF_NAME_, PROC_DEF_CAT_, PROC_DEF_STATUS_LIST);// 根据查询条件组装查询SQL语句
+    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaProcDef(false, PROC_DEF_ID_, PROC_DEF_ID_LIST, PROC_DEF_CODE_, PROC_DEF_CODE_LIST, PROC_DEF_NAME_, PROC_DEF_NAME_LIST, PROC_DEF_CAT_, PROC_DEF_CAT_LIST, VERSION_, VERSION_LIST, PROC_DEF_STATUS_, PROC_DEF_STATUS_LIST);// 根据查询条件组装查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -83,8 +83,8 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
     }
 
     @Override
-    public int countProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, List<String> PROC_DEF_STATUS_LIST) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaProcDef(true, PROC_DEF_ID_, PROC_DEF_CODE_, PROC_DEF_NAME_, PROC_DEF_CAT_, PROC_DEF_STATUS_LIST);// 根据查询条件组装总数查询SQL语句
+    public int countProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaProcDef(true, PROC_DEF_ID_, PROC_DEF_ID_LIST, PROC_DEF_CODE_, PROC_DEF_CODE_LIST, PROC_DEF_NAME_, PROC_DEF_NAME_LIST, PROC_DEF_CAT_, PROC_DEF_CAT_LIST, VERSION_, VERSION_LIST, PROC_DEF_STATUS_, PROC_DEF_STATUS_LIST);// 根据查询条件组装总数查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -92,7 +92,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    private OdSqlCriteria buildSqlCriteriaProcDef(boolean count, String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, List<String> PROC_DEF_STATUS_LIST) {// 组装查询SQL语句
+    private OdSqlCriteria buildSqlCriteriaProcDef(boolean count, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST) {// 组装查询SQL语句
         String sql;
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -107,17 +107,45 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
             sql += " and PROC_DEF_ID_ = :PROC_DEF_ID_";
             paramMap.put("PROC_DEF_ID_", PROC_DEF_ID_);
         }
+        if (PROC_DEF_ID_LIST != null && PROC_DEF_ID_LIST.size() > 0) {
+            sql += " and PROC_DEF_ID_ in (:PROC_DEF_ID_LIST)";
+            paramMap.put("PROC_DEF_ID_LIST", PROC_DEF_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(PROC_DEF_CODE_)) {
             sql += " and PROC_DEF_CODE_ = :PROC_DEF_CODE_";
             paramMap.put("PROC_DEF_CODE_", PROC_DEF_CODE_);
+        }
+        if (PROC_DEF_CODE_LIST != null && PROC_DEF_CODE_LIST.size() > 0) {
+            sql += " and PROC_DEF_CODE_ in (:PROC_DEF_CODE_LIST)";
+            paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
             sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
             paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
         }
+        if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
+            sql += " and PROC_DEF_NAME_ in (:PROC_DEF_NAME_LIST)";
+            paramMap.put("PROC_DEF_NAME_LIST", PROC_DEF_NAME_LIST);
+        }
         if (StringUtils.isNotEmpty(PROC_DEF_CAT_)) {
             sql += " and PROC_DEF_CAT_ like :PROC_DEF_CAT_ || '%'";
             paramMap.put("PROC_DEF_CAT_", PROC_DEF_CAT_);
+        }
+        if (PROC_DEF_CAT_LIST != null && PROC_DEF_CAT_LIST.size() > 0) {
+            sql += " and PROC_DEF_CAT_ in (:PROC_DEF_CAT_LIST)";
+            paramMap.put("PROC_DEF_CAT_LIST", PROC_DEF_CAT_LIST);
+        }
+        if (VERSION_ != null) {
+            sql += " and VERSION_ = :VERSION_";
+            paramMap.put("VERSION_", VERSION_);
+        }
+        if (VERSION_LIST != null && VERSION_LIST.size() > 0) {
+            sql += " and VERSION_ in (:VERSION_LIST)";
+            paramMap.put("VERSION_LIST", VERSION_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_DEF_STATUS_)) {
+            sql += " and PROC_DEF_STATUS_ = :PROC_DEF_STATUS_";
+            paramMap.put("PROC_DEF_STATUS_", PROC_DEF_STATUS_);
         }
         if (PROC_DEF_STATUS_LIST != null && PROC_DEF_STATUS_LIST.size() > 0) {
             sql += " and PROC_DEF_STATUS_ in (:PROC_DEF_STATUS_LIST)";
@@ -125,7 +153,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
         }
 
         if (!count) {
-            sql += " order by VERSION_ desc";
+            sql += " order by PROC_DEF_CODE_, VERSION_ desc";
         }
 
         return new OdSqlCriteria(sql, paramMap);

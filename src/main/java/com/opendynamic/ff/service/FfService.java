@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.el.ExpressionFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +31,6 @@ import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.RunningNodeDef;
 import com.opendynamic.ff.vo.RunningProcDef;
 import com.opendynamic.ff.vo.Task;
-
-import de.odysseus.el.util.SimpleContext;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -154,6 +150,10 @@ public interface FfService {
      */
     public static final String NODE_TYPE_GATEWAY = "GATEWAY";
     /**
+     * 节点类型-结束。
+     */
+    public static final String NODE_TYPE_END = "END";
+    /**
      * 任务类型-任务。
      */
     public static final String TASK_TYPE_TASK = "TASK";
@@ -198,6 +198,26 @@ public interface FfService {
      */
     public static final String OPERATION_ACTIVATE = "ACTIVATE";
     /**
+     * 数据范围-流程定义。
+     */
+    public static final String DATA_SCOPE_PROC_DEF = "PROC_DEF";
+    /**
+     * 数据范围-流程定义。
+     */
+    public static final String DATA_SCOPE_PROC = "PROC";
+    /**
+     * 数据范围-流程定义。
+     */
+    public static final String DATA_SCOPE_NODE = "NODE";
+    /**
+     * 数据范围-流程定义。
+     */
+    public static final String DATA_SCOPE_TASK = "TASK";
+    /**
+     * 数据范围-操作。
+     */
+    public static final String DATA_SCOPE_OPERATION = "OPERATION";
+    /**
      * 默认节点完成条件表达式。
      */
     public static final String DEFAULT_COMPLETE_EXPRESSION_ = "${COMPLETE/TOTAL>=1}";
@@ -227,6 +247,13 @@ public interface FfService {
     public NodeHandler getNodeHandler(String nodeType);
 
     /**
+     * 获取内部服务MAP，用于JUEL解析，
+     * 
+     * @return
+     */
+    public Map<String, Object> getInternalServiceMap();
+
+    /**
      * 获取外部服务MAP，用于JUEL解析，
      * 
      * @return
@@ -240,21 +267,6 @@ public interface FfService {
      * @param service
      */
     public void addExternalService(String serviceName, Object service);
-
-    /**
-     * 获取JUEL ExpressionFactory
-     * 
-     * @return
-     */
-    public ExpressionFactory getExpressionFactory();
-
-    /**
-     * 获取JUEL SimpleContext
-     * 
-     * @param objectMap
-     * @return
-     */
-    public SimpleContext getSimpleContext(Map<String, Object> objectMap);
 
     /**
      * 按主键查询流程定义。
@@ -320,14 +332,6 @@ public interface FfService {
      * @return 流程定义总数。
      */
     public int countProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList);
-
-    /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param procDefIdList
-     * @return 流程定义列表。
-     */
-    public List<ProcDef> selectProcDefByIdList(List<String> procDefIdList);
 
     /**
      * 部署流程定义。
@@ -461,14 +465,6 @@ public interface FfService {
     public InvolvedProcQuery createInvolvedProcQuery();
 
     /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param procIdList
-     * @return 流程列表。
-     */
-    public List<Proc> selectProcByIdList(List<String> procIdList);
-
-    /**
      * 更新流程业务数据。
      * 
      * @param procId
@@ -476,9 +472,10 @@ public interface FfService {
      * @param bizType
      * @param bizCode
      * @param bizName
+     * @param bizDesc
      * @return
      */
-    public boolean updateProcBizInfo(String procId, String bizId, String bizType, String bizCode, String bizName);
+    public boolean updateProcBizInfo(String procId, String bizId, String bizType, String bizCode, String bizName, String bizDesc);
 
     /**
      * 挂起流程。
@@ -578,14 +575,6 @@ public interface FfService {
     public ChildNodeQuery createChildNodeQuery();
 
     /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param nodeIdList
-     * @return 节点列表。
-     */
-    public List<Node> selectNodeByIdList(List<String> nodeIdList);
-
-    /**
      * 新增节点。
      * 
      * @param nodeDef
@@ -677,14 +666,6 @@ public interface FfService {
      * @return 任务查询。
      */
     public TaskQuery createTaskQuery();
-
-    /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param taskIdList
-     * @return 任务列表。
-     */
-    public List<Task> selectTaskByIdList(List<String> taskIdList);
 
     /**
      * 新增任务。
@@ -787,13 +768,14 @@ public interface FfService {
      * @param assigneeList
      * @param action
      * @param dueDate
-     * @param priority
+     * @param claim
      * @param forwardable
+     * @param priority
      * @param executor
      * @return
      */
     @FfOperation
-    public FfResult forwardTask(String taskId, List<String> assigneeList, String action, Date dueDate, Integer priority, boolean forwardable, String executor);
+    public FfResult forwardTask(String taskId, List<String> assigneeList, String action, Date dueDate, String claim, String forwardable, Integer priority, String executor);
 
     /**
      * 驳回任务。由当前任务办理人发起， 驳回后，前节点和任务被重新激活。
@@ -835,14 +817,6 @@ public interface FfService {
      * @return 节点变量查询。
      */
     public NodeVarQuery createNodeVarQuery();
-
-    /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param nodeVarIdList
-     * @return 节点变量列表。
-     */
-    public List<NodeVar> selectNodeVarByIdList(List<String> nodeVarIdList);
 
     /**
      * 部署节点变量。
@@ -902,14 +876,6 @@ public interface FfService {
      * @return 任务查询。
      */
     public DelegateQuery createDelegateQuery();
-
-    /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param delegateIdList
-     * @return 代理列表。
-     */
-    public List<Delegate> selectDelegateByIdList(List<String> delegateIdList);
 
     /**
      * 新增代理。
@@ -972,14 +938,6 @@ public interface FfService {
     public OperationQuery createOperationQuery();
 
     /**
-     * 按主键列表查询，返回对象列表，按主键列表顺序排序。
-     * 
-     * @param operationIdList
-     * @return 操作列表。
-     */
-    public List<Operation> selectOperationByIdList(List<String> operationIdList);
-
-    /**
      * 取消。
      * 
      * @param operationId
@@ -996,6 +954,10 @@ public interface FfService {
      *        业务主键
      * @param bizType
      *        业务类型
+     * @param bizName
+     *        业务名称
+     * @param bizDesc
+     *        业务备注
      * @param procStartUser
      *        流程开始人员
      * @param nodeVarMap
@@ -1003,7 +965,7 @@ public interface FfService {
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
-    public FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String procStartUser, Map<String, Object> nodeVarMap);
+    public FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap);
 
     /**
      * 按流程定义编码启动流程。
@@ -1018,6 +980,8 @@ public interface FfService {
      *        业务编码
      * @param bizName
      *        业务名称
+     * @param bizDesc
+     *        业务备注
      * @param procStartUser
      *        流程开始人员
      * @param nodeVarMap
@@ -1025,7 +989,7 @@ public interface FfService {
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
-    public FfResult startProcByProcDefCode(String procDefCode, String bizId, String bizType, String bizCode, String bizName, String procStartUser, Map<String, Object> nodeVarMap);
+    public FfResult startProcByProcDefCode(String procDefCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap);
 
     /**
      * 启动独立子流程。
@@ -1040,6 +1004,8 @@ public interface FfService {
      *        业务编码
      * @param bizName
      *        业务名称
+     * @param bizDesc
+     *        业务备注
      * @param procStartUser
      *        流程开始人员
      * @param nodeVarMap
@@ -1047,7 +1013,7 @@ public interface FfService {
      * @return
      */
     @FfOperation
-    public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String procStartUser, Map<String, Object> nodeVarMap);
+    public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap);
 
     /**
      * 获取运行期流程定义。

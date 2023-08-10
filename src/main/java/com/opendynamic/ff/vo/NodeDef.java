@@ -21,20 +21,21 @@ public class NodeDef implements Serializable {
     protected String nodeCode;// 节点编码
     protected String nodeName;// 节点名称
     protected String parentNodeCode;// 上级节点编码
-    protected String assignee; // 办理人
     protected String candidate;// 候选人
-    protected String assignSubProcDef; // 办理子流程定义
     protected String candidateSubProcDef;// 候选子流程定义
-    protected String action; // 业务行为
-    protected String dueDate;// 截止日期
     protected String completeExpression = FfService.DEFAULT_COMPLETE_EXPRESSION_;// 完成表达式
     protected String completeReturn = FfService.BOOLEAN_FALSE;// 完成后返回前一个节点
     protected String exclusive = FfService.BOOLEAN_FALSE;// 排他
-    protected String forwardable = FfService.BOOLEAN_FALSE;// 可转发
     protected String autoCompleteSameAssignee = FfService.BOOLEAN_FALSE;// 自动完成相同办理人任务
     protected String autoCompleteEmptyAssignee = FfService.BOOLEAN_FALSE;// 自动完成没有办理人节点
     protected String inform = FfService.BOOLEAN_FALSE;// 通知
-    protected Integer priority = 5; // 优先级
+    protected String assignee; // 办理人
+    protected String assignSubProcDef; // 办理子流程定义
+    protected String action; // 业务行为
+    protected String dueDate;// 截止日期
+    protected String claim;// 认领
+    protected String forwardable = FfService.BOOLEAN_FALSE;// 可转发
+    protected String priority = "5"; // 优先级
 
     protected Shape shape;// 形状
 
@@ -107,28 +108,12 @@ public class NodeDef implements Serializable {
         return parentNodeCode;
     }
 
-    public String getAssignee() {
-        return assignee;
-    }
-
     public String getCandidate() {
         return candidate;
     }
 
-    public String getAssignSubProcDef() {
-        return assignSubProcDef;
-    }
-
     public String getCandidateSubProcDef() {
         return candidateSubProcDef;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public String getDueDate() {
-        return dueDate;
     }
 
     public String getCompleteExpression() {
@@ -143,10 +128,6 @@ public class NodeDef implements Serializable {
         return exclusive;
     }
 
-    public String getForwardable() {
-        return forwardable;
-    }
-
     public String getAutoCompleteSameAssignee() {
         return autoCompleteSameAssignee;
     }
@@ -159,7 +140,31 @@ public class NodeDef implements Serializable {
         return inform;
     }
 
-    public Integer getPriority() {
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public String getAssignSubProcDef() {
+        return assignSubProcDef;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getClaim() {
+        return claim;
+    }
+
+    public String getForwardable() {
+        return forwardable;
+    }
+
+    public String getPriority() {
         return priority;
     }
 
@@ -208,6 +213,7 @@ public class NodeDef implements Serializable {
     public List<? extends NodeDef> getNextNodeDefList(Map<String, Object> nodeVarMap) {
         List<NodeDef> nextNodeDefList = new ArrayList<>();
 
+        // 设置JUEL解析环境
         ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         if (nodeVarMap != null) {// 装配节点变量
@@ -222,6 +228,7 @@ public class NodeDef implements Serializable {
                 nextNodeDefList.add(flowDef.getTargetNodeDef());
             }
             else {
+                // JUEL解析
                 ValueExpression expression = expressionFactory.createValueExpression(simpleContext, flowDef.getConditionExpression(), Boolean.class);
                 if (Boolean.TRUE.equals(expression.getValue(simpleContext))) {
                     nextNodeDefList.add(flowDef.getTargetNodeDef());

@@ -33,6 +33,7 @@ import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.Task;
 
+import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -62,7 +63,8 @@ public class FfOperationAspect {
             Method method = signature.getMethod();
             FfOperation annotation = method.getAnnotation(FfOperation.class);
 
-            ExpressionFactory expressionFactory = ffService.getExpressionFactory();// 解析使用JUEL表达式的注解参数。
+            // JUEL解析
+            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();// 解析使用JUEL表达式的注解参数。
             SimpleContext simpleContext = new SimpleContext();
             String[] parameterNames = signature.getParameterNames();
             for (int i = 0; i < parameterNames.length; i++) {
@@ -298,7 +300,7 @@ public class FfOperationAspect {
                             procIdSet.add((String) nodeOp.get("PROC_ID_"));
                             nodeIdSet.add((String) nodeOp.get("NODE_ID_"));
                         }
-                        sql = "select FF_TASK_OP.*, FFV_TASK.PROC_ID_ from FF_TASK_OP left outer join FFV_TASK on FFV_TASK.TASK_ID_ = FF_TASK_OP.TASK_ID_ where PROC_ID_ = ? and OPERATION_ID_ != ? and OPERATION_STATUS_ = 1";
+                        sql = "select FF_TASK_OP.*, FF_NODE.PROC_ID_ from FF_TASK_OP left outer join FF_TASK on FF_TASK.TASK_ID_ = FF_TASK_OP.TASK_ID_ inner join FF_NODE on FF_NODE.NODE_ID_ = FF_TASK.NODE_ID_ where PROC_ID_ = ? and OPERATION_ID_ != ? and OPERATION_STATUS_ = 1";
                         List<Map<String, Object>> taskOpList = ffJdbcTemplate.queryForList(sql, data.get("PROC_ID_"), operationId);
                         for (Map<String, Object> taskOp : taskOpList) {
                             procIdSet.add((String) taskOp.get("PROC_ID_"));

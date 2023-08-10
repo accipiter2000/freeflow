@@ -51,8 +51,8 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
     }
 
     @Override
-    public List<Map<String, Object>> selectNodeVar(String NODE_VAR_ID_, String NODE_ID_, List<String> VAR_TYPE_LIST, String VAR_NAME_, Boolean recursive, Integer page, Integer limit) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaNodeVar(false, NODE_VAR_ID_, NODE_ID_, VAR_TYPE_LIST, VAR_NAME_, recursive);// 根据查询条件组装查询SQL语句
+    public List<Map<String, Object>> selectNodeVar(String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, Boolean recursive, Integer page, Integer limit) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaNodeVar(false, NODE_VAR_ID_, NODE_VAR_ID_LIST, NODE_ID_, NODE_ID_LIST, VAR_TYPE_, VAR_TYPE_LIST, VAR_NAME_, VAR_NAME_LIST, recursive);// 根据查询条件组装查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -67,8 +67,8 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
     }
 
     @Override
-    public int countNodeVar(String NODE_VAR_ID_, String NODE_ID_, List<String> VAR_TYPE_LIST, String VAR_NAME_, Boolean recursive) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaNodeVar(true, NODE_VAR_ID_, NODE_ID_, VAR_TYPE_LIST, VAR_NAME_, recursive);// 根据查询条件组装总数查询SQL语句
+    public int countNodeVar(String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, Boolean recursive) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaNodeVar(true, NODE_VAR_ID_, NODE_VAR_ID_LIST, NODE_ID_, NODE_ID_LIST, VAR_TYPE_, VAR_TYPE_LIST, VAR_NAME_, VAR_NAME_LIST, recursive);// 根据查询条件组装总数查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -76,11 +76,18 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    private OdSqlCriteria buildSqlCriteriaNodeVar(boolean count, String NODE_VAR_ID_, String NODE_ID_, List<String> VAR_TYPE_LIST, String VAR_NAME_, Boolean recursive) {// 组装查询SQL语句
+    private OdSqlCriteria buildSqlCriteriaNodeVar(boolean count, String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, Boolean recursive) {// 组装查询SQL语句
+        if (recursive != null && recursive.equals(true)) {
+            if (StringUtils.isEmpty(NODE_ID_)) {
+                throw new RuntimeException("errors.idRequired");
+            }
+            if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+                throw new RuntimeException("errors.cannotRecursiveOnMultipulNodes");
+            }
+        }
+
         String sql;
         Map<String, Object> paramMap = new HashMap<String, Object>();
-
-        sql = "select * from FFV_PROC_VAR where SUB_PROC_ID_ in (:SUB_PROC_ID_LIST)";// 查询相关流程范围的流程变量，
 
         if (count) {
             sql = "select count(*) from FFV_NODE_VAR where 1 = 1";
@@ -93,18 +100,29 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             sql += " and NODE_VAR_ID_ = :NODE_VAR_ID_";
             paramMap.put("NODE_VAR_ID_", NODE_VAR_ID_);
         }
-        List<String> NODE_ID_LIST = null;
-        if (StringUtils.isNotEmpty(NODE_ID_)) {
-            if (recursive != null && recursive.equals(true)) {
-                sql += " and NODE_ID_ in (:NODE_ID_LIST)";
-                List<Map<String, Object>> nodeList = ffNodeService.selectParentNode(NODE_ID_, null, null, null, null, true, recursive);
-                NODE_ID_LIST = OdUtils.collect(nodeList, "NODE_ID_", String.class);
-                paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
-            }
-            else {
+        if (NODE_VAR_ID_LIST != null && NODE_VAR_ID_LIST.size() > 0) {
+            sql += " and NODE_VAR_ID_ in (:NODE_VAR_ID_LIST)";
+            paramMap.put("NODE_VAR_ID_LIST", NODE_VAR_ID_LIST);
+        }
+        if (recursive != null && recursive.equals(true)) {
+            sql += " and NODE_ID_ in (:NODE_ID_LIST)";
+            List<Map<String, Object>> nodeList = ffNodeService.selectParentNode(NODE_ID_, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, recursive, true, FfService.DATA_SCOPE_NODE);
+            NODE_ID_LIST = OdUtils.collect(nodeList, "NODE_ID_", String.class);
+            paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
+        }
+        else {
+            if (StringUtils.isNotEmpty(NODE_ID_)) {
                 sql += " and NODE_ID_ = :NODE_ID_";
                 paramMap.put("NODE_ID_", NODE_ID_);
             }
+            if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+                sql += " and NODE_ID_ in (:NODE_ID_LIST)";
+                paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
+            }
+        }
+        if (StringUtils.isNotEmpty(VAR_TYPE_)) {
+            sql += " and VAR_TYPE_ = :VAR_TYPE_";
+            paramMap.put("VAR_TYPE_", VAR_TYPE_);
         }
         if (VAR_TYPE_LIST != null && VAR_TYPE_LIST.size() > 0) {
             sql += " and VAR_TYPE_ in (:VAR_TYPE_LIST)";
@@ -113,6 +131,10 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         if (StringUtils.isNotEmpty(VAR_NAME_)) {
             sql += " and VAR_NAME_ like '%' || :VAR_NAME_ || '%'";
             paramMap.put("VAR_NAME_", VAR_NAME_);
+        }
+        if (VAR_NAME_LIST != null && VAR_NAME_LIST.size() > 0) {
+            sql += " and VAR_NAME_ in (:VAR_NAME_LIST)";
+            paramMap.put("VAR_NAME_LIST", VAR_NAME_LIST);
         }
 
         if (recursive != null && recursive.equals(true)) {
@@ -236,7 +258,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             return nodeVarIdList;
         }
 
-        List<Map<String, Object>> nodeVarList = selectNodeVar(null, NODE_ID_, null, null, false, 1, -1);
+        List<Map<String, Object>> nodeVarList = selectNodeVar(null, null, NODE_ID_, null, null, null, null, null, false, 1, -1);
         List<String> nodeVarKeyList = OdUtils.collect(nodeVarList, "VAR_NAME_", String.class);
 
         String NODE_VAR_ID_ = null;
@@ -282,7 +304,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
 
     @Override
     public int deleteNodeVarByNodeId(String NODE_ID_) {
-        List<Map<String, Object>> nodeVarList = selectNodeVar(null, NODE_ID_, null, null, false, 1, -1);
+        List<Map<String, Object>> nodeVarList = selectNodeVar(null, null, NODE_ID_, null, null, null, null, null, false, 1, -1);
         for (Map<String, Object> nodeVar : nodeVarList) {
             deleteNodeVar((String) nodeVar.get("NODE_VAR_ID_"));
         }

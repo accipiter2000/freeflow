@@ -30,12 +30,12 @@ public interface FfProcDefService {
     /**
      * 通用查询，返回对象列表。
      */
-    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit);
+    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit);
 
     /**
      * 总数查询，在分页时与通用查询配套使用。
      */
-    public int countProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, List<String> PROC_DEF_STATUS_LIST);
+    public int countProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST);
 
     /**
      * 按主键列表查询，返回对象列表，按主键列表顺序排序。

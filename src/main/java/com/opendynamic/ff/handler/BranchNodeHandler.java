@@ -180,7 +180,7 @@ public class BranchNodeHandler implements NodeHandler {
                 String lastCompleteNodeIds = node.getLastCompleteNodeIds();
                 if (StringUtils.isNotEmpty(lastCompleteNodeIds)) {
                     ffNodeService.updateNodeLastCompleteNodeIds(node.getNodeId(), null);
-                    List<Node> lastCompleteNodeList = ffService.selectNodeByIdList(Arrays.asList(lastCompleteNodeIds.split(",")));
+                    List<Node> lastCompleteNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(lastCompleteNodeIds.split(","))).queryForObjectList();
                     for (Node lastCompleteNode : lastCompleteNodeList) {
                         ffResult.addAll(ffService.getNodeHandler(lastCompleteNode.getNodeType()).activateNode(lastCompleteNode, null, triggerOperation, executor));
                     }

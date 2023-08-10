@@ -33,6 +33,7 @@ import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
 
+import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -67,7 +68,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
 
         // 新增节点
         String centerFarwardTaskNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(centerFarwardTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_CENTER_FORWARD_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getAssignee(), nodeDef.getCandidate(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getForwardable(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(centerFarwardTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_CENTER_FORWARD_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidate(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         centerFarwardTaskNode = ffService.loadNode(centerFarwardTaskNodeId);
         ffResult.addCreateNode(centerFarwardTaskNode);
 
@@ -78,11 +79,19 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         ffNodeVarService.updateNodeVar(branchNode.getNodeId(), nodeVarMap);
 
         // 新增任务
-        ExpressionFactory expressionFactory = ffService.getExpressionFactory();
-        SimpleContext simpleContext = ffService.getSimpleContext(ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap());
-        simpleContext.setVariable("proc", expressionFactory.createValueExpression(proc, Object.class));
-        simpleContext.setVariable("branch", expressionFactory.createValueExpression(branchNode, Object.class));
-        simpleContext.setVariable("node", expressionFactory.createValueExpression(centerFarwardTaskNode, Object.class));
+        // 设置JUEL解析环境
+        nodeVarMap = ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        nodeVarMap.putAll(ffService.getInternalServiceMap());
+        nodeVarMap.putAll(ffService.getExternalServiceMap());
+        nodeVarMap.put("proc", proc);
+        nodeVarMap.put("branch", branchNode);
+        nodeVarMap.put("node", centerFarwardTaskNode);
+        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+        SimpleContext simpleContext = new SimpleContext();
+        for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+        }
+        // JUEL解析
         // 计算办理人
         ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
         Object object = expression.getValue(simpleContext);// 获取办理人
@@ -109,6 +118,9 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             String taskId = OdUtils.getUuid();
             String action = null;
             Date dueDate = null;
+            String claim = FfService.BOOLEAN_FALSE;
+            String forwardable = FfService.BOOLEAN_FALSE;
+            Integer priority = 5;
 
             task = new Task();
             task.setTaskId(taskId);
@@ -116,22 +128,36 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             task.setTaskType(FfService.TASK_TYPE_TASK);
             task.setAssignee(assignee.getId());
             task.setAssigneeName(assignee.getUserName());
-            task.setPriority(nodeDef.getPriority());
-            task.setForwardable(nodeDef.getForwardable());
-            task.setForwardStatus(FfService.FORWARD_STATUS_NOT_FORWARDED);
-            task.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
-            task.setCreationDate(new Date());
+            // 解析JUEL,从节点定义中获取相关任务属性
             simpleContext.setVariable("task", expressionFactory.createValueExpression(task, Object.class));
-            if (StringUtils.isNotEmpty(nodeDef.getAction())) {// 解析JUEL,获取业务系统操作
+            if (StringUtils.isNotEmpty(nodeDef.getAction())) {
                 expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
                 action = (String) expression.getValue(simpleContext);
             }
-            if (StringUtils.isNotEmpty(nodeDef.getDueDate())) {// 解析JUEL,获取节点截止日期
+            if (StringUtils.isNotEmpty(nodeDef.getDueDate())) {
                 expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getDueDate(), Date.class);
                 dueDate = (Date) expression.getValue(simpleContext);
             }
+            if (StringUtils.isNotEmpty(nodeDef.getClaim())) {
+                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getClaim(), String.class);
+                claim = (String) expression.getValue(simpleContext);
+            }
+            if (StringUtils.isNotEmpty(nodeDef.getForwardable())) {
+                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getForwardable(), String.class);
+                forwardable = (String) expression.getValue(simpleContext);
+            }
+            if (StringUtils.isNotEmpty(nodeDef.getPriority())) {
+                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getPriority(), Integer.class);
+                priority = (Integer) expression.getValue(simpleContext);
+            }
             task.setAction(action);
             task.setDueDate(dueDate);
+            task.setClaim(claim);
+            task.setForwardable(forwardable);
+            task.setPriority(priority);
+            task.setForwardStatus(FfService.FORWARD_STATUS_NOT_FORWARDED);
+            task.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
+            task.setCreationDate(new Date());
 
             ffService.insertTask(task, executor);
             task = ffService.loadTask(taskId);
@@ -141,29 +167,50 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
 
         String systemExecutor = FfService.USER_FF_SYSTEM;
         String systemExecutorName = ffHelper.getUserName(systemExecutor);
+        String exclusive = nodeDef.getExclusive();
+        String autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
+        String autoCompleteEmptyAssignee = nodeDef.getAutoCompleteEmptyAssignee();
+        String inform = nodeDef.getInform();
+        if (exclusive != null && exclusive.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+            exclusive = (String) expression.getValue(simpleContext);
+        }
+        if (autoCompleteSameAssignee != null && autoCompleteSameAssignee.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
+            autoCompleteSameAssignee = (String) expression.getValue(simpleContext);
+        }
+        if (autoCompleteEmptyAssignee != null && autoCompleteEmptyAssignee.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
+            autoCompleteEmptyAssignee = (String) expression.getValue(simpleContext);
+        }
+        if (inform != null && inform.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
+            inform = (String) expression.getValue(simpleContext);
+        }
+
         // 自动完成通知节点
-        if (FfService.BOOLEAN_TRUE.equals(nodeDef.getInform())) {
+        if (FfService.BOOLEAN_TRUE.equals(inform)) {
             ffResult.addAll(completeNode(centerFarwardTaskNode, previousNodeIds, FfService.OPERATION_COMPLETE, systemExecutor));
         }
         // 自动完成相同办理人任务
-        if (FfService.BOOLEAN_TRUE.equals(nodeDef.getAutoCompleteSameAssignee())) {
+        if (FfService.BOOLEAN_TRUE.equals(autoCompleteSameAssignee)) {
             for (Task createTask : createTaskList) {
                 if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssigneeList(ffHelper.getAllUserIdList(createTask.getAssignee())).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_COMPLETE)).count() > 0) {
                     Date completeDate = new Date();
                     ffTaskService.updateTaskStatus(createTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
-                    createTask.setExecutor(systemExecutor);
-                    createTask.setExecutorName(systemExecutorName);
-                    createTask.setCompleteDate(completeDate);
+                    createTask.setTaskEndUser(systemExecutor);
+                    createTask.setTaskEndUserName(systemExecutorName);
+                    createTask.setTaskEndDate(completeDate);
                     createTask.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
                     ffResult.addCompleteTask(createTask);
 
-                    if (centerFarwardTaskNode.getExclusive().equals(FfService.BOOLEAN_TRUE)) {// 排他处理
+                    if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
                         List<Task> remainActiveTaskList = ffService.createTaskQuery().setNodeId(centerFarwardTaskNode.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).queryForObjectList();
                         for (Task remainActiveTask : remainActiveTaskList) {
                             ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                            remainActiveTask.setExecutor(systemExecutor);
-                            remainActiveTask.setExecutorName(systemExecutorName);
-                            remainActiveTask.setCompleteDate(completeDate);
+                            remainActiveTask.setTaskEndUser(systemExecutor);
+                            remainActiveTask.setTaskEndUserName(systemExecutorName);
+                            remainActiveTask.setTaskEndDate(completeDate);
                             remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                             ffResult.addTerminateTask(remainActiveTask);
                         }
@@ -177,7 +224,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             }
         }
         // 自动完成没有办理人节点
-        if (createTaskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(nodeDef.getAutoCompleteEmptyAssignee())) {
+        if (createTaskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
             ffResult.addAll(completeNode(centerFarwardTaskNode, previousNodeIds, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
         }
 
@@ -192,16 +239,35 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             return ffResult;
         }
 
-        // 非通知节点需完成判断
+        // 设置JUEL解析环境
         Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        nodeVarMap.putAll(ffService.getInternalServiceMap());
+        nodeVarMap.putAll(ffService.getExternalServiceMap());
         nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
         nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
         nodeVarMap.put("node", node);
         nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-        if (FfService.BOOLEAN_FALSE.equals(node.getInform()) && !nodeVarMap.get("TOTAL").equals(0)) {
-            ExpressionFactory expressionFactory = ffService.getExpressionFactory();
-            SimpleContext simpleContext = ffService.getSimpleContext(nodeVarMap);
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
+        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+        SimpleContext simpleContext = new SimpleContext();
+        for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+        }
+        // JUEL解析
+        String inform = FfService.BOOLEAN_FALSE;
+        String completeReturn = FfService.BOOLEAN_FALSE;
+        ValueExpression expression;
+        if (StringUtils.isNotEmpty(node.getInform())) {
+            expression = expressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
+            inform = (String) expression.getValue(simpleContext);
+        }
+        if (StringUtils.isNotEmpty(node.getCompleteReturn())) {
+            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
+            completeReturn = (String) expression.getValue(simpleContext);
+        }
+
+        // 非通知节点需完成判断
+        if (FfService.BOOLEAN_FALSE.equals(inform) && !nodeVarMap.get("TOTAL").equals(0)) {
+            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
             }
@@ -227,7 +293,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             }
         }
         else// 无后续节点定义。
-            if (node.getCompleteReturn().equals(FfService.BOOLEAN_TRUE)) {// 完成返回节点，激活前一个节点。
+            if (FfService.BOOLEAN_TRUE.equals(completeReturn)) {// 完成返回节点，激活前一个节点。
                 Node previousNode = ffService.loadNode(node.getPreviousNodeIds());// 获取前一个节点。
                 NodeDef previousNodeDef = ffService.getNodeProcDef(previousNode).getNodeDef((previousNode.getNodeCode()));// 获取当前节点所属节点定义
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), FfService.OPERATION_COMPLETE, executor));
@@ -301,7 +367,27 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                 }
             }
 
-            if (FfService.OPERATION_REJECT.equals(triggerOperation) && taskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(node.getAutoCompleteEmptyAssignee())) {
+            String autoCompleteEmptyAssignee = node.getAutoCompleteEmptyAssignee();
+            if (autoCompleteEmptyAssignee != null && autoCompleteEmptyAssignee.indexOf("${") != -1) {// JUEL解析
+                // 设置JUEL解析环境
+                Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+                nodeVarMap.putAll(ffService.getInternalServiceMap());
+                nodeVarMap.putAll(ffService.getExternalServiceMap());
+                nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
+                nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
+                nodeVarMap.put("node", node);
+                nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
+                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
+                SimpleContext simpleContext = new SimpleContext();
+                for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
+                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                }
+                // JUEL解析
+                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
+                autoCompleteEmptyAssignee = (String) expression.getValue(simpleContext);
+            }
+
+            if (FfService.OPERATION_REJECT.equals(triggerOperation) && taskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
                 ffResult.addAll(rejectNode(node, FfService.OPERATION_REJECT, FfService.USER_FF_SYSTEM));
             }
         }

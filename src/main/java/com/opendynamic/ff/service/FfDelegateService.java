@@ -19,12 +19,12 @@ public interface FfDelegateService {
     /**
      * 通用查询，返回对象列表。
      */
-    public List<Map<String, Object>> selectDelegate(String DELEGATE_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_, String DELEGATOR_, String DELEGATOR_NAME_, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_, Integer page, Integer limit);
+    public List<Map<String, Object>> selectDelegate(String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_, Integer page, Integer limit);
 
     /**
      * 总数查询，在分页时与通用查询配套使用。
      */
-    public int countDelegate(String DELEGATE_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_, String DELEGATOR_, String DELEGATOR_NAME_, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_);
+    public int countDelegate(String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_);
 
     /**
      * 按主键列表查询，返回对象列表，按主键列表顺序排序。

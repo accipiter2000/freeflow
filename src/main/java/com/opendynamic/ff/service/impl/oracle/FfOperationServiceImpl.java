@@ -48,8 +48,11 @@ public class FfOperationServiceImpl implements FfOperationService {
     }
 
     @Override
-    public List<Map<String, Object>> selectOperation(String OPERATION_ID_, String OPERATION_, String PROC_ID_, String NODE_ID_, String TASK_ID_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, List<String> OPERATION_STATUS_LIST, String BIZ_ID_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, String BIZ_NAME_, Integer page, Integer limit) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaOperation(false, OPERATION_ID_, OPERATION_, PROC_ID_, NODE_ID_, TASK_ID_, OPERATOR_LIST, OPERATOR_NAME_, FROM_OPERATION_DATE_, TO_OPERATION_DATE_, OPERATION_STATUS_LIST, BIZ_ID_, BIZ_TYPE_LIST, BIZ_CODE_, BIZ_NAME_);// 根据查询条件组装查询SQL语句
+    public List<Map<String, Object>> selectOperation(String OPERATION_ID_, List<String> OPERATION_ID_LIST, String OPERATION_, List<String> OPERATION_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String TASK_ID_, List<String> TASK_ID_LIST, String OPERATOR_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, List<String> OPERATOR_NAME_LIST, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, String OPERATION_STATUS_, List<String> OPERATION_STATUS_LIST, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST, String BIZ_NAME_,
+            List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST, String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_, List<String> PROC_STATUS_LIST, Date FROM_CREATION_DATE_, Date TO_CREATION_DATE_, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_,
+            List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit, String dataScope) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaOperation(false, OPERATION_ID_, OPERATION_ID_LIST, OPERATION_, OPERATION_LIST, NODE_ID_, NODE_ID_LIST, TASK_ID_, TASK_ID_LIST, OPERATOR_, OPERATOR_LIST, OPERATOR_NAME_, OPERATOR_NAME_LIST, FROM_OPERATION_DATE_, TO_OPERATION_DATE_, OPERATION_STATUS_, OPERATION_STATUS_LIST, PROC_ID_, PROC_ID_LIST, ADJUST_PROC_DEF_ID_, ADJUST_PROC_DEF_ID_LIST, ISOLATE_SUB_PROC_NODE_ID_, ISOLATE_SUB_PROC_NODE_ID_LIST, BIZ_ID_, BIZ_ID_LIST, BIZ_TYPE_, BIZ_TYPE_LIST, BIZ_CODE_, BIZ_CODE_LIST, BIZ_NAME_, BIZ_NAME_LIST, BIZ_DESC_, BIZ_DESC_LIST, PROC_START_USER_, PROC_START_USER_LIST, PROC_START_USER_NAME_, PROC_START_USER_NAME_LIST, PROC_END_USER_, PROC_END_USER_LIST, PROC_END_USER_NAME_, PROC_END_USER_NAME_LIST, FROM_PROC_END_DATE_, TO_PROC_END_DATE_,
+                PROC_STATUS_, PROC_STATUS_LIST, FROM_CREATION_DATE_, TO_CREATION_DATE_, PROC_DEF_ID_, PROC_DEF_ID_LIST, PROC_DEF_CODE_, PROC_DEF_CODE_LIST, PROC_DEF_NAME_, PROC_DEF_NAME_LIST, PROC_DEF_CAT_, PROC_DEF_CAT_LIST, VERSION_, VERSION_LIST, PROC_DEF_STATUS_, PROC_DEF_STATUS_LIST, dataScope);// 根据查询条件组装查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -64,8 +67,11 @@ public class FfOperationServiceImpl implements FfOperationService {
     }
 
     @Override
-    public int countOperation(String OPERATION_ID_, String OPERATION_, String PROC_ID_, String NODE_ID_, String TASK_ID_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, List<String> OPERATION_STATUS_LIST, String BIZ_ID_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, String BIZ_NAME_) {
-        OdSqlCriteria odSqlCriteria = buildSqlCriteriaOperation(true, OPERATION_ID_, OPERATION_, PROC_ID_, NODE_ID_, TASK_ID_, OPERATOR_LIST, OPERATOR_NAME_, FROM_OPERATION_DATE_, TO_OPERATION_DATE_, OPERATION_STATUS_LIST, BIZ_ID_, BIZ_TYPE_LIST, BIZ_CODE_, BIZ_NAME_);// 根据查询条件组装总数查询SQL语句
+    public int countOperation(String OPERATION_ID_, List<String> OPERATION_ID_LIST, String OPERATION_, List<String> OPERATION_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String TASK_ID_, List<String> TASK_ID_LIST, String OPERATOR_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, List<String> OPERATOR_NAME_LIST, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, String OPERATION_STATUS_, List<String> OPERATION_STATUS_LIST, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST, String BIZ_NAME_,
+            List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST, String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_, List<String> PROC_STATUS_LIST, Date FROM_CREATION_DATE_, Date TO_CREATION_DATE_, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_,
+            List<String> PROC_DEF_STATUS_LIST, String dataScope) {
+        OdSqlCriteria odSqlCriteria = buildSqlCriteriaOperation(true, OPERATION_ID_, OPERATION_ID_LIST, OPERATION_, OPERATION_LIST, NODE_ID_, NODE_ID_LIST, TASK_ID_, TASK_ID_LIST, OPERATOR_, OPERATOR_LIST, OPERATOR_NAME_, OPERATOR_NAME_LIST, FROM_OPERATION_DATE_, TO_OPERATION_DATE_, OPERATION_STATUS_, OPERATION_STATUS_LIST, PROC_ID_, PROC_ID_LIST, ADJUST_PROC_DEF_ID_, ADJUST_PROC_DEF_ID_LIST, ISOLATE_SUB_PROC_NODE_ID_, ISOLATE_SUB_PROC_NODE_ID_LIST, BIZ_ID_, BIZ_ID_LIST, BIZ_TYPE_, BIZ_TYPE_LIST, BIZ_CODE_, BIZ_CODE_LIST, BIZ_NAME_, BIZ_NAME_LIST, BIZ_DESC_, BIZ_DESC_LIST, PROC_START_USER_, PROC_START_USER_LIST, PROC_START_USER_NAME_, PROC_START_USER_NAME_LIST, PROC_END_USER_, PROC_END_USER_LIST, PROC_END_USER_NAME_, PROC_END_USER_NAME_LIST, FROM_PROC_END_DATE_, TO_PROC_END_DATE_,
+                PROC_STATUS_, PROC_STATUS_LIST, FROM_CREATION_DATE_, TO_CREATION_DATE_, PROC_DEF_ID_, PROC_DEF_ID_LIST, PROC_DEF_CODE_, PROC_DEF_CODE_LIST, PROC_DEF_NAME_, PROC_DEF_NAME_LIST, PROC_DEF_CAT_, PROC_DEF_CAT_LIST, VERSION_, VERSION_LIST, PROC_DEF_STATUS_, PROC_DEF_STATUS_LIST, dataScope);// 根据查询条件组装总数查询SQL语句
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
@@ -73,36 +79,61 @@ public class FfOperationServiceImpl implements FfOperationService {
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
-    private OdSqlCriteria buildSqlCriteriaOperation(boolean count, String OPERATION_ID_, String OPERATION_, String PROC_ID_, String NODE_ID_, String TASK_ID_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, List<String> OPERATION_STATUS_LIST, String BIZ_ID_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, String BIZ_NAME_) {// 组装查询SQL语句
+    private OdSqlCriteria buildSqlCriteriaOperation(boolean count, String OPERATION_ID_, List<String> OPERATION_ID_LIST, String OPERATION_, List<String> OPERATION_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String TASK_ID_, List<String> TASK_ID_LIST, String OPERATOR_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, List<String> OPERATOR_NAME_LIST, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, String OPERATION_STATUS_, List<String> OPERATION_STATUS_LIST, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST,
+            String BIZ_NAME_, List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST, String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_, List<String> PROC_STATUS_LIST, Date FROM_CREATION_DATE_, Date TO_CREATION_DATE_, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_,
+            List<String> PROC_DEF_STATUS_LIST, String dataScope) {// 组装查询SQL语句
         String sql;
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
+        String view = "FFV_OPERATION";
+        if (FfService.DATA_SCOPE_PROC_DEF.equals(dataScope)) {
+            view = "FFV_OPERATION_PD";
+        }
+        if (FfService.DATA_SCOPE_PROC.equals(dataScope)) {
+            view = "FFV_OPERATION_P";
+        }
         if (count) {
-            sql = "select count(*) from FFV_OPERATION where 1 = 1";
+            sql = "select count(*) from " + view + " where 1 = 1";
         }
         else {
-            sql = "select * from FFV_OPERATION where 1 = 1";
+            sql = "select * from " + view + " where 1 = 1";
         }
 
         if (StringUtils.isNotEmpty(OPERATION_ID_)) {
             sql += " and OPERATION_ID_ = :OPERATION_ID_";
             paramMap.put("OPERATION_ID_", OPERATION_ID_);
         }
+        if (OPERATION_ID_LIST != null && OPERATION_ID_LIST.size() > 0) {
+            sql += " and OPERATION_ID_ in (:OPERATION_ID_LIST)";
+            paramMap.put("OPERATION_ID_LIST", OPERATION_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(OPERATION_)) {
             sql += " and OPERATION_ = :OPERATION_";
             paramMap.put("OPERATION_", OPERATION_);
         }
-        if (StringUtils.isNotEmpty(PROC_ID_)) {
-            sql += " and PROC_ID_ = :PROC_ID_";
-            paramMap.put("PROC_ID_", PROC_ID_);
+        if (OPERATION_LIST != null && OPERATION_LIST.size() > 0) {
+            sql += " and OPERATION_ in (:OPERATION_LIST)";
+            paramMap.put("OPERATION_LIST", OPERATION_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_ID_)) {
             sql += " and NODE_ID_ = :NODE_ID_";
             paramMap.put("NODE_ID_", NODE_ID_);
         }
+        if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+            sql += " and NODE_ID_ in (:NODE_ID_LIST)";
+            paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(TASK_ID_)) {
             sql += " and TASK_ID_ = :TASK_ID_";
             paramMap.put("TASK_ID_", TASK_ID_);
+        }
+        if (TASK_ID_LIST != null && TASK_ID_LIST.size() > 0) {
+            sql += " and TASK_ID_ in (:TASK_ID_LIST)";
+            paramMap.put("TASK_ID_LIST", TASK_ID_LIST);
+        }
+        if (StringUtils.isNotEmpty(OPERATOR_)) {
+            sql += " and OPERATOR_ = :OPERATOR_";
+            paramMap.put("OPERATOR_", OPERATOR_);
         }
         if (OPERATOR_LIST != null && OPERATOR_LIST.size() > 0) {
             sql += " and OPERATOR_ in (:OPERATOR_LIST)";
@@ -112,6 +143,10 @@ public class FfOperationServiceImpl implements FfOperationService {
             sql += " and OPERATOR_NAME_ like '%' || :OPERATOR_NAME_ || '%'";
             paramMap.put("OPERATOR_NAME_", OPERATOR_NAME_);
         }
+        if (OPERATOR_NAME_LIST != null && OPERATOR_NAME_LIST.size() > 0) {
+            sql += " and OPERATOR_NAME_ in (:OPERATOR_NAME_LIST)";
+            paramMap.put("OPERATOR_NAME_LIST", OPERATOR_NAME_LIST);
+        }
         if (FROM_OPERATION_DATE_ != null) {
             sql += " and OPERATION_DATE_ >= :FROM_OPERATION_DATE_";
             paramMap.put("FROM_OPERATION_DATE_", FROM_OPERATION_DATE_);
@@ -120,13 +155,50 @@ public class FfOperationServiceImpl implements FfOperationService {
             sql += " and OPERATION_DATE_ <= :TO_OPERATION_DATE_";
             paramMap.put("TO_OPERATION_DATE_", TO_OPERATION_DATE_);
         }
+        if (StringUtils.isNotEmpty(OPERATION_STATUS_)) {
+            sql += " and OPERATION_STATUS_ = :OPERATION_STATUS_";
+            paramMap.put("OPERATION_STATUS_", OPERATION_STATUS_);
+        }
         if (OPERATION_STATUS_LIST != null && OPERATION_STATUS_LIST.size() > 0) {
             sql += " and OPERATION_STATUS_ in (:OPERATION_STATUS_LIST)";
             paramMap.put("OPERATION_STATUS_LIST", OPERATION_STATUS_LIST);
         }
+
+        if (StringUtils.isNotEmpty(PROC_ID_)) {
+            sql += " and PROC_ID_ = :PROC_ID_";
+            paramMap.put("PROC_ID_", PROC_ID_);
+        }
+        if (PROC_ID_LIST != null && PROC_ID_LIST.size() > 0) {
+            sql += " and PROC_ID_ in (:PROC_ID_LIST)";
+            paramMap.put("PROC_ID_LIST", PROC_ID_LIST);
+        }
+        if (StringUtils.isNotEmpty(ADJUST_PROC_DEF_ID_)) {
+            sql += " and ADJUST_PROC_DEF_ID_ = :ADJUST_PROC_DEF_ID_";
+            paramMap.put("ADJUST_PROC_DEF_ID_", ADJUST_PROC_DEF_ID_);
+        }
+        if (ADJUST_PROC_DEF_ID_LIST != null && ADJUST_PROC_DEF_ID_LIST.size() > 0) {
+            sql += " and ADJUST_PROC_DEF_ID_ in (:ADJUST_PROC_DEF_ID_LIST)";
+            paramMap.put("ADJUST_PROC_DEF_ID_LIST", ADJUST_PROC_DEF_ID_LIST);
+        }
+        if (StringUtils.isNotEmpty(ISOLATE_SUB_PROC_NODE_ID_)) {
+            sql += " and ISOLATE_SUB_PROC_NODE_ID_ = :ISOLATE_SUB_PROC_NODE_ID_";
+            paramMap.put("ISOLATE_SUB_PROC_NODE_ID_", ISOLATE_SUB_PROC_NODE_ID_);
+        }
+        if (ISOLATE_SUB_PROC_NODE_ID_LIST != null && ISOLATE_SUB_PROC_NODE_ID_LIST.size() > 0) {
+            sql += " and ISOLATE_SUB_PROC_NODE_ID_ in (:ISOLATE_SUB_PROC_NODE_ID_LIST)";
+            paramMap.put("ISOLATE_SUB_PROC_NODE_ID_LIST", ISOLATE_SUB_PROC_NODE_ID_LIST);
+        }
         if (StringUtils.isNotEmpty(BIZ_ID_)) {
             sql += " and BIZ_ID_ = :BIZ_ID_";
             paramMap.put("BIZ_ID_", BIZ_ID_);
+        }
+        if (BIZ_ID_LIST != null && BIZ_ID_LIST.size() > 0) {
+            sql += " and BIZ_ID_ in (:BIZ_ID_LIST)";
+            paramMap.put("BIZ_ID_LIST", BIZ_ID_LIST);
+        }
+        if (StringUtils.isNotEmpty(BIZ_TYPE_)) {
+            sql += " and BIZ_TYPE_ = :BIZ_TYPE_";
+            paramMap.put("BIZ_TYPE_", BIZ_TYPE_);
         }
         if (BIZ_TYPE_LIST != null && BIZ_TYPE_LIST.size() > 0) {
             sql += " and BIZ_TYPE_ in (:BIZ_TYPE_LIST)";
@@ -136,9 +208,130 @@ public class FfOperationServiceImpl implements FfOperationService {
             sql += " and BIZ_CODE_ = :BIZ_CODE_";
             paramMap.put("BIZ_CODE_", BIZ_CODE_);
         }
+        if (BIZ_CODE_LIST != null && BIZ_CODE_LIST.size() > 0) {
+            sql += " and BIZ_CODE_ in (:BIZ_CODE_LIST)";
+            paramMap.put("BIZ_CODE_LIST", BIZ_CODE_LIST);
+        }
         if (StringUtils.isNotEmpty(BIZ_NAME_)) {
             sql += " and BIZ_NAME_ like '%' || :BIZ_NAME_ || '%'";
             paramMap.put("BIZ_NAME_", BIZ_NAME_);
+        }
+        if (BIZ_NAME_LIST != null && BIZ_NAME_LIST.size() > 0) {
+            sql += " and BIZ_NAME_ in (:BIZ_NAME_LIST)";
+            paramMap.put("BIZ_NAME_LIST", BIZ_NAME_LIST);
+        }
+        if (StringUtils.isNotEmpty(BIZ_DESC_)) {
+            sql += " and BIZ_DESC_ like '%' || :BIZ_DESC_ || '%'";
+            paramMap.put("BIZ_DESC_", BIZ_DESC_);
+        }
+        if (BIZ_DESC_LIST != null && BIZ_DESC_LIST.size() > 0) {
+            sql += " and BIZ_DESC_ in (:BIZ_DESC_LIST)";
+            paramMap.put("BIZ_DESC_LIST", BIZ_DESC_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_START_USER_)) {
+            sql += " and PROC_START_USER_ = :PROC_START_USER_";
+            paramMap.put("PROC_START_USER_", PROC_START_USER_);
+        }
+        if (PROC_START_USER_LIST != null && PROC_START_USER_LIST.size() > 0) {
+            sql += " and PROC_START_USER_ in (:PROC_START_USER_LIST)";
+            paramMap.put("PROC_START_USER_LIST", PROC_START_USER_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_START_USER_NAME_)) {
+            sql += " and PROC_START_USER_NAME_ like '%' || :PROC_START_USER_NAME_ || '%'";
+            paramMap.put("PROC_START_USER_NAME_", PROC_START_USER_NAME_);
+        }
+        if (PROC_START_USER_NAME_LIST != null && PROC_START_USER_NAME_LIST.size() > 0) {
+            sql += " and PROC_START_USER_NAME_ in (:PROC_START_USER_NAME_LIST)";
+            paramMap.put("PROC_START_USER_NAME_LIST", PROC_START_USER_NAME_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_END_USER_)) {
+            sql += " and PROC_END_USER_ = :PROC_END_USER_";
+            paramMap.put("PROC_END_USER_", PROC_END_USER_);
+        }
+        if (PROC_END_USER_LIST != null && PROC_END_USER_LIST.size() > 0) {
+            sql += " and PROC_END_USER_ in (:PROC_END_USER_LIST)";
+            paramMap.put("PROC_END_USER_LIST", PROC_END_USER_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_END_USER_NAME_)) {
+            sql += " and PROC_END_USER_NAME_ like '%' || :PROC_END_USER_NAME_ || '%'";
+            paramMap.put("PROC_END_USER_NAME_", PROC_END_USER_NAME_);
+        }
+        if (PROC_END_USER_NAME_LIST != null && PROC_END_USER_NAME_LIST.size() > 0) {
+            sql += " and PROC_END_USER_NAME_ in (:PROC_END_USER_NAME_LIST)";
+            paramMap.put("PROC_END_USER_NAME_LIST", PROC_END_USER_NAME_LIST);
+        }
+        if (FROM_PROC_END_DATE_ != null) {
+            sql += " and PROC_END_DATE_ >= :FROM_PROC_END_DATE_";
+            paramMap.put("FROM_PROC_END_DATE_", FROM_PROC_END_DATE_);
+        }
+        if (TO_PROC_END_DATE_ != null) {
+            sql += " and PROC_END_DATE_ <= :TO_PROC_END_DATE_";
+            paramMap.put("TO_PROC_END_DATE_", TO_PROC_END_DATE_);
+        }
+        if (StringUtils.isNotEmpty(PROC_STATUS_)) {
+            sql += " and PROC_STATUS_ = :PROC_STATUS_";
+            paramMap.put("PROC_STATUS_", PROC_STATUS_);
+        }
+        if (PROC_STATUS_LIST != null && PROC_STATUS_LIST.size() > 0) {
+            sql += " and PROC_STATUS_ in (:PROC_STATUS_LIST)";
+            paramMap.put("PROC_STATUS_LIST", PROC_STATUS_LIST);
+        }
+        if (FROM_CREATION_DATE_ != null) {
+            sql += " and CREATION_DATE_ >= :FROM_CREATION_DATE_";
+            paramMap.put("FROM_CREATION_DATE_", FROM_CREATION_DATE_);
+        }
+        if (TO_CREATION_DATE_ != null) {
+            sql += " and CREATION_DATE_ <= :TO_CREATION_DATE_";
+            paramMap.put("TO_CREATION_DATE_", TO_CREATION_DATE_);
+        }
+
+        if (StringUtils.isNotEmpty(PROC_DEF_ID_)) {
+            sql += " and PROC_DEF_ID_ = :PROC_DEF_ID_";
+            paramMap.put("PROC_DEF_ID_", PROC_DEF_ID_);
+        }
+        if (PROC_DEF_ID_LIST != null && PROC_DEF_ID_LIST.size() > 0) {
+            sql += " and PROC_DEF_ID_ in (:PROC_DEF_ID_LIST)";
+            paramMap.put("PROC_DEF_ID_LIST", PROC_DEF_ID_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_DEF_CODE_)) {
+            sql += " and PROC_DEF_CODE_ = :PROC_DEF_CODE_";
+            paramMap.put("PROC_DEF_CODE_", PROC_DEF_CODE_);
+        }
+        if (PROC_DEF_CODE_LIST != null && PROC_DEF_CODE_LIST.size() > 0) {
+            sql += " and PROC_DEF_CODE_ in (:PROC_DEF_CODE_LIST)";
+            paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
+            sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
+            paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
+        }
+        if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
+            sql += " and PROC_DEF_NAME_ in (:PROC_DEF_NAME_LIST)";
+            paramMap.put("PROC_DEF_NAME_LIST", PROC_DEF_NAME_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_DEF_CAT_)) {
+            sql += " and PROC_DEF_CAT_ like :PROC_DEF_CAT_ || '%'";
+            paramMap.put("PROC_DEF_CAT_", PROC_DEF_CAT_);
+        }
+        if (PROC_DEF_CAT_LIST != null && PROC_DEF_CAT_LIST.size() > 0) {
+            sql += " and PROC_DEF_CAT_ in (:PROC_DEF_CAT_LIST)";
+            paramMap.put("PROC_DEF_CAT_LIST", PROC_DEF_CAT_LIST);
+        }
+        if (VERSION_ != null) {
+            sql += " and VERSION_ = :VERSION_";
+            paramMap.put("VERSION_", VERSION_);
+        }
+        if (VERSION_LIST != null && VERSION_LIST.size() > 0) {
+            sql += " and VERSION_ in (:VERSION_LIST)";
+            paramMap.put("VERSION_LIST", VERSION_LIST);
+        }
+        if (StringUtils.isNotEmpty(PROC_DEF_STATUS_)) {
+            sql += " and PROC_DEF_STATUS_ = :PROC_DEF_STATUS_";
+            paramMap.put("PROC_DEF_STATUS_", PROC_DEF_STATUS_);
+        }
+        if (PROC_DEF_STATUS_LIST != null && PROC_DEF_STATUS_LIST.size() > 0) {
+            sql += " and PROC_DEF_STATUS_ in (:PROC_DEF_STATUS_LIST)";
+            paramMap.put("PROC_DEF_STATUS_LIST", PROC_DEF_STATUS_LIST);
         }
 
         if (!count) {
@@ -201,21 +394,21 @@ public class FfOperationServiceImpl implements FfOperationService {
     @Override
     public int insertProcOp(String PROC_OP_ID_, String PROC_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
-        String sql = "insert into FF_PROC_OP (PROC_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC where PROC_ID_ = ?";
+        String sql = "insert into FF_PROC_OP (PROC_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, PROC_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, PROC_ID_);
     }
 
     @Override
     public int insertNodeOp(String NODE_OP_ID_, String NODE_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
-        String sql = "insert into FF_NODE_OP (NODE_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_ from FF_NODE where NODE_ID_ = ?";
+        String sql = "insert into FF_NODE_OP (NODE_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_ from FF_NODE where NODE_ID_ = ?";
         return ffJdbcTemplate.update(sql, NODE_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, NODE_ID_);
     }
 
     @Override
     public int insertTaskOp(String TASK_OP_ID_, String TASK_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
-        String sql = "insert into FF_TASK_OP (TASK_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_ from FF_TASK where TASK_ID_ = ?";
+        String sql = "insert into FF_TASK_OP (TASK_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_ from FF_TASK where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, TASK_ID_);
     }
 
@@ -337,7 +530,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             String CURRENT_PROC_STATUS_ = (String) procList.get(0).get("PROC_STATUS_");
             String UNDO_PROC_STATUS_ = (String) procOp.get("PROC_STATUS_");
 
-            sql = "update FF_PROC set (PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) = (select PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC_OP where PROC_OP_ID_ = ?) where PROC_ID_ = ?";
+            sql = "update FF_PROC set (PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) = (select PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC_OP where PROC_OP_ID_ = ?) where PROC_ID_ = ?";
             ffJdbcTemplate.update(sql, procOp.get("PROC_OP_ID_"), procOp.get("PROC_ID_"));
 
             Proc proc = ffService.loadProc((String) procOp.get("PROC_ID_"));
@@ -357,7 +550,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             }
         }
         if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
-            sql = "insert into FF_PROC(PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_START_DATE_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC_OP where PROC_OP_ID_ = ?";
+            sql = "insert into FF_PROC(PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC_OP where PROC_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, procOp.get("PROC_OP_ID_"));
             ffResult.addCreateProc(ffService.loadProc((String) procOp.get("PROC_ID_")));
         }
@@ -386,7 +579,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             String CURRENT_NODE_STATUS_ = (String) nodeList.get(0).get("NODE_STATUS_");
             String UNDO_NODE_STATUS_ = (String) nodeOp.get("NODE_STATUS_");
 
-            sql = "update FF_NODE set (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) = (select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?) where NODE_ID_ = ?";
+            sql = "update FF_NODE set (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) = (select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?) where NODE_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeOp.get("NODE_OP_ID_"), nodeOp.get("NODE_ID_"));
 
             Node node = ffService.loadNode((String) nodeOp.get("NODE_ID_"));
@@ -406,7 +599,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             }
         }
         if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
-            sql = "insert into FF_NODE (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, ASSIGNEE_, CANDIDATE_, ACTION_, DUE_DATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, FORWARDABLE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?";
+            sql = "insert into FF_NODE (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeOp.get("NODE_OP_ID_"));
             ffResult.addCreateNode(ffService.loadNode((String) nodeOp.get("NODE_ID_")));
         }
@@ -435,7 +628,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             String CURRENT_TASK_STATUS_ = (String) taskList.get(0).get("TASK_STATUS_");
             String UNDO_TASK_STATUS_ = (String) taskOp.get("TASK_STATUS_");
 
-            sql = "update FF_TASK set (TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_) = (select TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_ from FF_TASK_OP where TASK_OP_ID_ = ?) where TASK_ID_ = ?";
+            sql = "update FF_TASK set (TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_) = (select TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_ from FF_TASK_OP where TASK_OP_ID_ = ?) where TASK_ID_ = ?";
             ffJdbcTemplate.update(sql, taskOp.get("TASK_OP_ID_"), taskOp.get("TASK_ID_"));
 
             Task task = ffService.loadTask((String) taskOp.get("TASK_ID_"));
@@ -455,7 +648,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             }
         }
         if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
-            sql = "insert into FF_TASK(TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_) select TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, EXECUTOR_, EXECUTOR_NAME_, ACTION_, CLAIM_DATE_, DUE_DATE_, COMPLETE_DATE_, PRIORITY_, FORWARDABLE_, FORWARD_STATUS_, TASK_STATUS_, CREATION_DATE_ from FF_TASK_OP where TASK_OP_ID_ = ?";
+            sql = "insert into FF_TASK(TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_) select TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, CREATION_DATE_ from FF_TASK_OP where TASK_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, taskOp.get("TASK_OP_ID_"));
             ffResult.addCreateTask(ffService.loadTask((String) taskOp.get("TASK_ID_")));
         }
