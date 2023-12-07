@@ -23,7 +23,7 @@
             "nodeType": "TASK",
             "nodeCode": "hrLeader",
             "nodeName": "人力资源审批",
-            "assignee": "hrLeader",
+            "candidateAssignee": "hrLeader,DevLeader",
             "action": "commonApproveContract.do?CONTRACT_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
         },
         {
@@ -34,8 +34,7 @@
             "nodeType": "TASK",
             "nodeCode": "companyLeader",
             "nodeName": "公司领导审批",
-            "candidate": "${initPosiEmpId}",
-            "assignee": "${assignee}",
+            "candidateAssignee": "${initPosiEmpId}",
             "action": "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
         }
     ],

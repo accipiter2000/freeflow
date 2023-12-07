@@ -1,153 +1,89 @@
 {
-	"procDefCode" : "serviceTaskDemo",
-	"procDefName" : "服务任务示例",
-	"procDefCat" : "demo.hq.hr",
-	"memo" : "memo",
-	"procDefDiagramWidth" : "600",
-	"procDefDiagramHeight" : "500",
-	"nodeDefList" : [ {
-		"nodeType" : "SERVICE_TASK",
-		"nodeCode" : "auto",
-		"nodeName" : "自动审批",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "${ffService.refreshProcDefCache()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 50; top: 0; width: 100; height: 50"
-		}
-	}, {
-		"nodeType" : "TASK",
-		"nodeCode" : "departmentLeader",
-		"nodeName" : "部门领导审批",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 200; top: 100; width: 100; height: 50; "
-		}
-	}, {
-		"nodeType" : "TASK",
-		"nodeCode" : "hrLeader",
-		"nodeName" : "人力资源审批",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 50; top: 100; width: 100; height: 50; "
-		}
-	}, {
-		"nodeType" : "SERVICE_TASK",
-		"nodeCode" : "factory1",
-		"nodeName" : "厂矿1审批",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}",
-		"completeReturn" : "1",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 150; top: 200; width: 100; height: 50; "
-		}
-	}, {
-		"nodeType" : "STAGE",
-		"nodeCode" : "factory2",
-		"nodeName" : "厂矿2审批",
-		"completeReturn" : "1",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 150; top: 275; width: 300; height: 100; vertical-align: top;"
-		}
-	}, {
-		"nodeType" : "TASK",
-		"nodeCode" : "factorys-schedule",
-		"nodeName" : "调度员审批",
-		"parentNodeCode" : "factory2",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 175; top: 300; width: 100; height: 50;"
-		}
-	}, {
-		"nodeType" : "SERVICE_TASK",
-		"nodeCode" : "factorys-master",
-		"nodeName" : "厂长审批",
-		"parentNodeCode" : "factory2",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 325; top: 300; width: 100; height: 50;"
-		}
-	}, {
-		"nodeType" : "TASK",
-		"nodeCode" : "hqLeader",
-		"nodeName" : "集团领导审批",
-		"candidate" : "${initPosiEmpId}",
-		"assignee" : "${assignee}",
-		"action" : "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
-		"shape" : {
-			"type" : "rectangle",
-			"style" : "left: 50; top: 400; width: 100; height: 50; "
-		}
-	} ],
-	"flowDefList" : [ {
-		"flowCode" : "flow01",
-		"sourceNodeCode" : "auto",
-		"targetNodeCode" : "hrLeader",
-		"conditionExpression" : "${amountOfMoney>=1000}",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "SN"
-		}
-	}, {
-		"flowCode" : "flow01",
-		"sourceNodeCode" : "auto",
-		"targetNodeCode" : "departmentLeader",
-		"conditionExpression" : "${amountOfMoney<1000}",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "EN"
-		}
-	}, {
-		"flowCode" : "flow02",
-		"sourceNodeCode" : "hrLeader",
-		"targetNodeCode" : "factory1",
-		"conditionExpression" : "${STEP==1}",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "SW"
-		}
-	}, {
-		"flowCode" : "flow03",
-		"sourceNodeCode" : "hrLeader",
-		"targetNodeCode" : "factory2",
-		"conditionExpression" : "${STEP==2}",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "SW"
-		}
-	}, {
-		"flowCode" : "flow03",
-		"sourceNodeCode" : "factorys-schedule",
-		"targetNodeCode" : "factorys-master",
-		"conditionExpression" : "true",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "EW"
-		}
-	}, {
-		"flowCode" : "flow04",
-		"sourceNodeCode" : "hrLeader",
-		"targetNodeCode" : "hqLeader",
-		"conditionExpression" : "${STEP==3}",
-		"shape" : {
-			"type" : "line",
-			"linePath" : "SN"
-		}
-	} ]
+    "procDefCode": "serviceTaskDemo",
+    "procDefName": "服务任务示例",
+    "procDefCat": "demo.main",
+    "procDefDiagramWidth": null,
+    "procDefDiagramHeight": null,
+    "memo": "memo",
+    "nodeDefList": [
+        {
+            "shape": {
+                "type": "rectangle",
+                "style": "left: 50; top: 50; width: 100; height: 50; border-style: solid; border-width: 1; border-radius: 10; border-color: #000000; background-color: #ffffc8; font-family: Microsoft YaHei; font-weight: normal; font-size: 13px; color: #000000; text-align: center; vertical-align: middle; "
+            },
+            "nodeType": "TASK",
+            "nodeCode": "部门领导审批",
+            "nodeName": "部门领导审批",
+            "assignee": "${ffOmService.selectOrgLeader(INIT_ORG_ID_,\"1\")}",
+            "action": "commonApproveDoc.do?DOC_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
+            "completeExpression": "${COMPLETE/TOTAL>=1}",
+            "completeReturn": "0",
+            "exclusive": "0",
+            "autoCompleteSameAssignee": "0",
+            "autoCompleteEmptyAssignee": "0",
+            "inform": "0",
+            "claim": "0",
+            "forwardable": "0",
+            "priority": "5"
+        },
+        {
+            "shape": {
+                "type": "rectangle",
+                "style": "left: 50; top: 150; width: 100; height: 50; border-style: solid; border-width: 1; border-radius: 10; border-color: #000000; background-color: #ffffc8; font-family: Microsoft YaHei; font-weight: normal; font-size: 13px; color: #000000; text-align: center; vertical-align: middle; "
+            },
+            "nodeType": "SERVICE_TASK",
+            "nodeCode": "服务接口调用",
+            "nodeName": "服务接口调用",
+            "action": "${docService.testService()}",
+            "completeExpression": "${COMPLETE/TOTAL>=1}",
+            "completeReturn": "0",
+            "exclusive": "0",
+            "autoCompleteSameAssignee": "0",
+            "autoCompleteEmptyAssignee": "0",
+            "inform": "0",
+            "claim": "0",
+            "forwardable": "0",
+            "priority": "5"
+        },
+        {
+            "shape": {
+                "type": "rectangle",
+                "style": "left: 50; top: 250; width: 100; height: 50; border-style: solid; border-width: 1; border-radius: 10; border-color: #000000; background-color: #ffffc8; font-family: Microsoft YaHei; font-weight: normal; font-size: 13px; color: #000000; text-align: center; vertical-align: middle; "
+            },
+            "nodeType": "TASK",
+            "nodeCode": "厂矿领导审批",
+            "nodeName": "厂矿领导审批",
+            "assignee": "${ffOmService.selectOrgLeader(INIT_COM_ID_,\"1\")}",
+            "action": "commonApproveDoc.do?DOC_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}",
+            "completeExpression": "${COMPLETE/TOTAL>=1}",
+            "completeReturn": "0",
+            "exclusive": "0",
+            "autoCompleteSameAssignee": "0",
+            "autoCompleteEmptyAssignee": "0",
+            "inform": "0",
+            "claim": "0",
+            "forwardable": "0",
+            "priority": "5"
+        }
+    ],
+    "flowDefList": [
+        {
+            "shape": {
+                "type": "line",
+                "linePath": "SN",
+                "style": "left: 0; top: 0; width: 100; height: 50; border-style: solid; border-width: 1; border-radius: 10; border-color: #000000; background-color: #ffffc8; font-family: Microsoft YaHei; font-weight: normal; font-size: 13px; color: #000000; text-align: center; vertical-align: middle; "
+            },
+            "sourceNodeCode": "部门领导审批",
+            "targetNodeCode": "服务接口调用"
+        },
+        {
+            "shape": {
+                "type": "line",
+                "linePath": "SN",
+                "style": "left: 0; top: 0; width: 100; height: 50; border-style: solid; border-width: 1; border-radius: 10; border-color: #000000; background-color: #ffffc8; font-family: Microsoft YaHei; font-weight: normal; font-size: 13px; color: #000000; text-align: center; vertical-align: middle; "
+            },
+            "sourceNodeCode": "服务接口调用",
+            "targetNodeCode": "厂矿领导审批"
+        }
+    ]
 }
