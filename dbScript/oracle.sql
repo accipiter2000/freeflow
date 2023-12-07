@@ -1,68 +1,63 @@
-prompt PL/SQL Developer Export User Objects for user FF@FFOA
-prompt Created by Administrator on 2023年8月10日
-set define off
-spool 1.log
-
 prompt
 prompt Creating table FF_PROC_DEF
 prompt ==========================
 prompt
 create table FF_PROC_DEF
 (
-  proc_def_id_                  VARCHAR2(40) not null,
-  proc_def_code_                VARCHAR2(60) not null,
-  proc_def_name_                VARCHAR2(60) not null,
-  proc_def_cat_                 VARCHAR2(100),
-  proc_def_model_               CLOB not null,
-  proc_def_diagram_file_        BLOB,
-  proc_def_diagram_file_name_   VARCHAR2(300),
-  proc_def_diagram_file_length_ INTEGER,
-  proc_def_diagram_width_       INTEGER,
-  proc_def_diagram_height_      INTEGER,
-  memo_                         VARCHAR2(300),
-  version_                      INTEGER not null,
-  proc_def_status_              VARCHAR2(20) not null,
-  creation_date_                TIMESTAMP(6),
-  update_date_                  TIMESTAMP(6),
-  operator_id_                  VARCHAR2(40),
-  operator_name_                VARCHAR2(60)
+  PROC_DEF_ID_                  VARCHAR2(40) not null,
+  PROC_DEF_CODE_                VARCHAR2(60) not null,
+  PROC_DEF_NAME_                VARCHAR2(60) not null,
+  PROC_DEF_CAT_                 VARCHAR2(100),
+  PROC_DEF_MODEL_               CLOB not null,
+  PROC_DEF_DIAGRAM_FILE_        BLOB,
+  PROC_DEF_DIAGRAM_FILE_NAME_   VARCHAR2(300),
+  PROC_DEF_DIAGRAM_FILE_LENGTH_ INTEGER,
+  PROC_DEF_DIAGRAM_WIDTH_       INTEGER,
+  PROC_DEF_DIAGRAM_HEIGHT_      INTEGER,
+  MEMO_                         VARCHAR2(300),
+  VERSION_                      INTEGER not null,
+  PROC_DEF_STATUS_              VARCHAR2(20) not null,
+  CREATION_DATE_                TIMESTAMP(6),
+  UPDATE_DATE_                  TIMESTAMP(6),
+  OPERATOR_ID_                  VARCHAR2(40),
+  OPERATOR_NAME_                VARCHAR2(60)
 )
 ;
 comment on table FF_PROC_DEF
   is '流程定义';
-comment on column FF_PROC_DEF.proc_def_id_
+comment on column FF_PROC_DEF.PROC_DEF_ID_
   is '流程定义ID';
-comment on column FF_PROC_DEF.proc_def_code_
+comment on column FF_PROC_DEF.PROC_DEF_CODE_
   is '流程定义编码';
-comment on column FF_PROC_DEF.proc_def_name_
+comment on column FF_PROC_DEF.PROC_DEF_NAME_
   is '流程定义名称';
-comment on column FF_PROC_DEF.proc_def_cat_
+comment on column FF_PROC_DEF.PROC_DEF_CAT_
   is '流程定义分类';
-comment on column FF_PROC_DEF.proc_def_model_
+comment on column FF_PROC_DEF.PROC_DEF_MODEL_
   is '流程定义模型';
-comment on column FF_PROC_DEF.proc_def_diagram_file_
+comment on column FF_PROC_DEF.PROC_DEF_DIAGRAM_FILE_
   is '流程定义图文件';
-comment on column FF_PROC_DEF.proc_def_diagram_file_name_
+comment on column FF_PROC_DEF.PROC_DEF_DIAGRAM_FILE_NAME_
   is '流程定义图文件名称';
-comment on column FF_PROC_DEF.proc_def_diagram_file_length_
+comment on column FF_PROC_DEF.PROC_DEF_DIAGRAM_FILE_LENGTH_
   is '流程定义图文件长度';
-comment on column FF_PROC_DEF.proc_def_diagram_width_
+comment on column FF_PROC_DEF.PROC_DEF_DIAGRAM_WIDTH_
   is '流程定义图宽度';
-comment on column FF_PROC_DEF.proc_def_diagram_height_
+comment on column FF_PROC_DEF.PROC_DEF_DIAGRAM_HEIGHT_
   is '流程定义图高度';
-comment on column FF_PROC_DEF.memo_
+comment on column FF_PROC_DEF.MEMO_
   is '备注';
-comment on column FF_PROC_DEF.version_
+comment on column FF_PROC_DEF.VERSION_
   is '版本';
-comment on column FF_PROC_DEF.proc_def_status_
+comment on column FF_PROC_DEF.PROC_DEF_STATUS_
   is '流程定义状态';
-comment on column FF_PROC_DEF.creation_date_
+comment on column FF_PROC_DEF.CREATION_DATE_
   is '创建日期';
-comment on column FF_PROC_DEF.update_date_
+comment on column FF_PROC_DEF.UPDATE_DATE_
   is '更新日期';
-comment on column FF_PROC_DEF.operator_id_
+comment on column FF_PROC_DEF.OPERATOR_ID_
   is '操作人员ID';
-comment on column FF_PROC_DEF.operator_name_
+comment on column FF_PROC_DEF.OPERATOR_NAME_
   is '操作人员名称';
 alter table FF_PROC_DEF
   add constraint PK_FF_PROC_DEF primary key (PROC_DEF_ID_);
@@ -75,45 +70,45 @@ prompt =================================
 prompt
 create table FF_ADJUST_PROC_DEF
 (
-  adjust_proc_def_id_           VARCHAR2(40) not null,
-  proc_def_id_                  VARCHAR2(40) not null,
-  proc_def_model_               CLOB not null,
-  proc_def_diagram_file_        BLOB,
-  proc_def_diagram_file_name_   VARCHAR2(300),
-  proc_def_diagram_file_length_ INTEGER,
-  proc_def_diagram_width_       INTEGER,
-  proc_def_diagram_height_      INTEGER,
-  creation_date_                TIMESTAMP(6),
-  update_date_                  TIMESTAMP(6),
-  operator_id_                  VARCHAR2(40),
-  operator_name_                VARCHAR2(60)
+  ADJUST_PROC_DEF_ID_           VARCHAR2(40) not null,
+  PROC_DEF_ID_                  VARCHAR2(40) not null,
+  PROC_DEF_MODEL_               CLOB not null,
+  PROC_DEF_DIAGRAM_FILE_        BLOB,
+  PROC_DEF_DIAGRAM_FILE_NAME_   VARCHAR2(300),
+  PROC_DEF_DIAGRAM_FILE_LENGTH_ INTEGER,
+  PROC_DEF_DIAGRAM_WIDTH_       INTEGER,
+  PROC_DEF_DIAGRAM_HEIGHT_      INTEGER,
+  CREATION_DATE_                TIMESTAMP(6),
+  UPDATE_DATE_                  TIMESTAMP(6),
+  OPERATOR_ID_                  VARCHAR2(40),
+  OPERATOR_NAME_                VARCHAR2(60)
 )
 ;
 comment on table FF_ADJUST_PROC_DEF
   is '调整流程定义';
-comment on column FF_ADJUST_PROC_DEF.adjust_proc_def_id_
+comment on column FF_ADJUST_PROC_DEF.ADJUST_PROC_DEF_ID_
   is '调整流程定义ID';
-comment on column FF_ADJUST_PROC_DEF.proc_def_id_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_ID_
   is '流程定义ID';
-comment on column FF_ADJUST_PROC_DEF.proc_def_model_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_MODEL_
   is '流程定义模型';
-comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_DIAGRAM_FILE_
   is '流程定义图文件';
-comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_name_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_DIAGRAM_FILE_NAME_
   is '流程定义图文件名称';
-comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_file_length_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_DIAGRAM_FILE_LENGTH_
   is '流程定义图文件长度';
-comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_width_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_DIAGRAM_WIDTH_
   is '流程定义图宽度';
-comment on column FF_ADJUST_PROC_DEF.proc_def_diagram_height_
+comment on column FF_ADJUST_PROC_DEF.PROC_DEF_DIAGRAM_HEIGHT_
   is '流程定义图高度';
-comment on column FF_ADJUST_PROC_DEF.creation_date_
+comment on column FF_ADJUST_PROC_DEF.CREATION_DATE_
   is '创建日期';
-comment on column FF_ADJUST_PROC_DEF.update_date_
+comment on column FF_ADJUST_PROC_DEF.UPDATE_DATE_
   is '更新日期';
-comment on column FF_ADJUST_PROC_DEF.operator_id_
+comment on column FF_ADJUST_PROC_DEF.OPERATOR_ID_
   is '操作人员ID';
-comment on column FF_ADJUST_PROC_DEF.operator_name_
+comment on column FF_ADJUST_PROC_DEF.OPERATOR_NAME_
   is '操作人员名称';
 alter table FF_ADJUST_PROC_DEF
   add constraint PK_FF_ADJUST_PROC_DEF primary key (ADJUST_PROC_DEF_ID_);
@@ -127,30 +122,30 @@ prompt ==========================
 prompt
 create table FF_DELEGATE
 (
-  delegate_id_    VARCHAR2(40) not null,
-  assignee_       VARCHAR2(60),
-  assignee_name_  VARCHAR2(60),
-  delegator_      VARCHAR2(60) not null,
-  delegator_name_ VARCHAR2(60),
-  start_date_     TIMESTAMP(6),
-  end_date_       TIMESTAMP(6)
+  DELEGATE_ID_    VARCHAR2(40) not null,
+  ASSIGNEE_       VARCHAR2(60),
+  ASSIGNEE_NAME_  VARCHAR2(60),
+  DELEGATOR_      VARCHAR2(60) not null,
+  DELEGATOR_NAME_ VARCHAR2(60),
+  START_DATE_     TIMESTAMP(6),
+  END_DATE_       TIMESTAMP(6)
 )
 ;
 comment on table FF_DELEGATE
   is '代理';
-comment on column FF_DELEGATE.delegate_id_
+comment on column FF_DELEGATE.DELEGATE_ID_
   is '代理ID';
-comment on column FF_DELEGATE.assignee_
+comment on column FF_DELEGATE.ASSIGNEE_
   is '办理人';
-comment on column FF_DELEGATE.assignee_name_
+comment on column FF_DELEGATE.ASSIGNEE_NAME_
   is '办理人名称';
-comment on column FF_DELEGATE.delegator_
+comment on column FF_DELEGATE.DELEGATOR_
   is '代理人';
-comment on column FF_DELEGATE.delegator_name_
+comment on column FF_DELEGATE.DELEGATOR_NAME_
   is '代理人名称';
-comment on column FF_DELEGATE.start_date_
+comment on column FF_DELEGATE.START_DATE_
   is '开始日期';
-comment on column FF_DELEGATE.end_date_
+comment on column FF_DELEGATE.END_DATE_
   is '结束日期';
 alter table FF_DELEGATE
   add constraint PK_FF_DELEGATE primary key (DELEGATE_ID_);
@@ -161,64 +156,64 @@ prompt ======================
 prompt
 create table FF_PROC
 (
-  proc_id_                  VARCHAR2(40) not null,
-  proc_def_id_              VARCHAR2(40) not null,
-  adjust_proc_def_id_       VARCHAR2(40),
-  isolate_sub_proc_node_id_ VARCHAR2(40),
-  biz_id_                   VARCHAR2(40),
-  biz_type_                 VARCHAR2(60),
-  biz_code_                 VARCHAR2(100),
-  biz_name_                 VARCHAR2(100),
-  biz_desc_                 VARCHAR2(300),
-  proc_start_user_          VARCHAR2(40),
-  proc_start_user_name_     VARCHAR2(60),
-  proc_end_user_            VARCHAR2(40),
-  proc_end_user_name_       VARCHAR2(60),
-  proc_end_date_            TIMESTAMP(6),
-  proc_status_              VARCHAR2(20) not null,
-  creation_date_            TIMESTAMP(6) not null
+  PROC_ID_                  VARCHAR2(40) not null,
+  PROC_DEF_ID_              VARCHAR2(40) not null,
+  ADJUST_PROC_DEF_ID_       VARCHAR2(40),
+  ISOLATE_SUB_PROC_NODE_ID_ VARCHAR2(40),
+  BIZ_ID_                   VARCHAR2(40),
+  BIZ_TYPE_                 VARCHAR2(60),
+  BIZ_CODE_                 VARCHAR2(100),
+  BIZ_NAME_                 VARCHAR2(100),
+  BIZ_DESC_                 VARCHAR2(300),
+  PROC_START_USER_          VARCHAR2(40),
+  PROC_START_USER_NAME_     VARCHAR2(60),
+  PROC_END_USER_            VARCHAR2(40),
+  PROC_END_USER_NAME_       VARCHAR2(60),
+  PROC_END_DATE_            TIMESTAMP(6),
+  PROC_STATUS_              VARCHAR2(20) not null,
+  CREATION_DATE_            TIMESTAMP(6) not null
 )
 ;
 comment on table FF_PROC
   is '流程';
-comment on column FF_PROC.proc_id_
+comment on column FF_PROC.PROC_ID_
   is '流程ID';
-comment on column FF_PROC.proc_def_id_
+comment on column FF_PROC.PROC_DEF_ID_
   is '流程定义ID';
-comment on column FF_PROC.adjust_proc_def_id_
+comment on column FF_PROC.ADJUST_PROC_DEF_ID_
   is '调整流程定义ID';
-comment on column FF_PROC.isolate_sub_proc_node_id_
+comment on column FF_PROC.ISOLATE_SUB_PROC_NODE_ID_
   is '独立子流程所属节点ID';
-comment on column FF_PROC.biz_id_
+comment on column FF_PROC.BIZ_ID_
   is '业务主键';
-comment on column FF_PROC.biz_type_
+comment on column FF_PROC.BIZ_TYPE_
   is '业务类型';
-comment on column FF_PROC.biz_code_
+comment on column FF_PROC.BIZ_CODE_
   is '业务编码';
-comment on column FF_PROC.biz_name_
+comment on column FF_PROC.BIZ_NAME_
   is '业务名称';
-comment on column FF_PROC.biz_desc_
+comment on column FF_PROC.BIZ_DESC_
   is '业务备注';
-comment on column FF_PROC.proc_start_user_
+comment on column FF_PROC.PROC_START_USER_
   is '流程开始人员';
-comment on column FF_PROC.proc_start_user_name_
+comment on column FF_PROC.PROC_START_USER_NAME_
   is '流程开始人员名称';
-comment on column FF_PROC.proc_end_user_
+comment on column FF_PROC.PROC_END_USER_
   is '流程完成人员';
-comment on column FF_PROC.proc_end_user_name_
+comment on column FF_PROC.PROC_END_USER_NAME_
   is '流程完成人员名称';
-comment on column FF_PROC.proc_end_date_
+comment on column FF_PROC.PROC_END_DATE_
   is '流程完成日期';
-comment on column FF_PROC.proc_status_
+comment on column FF_PROC.PROC_STATUS_
   is '流程状态';
-comment on column FF_PROC.creation_date_
+comment on column FF_PROC.CREATION_DATE_
   is '创建日期';
-create index FK_PROC_DEF on FF_PROC (PROC_DEF_ID_);
 alter table FF_PROC
   add constraint PK_FF_PROC primary key (PROC_ID_);
 alter table FF_PROC
   add constraint FK_FF_PROC_PROC_DEF foreign key (PROC_DEF_ID_)
   references FF_PROC_DEF (PROC_DEF_ID_);
+create index FK_PROC_DEF on FF_PROC (PROC_DEF_ID_);
 
 prompt
 prompt Creating table FF_NODE
@@ -226,102 +221,108 @@ prompt ======================
 prompt
 create table FF_NODE
 (
-  node_id_                      VARCHAR2(40) not null,
-  parent_node_id_               VARCHAR2(40),
-  proc_id_                      VARCHAR2(40) not null,
-  previous_node_ids_            VARCHAR2(280),
-  last_complete_node_ids_       VARCHAR2(280),
-  sub_proc_def_id_              VARCHAR2(40),
-  adjust_sub_proc_def_id_       VARCHAR2(40),
-  node_type_                    VARCHAR2(20) not null,
-  node_code_                    VARCHAR2(60),
-  node_name_                    VARCHAR2(60),
-  parent_node_code_             VARCHAR2(100),
-  candidate_                    VARCHAR2(200),
-  complete_expression_          VARCHAR2(200),
-  complete_return_              VARCHAR2(200),
-  exclusive_                    VARCHAR2(200),
-  auto_complete_same_assignee_  VARCHAR2(200),
-  auto_complete_empty_assignee_ VARCHAR2(200),
-  inform_                       VARCHAR2(200),
-  assignee_                     VARCHAR2(200),
-  action_                       VARCHAR2(300),
-  due_date_                     VARCHAR2(200),
-  claim_                        VARCHAR2(200),
-  forwardable_                  VARCHAR2(200),
-  priority_                     VARCHAR2(200),
-  node_end_user_                VARCHAR2(40),
-  node_end_user_name_           VARCHAR2(60),
-  node_end_date_                TIMESTAMP(6),
-  isolate_sub_proc_def_code_    VARCHAR2(60),
-  isolate_sub_proc_status_      VARCHAR2(60),
-  node_status_                  VARCHAR2(20) not null,
-  creation_date_                TIMESTAMP(6) not null
+  NODE_ID_                      VARCHAR2(40) not null,
+  PARENT_NODE_ID_               VARCHAR2(40),
+  PROC_ID_                      VARCHAR2(40) not null,
+  PREVIOUS_NODE_IDS_            VARCHAR2(280),
+  LAST_COMPLETE_NODE_IDS_       VARCHAR2(280),
+  SUB_PROC_DEF_ID_              VARCHAR2(40),
+  ADJUST_SUB_PROC_DEF_ID_       VARCHAR2(40),
+  NODE_TYPE_                    VARCHAR2(20) not null,
+  NODE_CODE_                    VARCHAR2(60),
+  NODE_NAME_                    VARCHAR2(60),
+  PARENT_NODE_CODE_             VARCHAR2(100),
+  CANDIDATE_ASSIGNEE_           VARCHAR2(200),
+  COMPLETE_EXPRESSION_          VARCHAR2(200),
+  COMPLETE_RETURN_              VARCHAR2(200),
+  EXCLUSIVE_                    VARCHAR2(200),
+  AUTO_COMPLETE_SAME_ASSIGNEE_  VARCHAR2(200),
+  AUTO_COMPLETE_EMPTY_ASSIGNEE_ VARCHAR2(200),
+  INFORM_                       VARCHAR2(200),
+  ASSIGNEE_                     VARCHAR2(200),
+  ACTION_                       VARCHAR2(300),
+  DUE_DATE_                     VARCHAR2(200),
+  CLAIM_                        VARCHAR2(200),
+  FORWARDABLE_                  VARCHAR2(200),
+  PRIORITY_                     VARCHAR2(200),
+  NODE_END_USER_                VARCHAR2(40),
+  NODE_END_USER_NAME_           VARCHAR2(60),
+  NODE_END_DATE_                TIMESTAMP(6),
+  NEXT_CANDIDATE_               CLOB,
+  ISOLATE_SUB_PROC_DEF_CODE_    VARCHAR2(60),
+  ISOLATE_SUB_PROC_CANDIDATE_   VARCHAR2(500),
+  ISOLATE_SUB_PROC_STATUS_      VARCHAR2(60),
+  NODE_STATUS_                  VARCHAR2(20) not null,
+  CREATION_DATE_                TIMESTAMP(6) not null
 )
 ;
 comment on table FF_NODE
   is '节点';
-comment on column FF_NODE.node_id_
+comment on column FF_NODE.NODE_ID_
   is '节点ID';
-comment on column FF_NODE.parent_node_id_
+comment on column FF_NODE.PARENT_NODE_ID_
   is '上级节点ID';
-comment on column FF_NODE.proc_id_
+comment on column FF_NODE.PROC_ID_
   is '流程ID';
-comment on column FF_NODE.previous_node_ids_
+comment on column FF_NODE.PREVIOUS_NODE_IDS_
   is '前节点IDs';
-comment on column FF_NODE.last_complete_node_ids_
+comment on column FF_NODE.LAST_COMPLETE_NODE_IDS_
   is '最后完成节点IDs';
-comment on column FF_NODE.sub_proc_def_id_
+comment on column FF_NODE.SUB_PROC_DEF_ID_
   is '子流程定义ID';
-comment on column FF_NODE.adjust_sub_proc_def_id_
+comment on column FF_NODE.ADJUST_SUB_PROC_DEF_ID_
   is '调整子流程定义ID';
-comment on column FF_NODE.node_type_
+comment on column FF_NODE.NODE_TYPE_
   is '节点类型';
-comment on column FF_NODE.node_code_
+comment on column FF_NODE.NODE_CODE_
   is '节点编码';
-comment on column FF_NODE.node_name_
+comment on column FF_NODE.NODE_NAME_
   is '节点名称';
-comment on column FF_NODE.parent_node_code_
+comment on column FF_NODE.PARENT_NODE_CODE_
   is '上级节点编码';
-comment on column FF_NODE.candidate_
+comment on column FF_NODE.CANDIDATE_ASSIGNEE_
   is '候选人';
-comment on column FF_NODE.complete_expression_
+comment on column FF_NODE.COMPLETE_EXPRESSION_
   is '完成表达式';
-comment on column FF_NODE.complete_return_
+comment on column FF_NODE.COMPLETE_RETURN_
   is '完成后返回前一个节点';
-comment on column FF_NODE.exclusive_
+comment on column FF_NODE.EXCLUSIVE_
   is '排他';
-comment on column FF_NODE.auto_complete_same_assignee_
+comment on column FF_NODE.AUTO_COMPLETE_SAME_ASSIGNEE_
   is '自动完成相同办理人任务';
-comment on column FF_NODE.auto_complete_empty_assignee_
+comment on column FF_NODE.AUTO_COMPLETE_EMPTY_ASSIGNEE_
   is '自动完成没有办理人节点';
-comment on column FF_NODE.inform_
+comment on column FF_NODE.INFORM_
   is '通知';
-comment on column FF_NODE.assignee_
+comment on column FF_NODE.ASSIGNEE_
   is '办理人';
-comment on column FF_NODE.action_
+comment on column FF_NODE.ACTION_
   is '业务行为';
-comment on column FF_NODE.due_date_
+comment on column FF_NODE.DUE_DATE_
   is '截止日期';
-comment on column FF_NODE.claim_
+comment on column FF_NODE.CLAIM_
   is '认领';
-comment on column FF_NODE.forwardable_
+comment on column FF_NODE.FORWARDABLE_
   is '可转发';
-comment on column FF_NODE.priority_
+comment on column FF_NODE.PRIORITY_
   is '优先级';
-comment on column FF_NODE.node_end_user_
+comment on column FF_NODE.NODE_END_USER_
   is '节点完成人员';
-comment on column FF_NODE.node_end_user_name_
+comment on column FF_NODE.NODE_END_USER_NAME_
   is '节点完成人员名称';
-comment on column FF_NODE.node_end_date_
+comment on column FF_NODE.NODE_END_DATE_
   is '节点完成日期';
-comment on column FF_NODE.isolate_sub_proc_def_code_
+comment on column FF_NODE.NEXT_CANDIDATE_
+  is '下个候选人';
+comment on column FF_NODE.ISOLATE_SUB_PROC_DEF_CODE_
   is '独立子流程定义编码';
-comment on column FF_NODE.isolate_sub_proc_status_
+comment on column FF_NODE.ISOLATE_SUB_PROC_CANDIDATE_
+  is '独立子流程候选人';
+comment on column FF_NODE.ISOLATE_SUB_PROC_STATUS_
   is '独立子流程状态';
-comment on column FF_NODE.node_status_
+comment on column FF_NODE.NODE_STATUS_
   is '节点状态';
-comment on column FF_NODE.creation_date_
+comment on column FF_NODE.CREATION_DATE_
   is '创建日期';
 alter table FF_NODE
   add constraint PK_FF_NODE primary key (NODE_ID_);
@@ -344,39 +345,39 @@ prompt ===========================
 prompt
 create table FF_OPERATION
 (
-  operation_id_     VARCHAR2(40) not null,
-  operation_        VARCHAR2(40) not null,
-  proc_id_          VARCHAR2(40),
-  node_id_          VARCHAR2(40),
-  task_id_          VARCHAR2(40),
-  memo_             VARCHAR2(1000),
-  operator_         VARCHAR2(40),
-  operator_name_    VARCHAR2(60),
-  operation_date_   TIMESTAMP(6) not null,
-  operation_status_ VARCHAR2(20) not null
+  OPERATION_ID_     VARCHAR2(40) not null,
+  OPERATION_        VARCHAR2(40) not null,
+  PROC_ID_          VARCHAR2(40),
+  NODE_ID_          VARCHAR2(40),
+  TASK_ID_          VARCHAR2(40),
+  MEMO_             VARCHAR2(1000),
+  OPERATOR_         VARCHAR2(40),
+  OPERATOR_NAME_    VARCHAR2(60),
+  OPERATION_DATE_   TIMESTAMP(6) not null,
+  OPERATION_STATUS_ VARCHAR2(20) not null
 )
 ;
 comment on table FF_OPERATION
   is '操作';
-comment on column FF_OPERATION.operation_id_
+comment on column FF_OPERATION.OPERATION_ID_
   is '操作ID';
-comment on column FF_OPERATION.operation_
+comment on column FF_OPERATION.OPERATION_
   is '操作';
-comment on column FF_OPERATION.proc_id_
+comment on column FF_OPERATION.PROC_ID_
   is '流程ID';
-comment on column FF_OPERATION.node_id_
+comment on column FF_OPERATION.NODE_ID_
   is '节点ID';
-comment on column FF_OPERATION.task_id_
+comment on column FF_OPERATION.TASK_ID_
   is '任务ID';
-comment on column FF_OPERATION.memo_
+comment on column FF_OPERATION.MEMO_
   is '备注';
-comment on column FF_OPERATION.operator_
+comment on column FF_OPERATION.OPERATOR_
   is '操作人';
-comment on column FF_OPERATION.operator_name_
+comment on column FF_OPERATION.OPERATOR_NAME_
   is '操作人名称';
-comment on column FF_OPERATION.operation_date_
+comment on column FF_OPERATION.OPERATION_DATE_
   is '操作日期';
-comment on column FF_OPERATION.operation_status_
+comment on column FF_OPERATION.OPERATION_STATUS_
   is '操作状态';
 alter table FF_OPERATION
   add constraint FF_FF_OPERATION primary key (OPERATION_ID_);
@@ -387,120 +388,126 @@ prompt =========================
 prompt
 create table FF_NODE_OP
 (
-  node_op_id_                   VARCHAR2(40) not null,
-  operation_id_                 VARCHAR2(40) not null,
-  operation_type_               VARCHAR2(20) not null,
-  operation_order_              INTEGER,
-  operation_date_               TIMESTAMP(6),
-  operation_status_             VARCHAR2(20),
-  node_id_                      VARCHAR2(40) not null,
-  parent_node_id_               VARCHAR2(40),
-  proc_id_                      VARCHAR2(40),
-  previous_node_ids_            VARCHAR2(280),
-  last_complete_node_ids_       VARCHAR2(280),
-  sub_proc_def_id_              VARCHAR2(40),
-  adjust_sub_proc_def_id_       VARCHAR2(40),
-  node_type_                    VARCHAR2(20),
-  node_code_                    VARCHAR2(60),
-  node_name_                    VARCHAR2(60),
-  parent_node_code_             VARCHAR2(60),
-  candidate_                    VARCHAR2(200),
-  complete_expression_          VARCHAR2(200),
-  complete_return_              VARCHAR2(200),
-  exclusive_                    VARCHAR2(200),
-  auto_complete_same_assignee_  VARCHAR2(200),
-  auto_complete_empty_assignee_ VARCHAR2(200),
-  inform_                       VARCHAR2(200),
-  assignee_                     VARCHAR2(200),
-  action_                       VARCHAR2(200),
-  due_date_                     VARCHAR2(200),
-  claim_                        VARCHAR2(200),
-  forwardable_                  VARCHAR2(200),
-  priority_                     VARCHAR2(200),
-  node_end_user_                VARCHAR2(40),
-  node_end_user_name_           VARCHAR2(60),
-  node_end_date_                TIMESTAMP(6),
-  isolate_sub_proc_def_code_    VARCHAR2(60),
-  isolate_sub_proc_status_      VARCHAR2(60),
-  node_status_                  VARCHAR2(20),
-  creation_date_                TIMESTAMP(6)
+  NODE_OP_ID_                   VARCHAR2(40) not null,
+  OPERATION_ID_                 VARCHAR2(40) not null,
+  OPERATION_TYPE_               VARCHAR2(20) not null,
+  OPERATION_ORDER_              INTEGER,
+  OPERATION_DATE_               TIMESTAMP(6),
+  OPERATION_STATUS_             VARCHAR2(20),
+  NODE_ID_                      VARCHAR2(40) not null,
+  PARENT_NODE_ID_               VARCHAR2(40),
+  PROC_ID_                      VARCHAR2(40),
+  PREVIOUS_NODE_IDS_            VARCHAR2(280),
+  LAST_COMPLETE_NODE_IDS_       VARCHAR2(280),
+  SUB_PROC_DEF_ID_              VARCHAR2(40),
+  ADJUST_SUB_PROC_DEF_ID_       VARCHAR2(40),
+  NODE_TYPE_                    VARCHAR2(20),
+  NODE_CODE_                    VARCHAR2(60),
+  NODE_NAME_                    VARCHAR2(60),
+  PARENT_NODE_CODE_             VARCHAR2(60),
+  CANDIDATE_ASSIGNEE_           VARCHAR2(200),
+  COMPLETE_EXPRESSION_          VARCHAR2(200),
+  COMPLETE_RETURN_              VARCHAR2(200),
+  EXCLUSIVE_                    VARCHAR2(200),
+  AUTO_COMPLETE_SAME_ASSIGNEE_  VARCHAR2(200),
+  AUTO_COMPLETE_EMPTY_ASSIGNEE_ VARCHAR2(200),
+  INFORM_                       VARCHAR2(200),
+  ASSIGNEE_                     VARCHAR2(200),
+  ACTION_                       VARCHAR2(200),
+  DUE_DATE_                     VARCHAR2(200),
+  CLAIM_                        VARCHAR2(200),
+  FORWARDABLE_                  VARCHAR2(200),
+  PRIORITY_                     VARCHAR2(200),
+  NODE_END_USER_                VARCHAR2(40),
+  NODE_END_USER_NAME_           VARCHAR2(60),
+  NODE_END_DATE_                TIMESTAMP(6),
+  NEXT_CANDIDATE_               CLOB,
+  ISOLATE_SUB_PROC_DEF_CODE_    VARCHAR2(60),
+  ISOLATE_SUB_PROC_CANDIDATE_   VARCHAR2(500),
+  ISOLATE_SUB_PROC_STATUS_      VARCHAR2(60),
+  NODE_STATUS_                  VARCHAR2(20),
+  CREATION_DATE_                TIMESTAMP(6)
 )
 ;
 comment on table FF_NODE_OP
   is '节点操作';
-comment on column FF_NODE_OP.node_op_id_
+comment on column FF_NODE_OP.NODE_OP_ID_
   is '节点操作ID';
-comment on column FF_NODE_OP.operation_id_
+comment on column FF_NODE_OP.OPERATION_ID_
   is '操作ID';
-comment on column FF_NODE_OP.operation_type_
+comment on column FF_NODE_OP.OPERATION_TYPE_
   is '操作类型';
-comment on column FF_NODE_OP.operation_order_
+comment on column FF_NODE_OP.OPERATION_ORDER_
   is '操作顺序';
-comment on column FF_NODE_OP.operation_date_
+comment on column FF_NODE_OP.OPERATION_DATE_
   is '操作日期';
-comment on column FF_NODE_OP.operation_status_
+comment on column FF_NODE_OP.OPERATION_STATUS_
   is '操作状态';
-comment on column FF_NODE_OP.node_id_
+comment on column FF_NODE_OP.NODE_ID_
   is '节点ID';
-comment on column FF_NODE_OP.parent_node_id_
+comment on column FF_NODE_OP.PARENT_NODE_ID_
   is '上级节点ID';
-comment on column FF_NODE_OP.proc_id_
+comment on column FF_NODE_OP.PROC_ID_
   is '流程ID';
-comment on column FF_NODE_OP.previous_node_ids_
+comment on column FF_NODE_OP.PREVIOUS_NODE_IDS_
   is '前节点IDs';
-comment on column FF_NODE_OP.last_complete_node_ids_
+comment on column FF_NODE_OP.LAST_COMPLETE_NODE_IDS_
   is '最后完成节点IDs';
-comment on column FF_NODE_OP.sub_proc_def_id_
+comment on column FF_NODE_OP.SUB_PROC_DEF_ID_
   is '子流程定义ID';
-comment on column FF_NODE_OP.adjust_sub_proc_def_id_
+comment on column FF_NODE_OP.ADJUST_SUB_PROC_DEF_ID_
   is '调整子流程定义ID';
-comment on column FF_NODE_OP.node_type_
+comment on column FF_NODE_OP.NODE_TYPE_
   is '节点类型';
-comment on column FF_NODE_OP.node_code_
+comment on column FF_NODE_OP.NODE_CODE_
   is '节点编码';
-comment on column FF_NODE_OP.node_name_
+comment on column FF_NODE_OP.NODE_NAME_
   is '节点名称';
-comment on column FF_NODE_OP.parent_node_code_
+comment on column FF_NODE_OP.PARENT_NODE_CODE_
   is '上级节点编码';
-comment on column FF_NODE_OP.candidate_
+comment on column FF_NODE_OP.CANDIDATE_ASSIGNEE_
   is '候选人';
-comment on column FF_NODE_OP.complete_expression_
+comment on column FF_NODE_OP.COMPLETE_EXPRESSION_
   is '完成表达式';
-comment on column FF_NODE_OP.complete_return_
+comment on column FF_NODE_OP.COMPLETE_RETURN_
   is '完成后返回前一个节点';
-comment on column FF_NODE_OP.exclusive_
+comment on column FF_NODE_OP.EXCLUSIVE_
   is '排他';
-comment on column FF_NODE_OP.auto_complete_same_assignee_
+comment on column FF_NODE_OP.AUTO_COMPLETE_SAME_ASSIGNEE_
   is '自动完成相同办理人任务';
-comment on column FF_NODE_OP.auto_complete_empty_assignee_
+comment on column FF_NODE_OP.AUTO_COMPLETE_EMPTY_ASSIGNEE_
   is '自动完成没有办理人节点';
-comment on column FF_NODE_OP.inform_
+comment on column FF_NODE_OP.INFORM_
   is '通知';
-comment on column FF_NODE_OP.assignee_
+comment on column FF_NODE_OP.ASSIGNEE_
   is '办理人';
-comment on column FF_NODE_OP.action_
+comment on column FF_NODE_OP.ACTION_
   is '业务行为';
-comment on column FF_NODE_OP.due_date_
+comment on column FF_NODE_OP.DUE_DATE_
   is '截止日期';
-comment on column FF_NODE_OP.claim_
+comment on column FF_NODE_OP.CLAIM_
   is '认领';
-comment on column FF_NODE_OP.forwardable_
+comment on column FF_NODE_OP.FORWARDABLE_
   is '可转发';
-comment on column FF_NODE_OP.priority_
+comment on column FF_NODE_OP.PRIORITY_
   is '优先级';
-comment on column FF_NODE_OP.node_end_user_
+comment on column FF_NODE_OP.NODE_END_USER_
   is '节点完成人员';
-comment on column FF_NODE_OP.node_end_user_name_
+comment on column FF_NODE_OP.NODE_END_USER_NAME_
   is '节点完成人员名称';
-comment on column FF_NODE_OP.node_end_date_
+comment on column FF_NODE_OP.NODE_END_DATE_
   is '节点完成日期';
-comment on column FF_NODE_OP.isolate_sub_proc_def_code_
+comment on column FF_NODE_OP.NEXT_CANDIDATE_
+  is '下个候选人';
+comment on column FF_NODE_OP.ISOLATE_SUB_PROC_DEF_CODE_
   is '独立子流程定义编码';
-comment on column FF_NODE_OP.isolate_sub_proc_status_
+comment on column FF_NODE_OP.ISOLATE_SUB_PROC_CANDIDATE_
+  is '独立子流程候选人';
+comment on column FF_NODE_OP.ISOLATE_SUB_PROC_STATUS_
   is '独立子流程状态';
-comment on column FF_NODE_OP.node_status_
+comment on column FF_NODE_OP.NODE_STATUS_
   is '节点状态';
-comment on column FF_NODE_OP.creation_date_
+comment on column FF_NODE_OP.CREATION_DATE_
   is '创建日期';
 alter table FF_NODE_OP
   add constraint PK_FF_NODE_OP primary key (NODE_OP_ID_);
@@ -514,35 +521,35 @@ prompt ==========================
 prompt
 create table FF_NODE_VAR
 (
-  node_var_id_   VARCHAR2(40) not null,
-  node_id_       VARCHAR2(40) not null,
-  var_type_      VARCHAR2(20) not null,
-  var_name_      VARCHAR2(60) not null,
-  value_         VARCHAR2(3000),
-  obj_           BLOB,
-  creation_date_ TIMESTAMP(6) not null
+  NODE_VAR_ID_   VARCHAR2(40) not null,
+  NODE_ID_       VARCHAR2(40) not null,
+  VAR_TYPE_      VARCHAR2(20) not null,
+  VAR_NAME_      VARCHAR2(60) not null,
+  VALUE_         VARCHAR2(3000),
+  OBJ_           BLOB,
+  CREATION_DATE_ TIMESTAMP(6) not null
 )
 ;
 comment on table FF_NODE_VAR
   is '节点变量';
-comment on column FF_NODE_VAR.node_var_id_
+comment on column FF_NODE_VAR.NODE_VAR_ID_
   is '节点变量ID';
-comment on column FF_NODE_VAR.node_id_
+comment on column FF_NODE_VAR.NODE_ID_
   is '节点ID';
-comment on column FF_NODE_VAR.var_type_
+comment on column FF_NODE_VAR.VAR_TYPE_
   is '变量类型';
-comment on column FF_NODE_VAR.var_name_
+comment on column FF_NODE_VAR.VAR_NAME_
   is '变量名称';
-comment on column FF_NODE_VAR.value_
+comment on column FF_NODE_VAR.VALUE_
   is '值';
-comment on column FF_NODE_VAR.obj_
+comment on column FF_NODE_VAR.OBJ_
   is '对象';
-comment on column FF_NODE_VAR.creation_date_
+comment on column FF_NODE_VAR.CREATION_DATE_
   is '创建日期';
-create index IX_SUB_PROC_VAR_NAME on FF_NODE_VAR (VAR_NAME_);
-create index IX_SUB_PROC_VAR_VALUE on FF_NODE_VAR (VALUE_);
 alter table FF_NODE_VAR
   add constraint PK_FF_NODE_VAR primary key (NODE_VAR_ID_);
+create index IX_SUB_PROC_VAR_NAME on FF_NODE_VAR (VAR_NAME_);
+create index IX_SUB_PROC_VAR_VALUE on FF_NODE_VAR (VALUE_);
 
 prompt
 prompt Creating table FF_NODE_VAR_OP
@@ -550,48 +557,48 @@ prompt =============================
 prompt
 create table FF_NODE_VAR_OP
 (
-  node_var_op_id_   VARCHAR2(40) not null,
-  operation_id_     VARCHAR2(40) not null,
-  operation_type_   VARCHAR2(20) not null,
-  operation_order_  INTEGER,
-  operation_date_   TIMESTAMP(6),
-  operation_status_ VARCHAR2(20),
-  node_var_id_      VARCHAR2(40) not null,
-  node_id_          VARCHAR2(40),
-  var_type_         VARCHAR2(20),
-  var_name_         VARCHAR2(60),
-  value_            VARCHAR2(3000),
-  obj_              BLOB,
-  creation_date_    TIMESTAMP(6)
+  NODE_VAR_OP_ID_   VARCHAR2(40) not null,
+  OPERATION_ID_     VARCHAR2(40) not null,
+  OPERATION_TYPE_   VARCHAR2(20) not null,
+  OPERATION_ORDER_  INTEGER,
+  OPERATION_DATE_   TIMESTAMP(6),
+  OPERATION_STATUS_ VARCHAR2(20),
+  NODE_VAR_ID_      VARCHAR2(40) not null,
+  NODE_ID_          VARCHAR2(40),
+  VAR_TYPE_         VARCHAR2(20),
+  VAR_NAME_         VARCHAR2(60),
+  VALUE_            VARCHAR2(3000),
+  OBJ_              BLOB,
+  CREATION_DATE_    TIMESTAMP(6)
 )
 ;
 comment on table FF_NODE_VAR_OP
   is '节点变量操作';
-comment on column FF_NODE_VAR_OP.node_var_op_id_
+comment on column FF_NODE_VAR_OP.NODE_VAR_OP_ID_
   is '节点变量操作ID';
-comment on column FF_NODE_VAR_OP.operation_id_
+comment on column FF_NODE_VAR_OP.OPERATION_ID_
   is '操作ID';
-comment on column FF_NODE_VAR_OP.operation_type_
+comment on column FF_NODE_VAR_OP.OPERATION_TYPE_
   is '操作类型';
-comment on column FF_NODE_VAR_OP.operation_order_
+comment on column FF_NODE_VAR_OP.OPERATION_ORDER_
   is '操作顺序';
-comment on column FF_NODE_VAR_OP.operation_date_
+comment on column FF_NODE_VAR_OP.OPERATION_DATE_
   is '操作日期';
-comment on column FF_NODE_VAR_OP.operation_status_
+comment on column FF_NODE_VAR_OP.OPERATION_STATUS_
   is '操作状态';
-comment on column FF_NODE_VAR_OP.node_var_id_
+comment on column FF_NODE_VAR_OP.NODE_VAR_ID_
   is '节点变量ID';
-comment on column FF_NODE_VAR_OP.node_id_
+comment on column FF_NODE_VAR_OP.NODE_ID_
   is '节点ID';
-comment on column FF_NODE_VAR_OP.var_type_
+comment on column FF_NODE_VAR_OP.VAR_TYPE_
   is '变量类型';
-comment on column FF_NODE_VAR_OP.var_name_
+comment on column FF_NODE_VAR_OP.VAR_NAME_
   is '变量名称';
-comment on column FF_NODE_VAR_OP.value_
+comment on column FF_NODE_VAR_OP.VALUE_
   is '值';
-comment on column FF_NODE_VAR_OP.obj_
+comment on column FF_NODE_VAR_OP.OBJ_
   is '对象';
-comment on column FF_NODE_VAR_OP.creation_date_
+comment on column FF_NODE_VAR_OP.CREATION_DATE_
   is '创建日期';
 alter table FF_NODE_VAR_OP
   add constraint PK_FF_NODE_VAR_OP primary key (NODE_VAR_OP_ID_);
@@ -605,21 +612,21 @@ prompt =====================================
 prompt
 create table FF_OPERATION_FOLLOW_UP
 (
-  operation_follow_up_id_ VARCHAR2(40) not null,
-  operation_id_           VARCHAR2(40) not null,
-  follow_up_operation_id_ VARCHAR2(40) not null,
-  operation_date_         TIMESTAMP(6) not null
+  OPERATION_FOLLOW_UP_ID_ VARCHAR2(40) not null,
+  OPERATION_ID_           VARCHAR2(40) not null,
+  FOLLOW_UP_OPERATION_ID_ VARCHAR2(40) not null,
+  OPERATION_DATE_         TIMESTAMP(6) not null
 )
 ;
 comment on table FF_OPERATION_FOLLOW_UP
   is '操作后续';
-comment on column FF_OPERATION_FOLLOW_UP.operation_follow_up_id_
+comment on column FF_OPERATION_FOLLOW_UP.OPERATION_FOLLOW_UP_ID_
   is '操作后续ID';
-comment on column FF_OPERATION_FOLLOW_UP.operation_id_
+comment on column FF_OPERATION_FOLLOW_UP.OPERATION_ID_
   is '操作ID';
-comment on column FF_OPERATION_FOLLOW_UP.follow_up_operation_id_
+comment on column FF_OPERATION_FOLLOW_UP.FOLLOW_UP_OPERATION_ID_
   is '后续操作ID';
-comment on column FF_OPERATION_FOLLOW_UP.operation_date_
+comment on column FF_OPERATION_FOLLOW_UP.OPERATION_DATE_
   is '操作日期';
 alter table FF_OPERATION_FOLLOW_UP
   add constraint PK_FF_OPERATION_FOLOW_UP primary key (OPERATION_FOLLOW_UP_ID_);
@@ -636,75 +643,75 @@ prompt =========================
 prompt
 create table FF_PROC_OP
 (
-  proc_op_id_               VARCHAR2(40) not null,
-  operation_id_             VARCHAR2(40) not null,
-  operation_type_           VARCHAR2(20) not null,
-  operation_order_          INTEGER,
-  operation_date_           TIMESTAMP(6),
-  operation_status_         VARCHAR2(20),
-  proc_id_                  VARCHAR2(40) not null,
-  proc_def_id_              VARCHAR2(40),
-  adjust_proc_def_id_       VARCHAR2(40),
-  isolate_sub_proc_node_id_ VARCHAR2(40),
-  biz_id_                   VARCHAR2(40),
-  biz_type_                 VARCHAR2(60),
-  biz_code_                 VARCHAR2(100),
-  biz_name_                 VARCHAR2(100),
-  biz_desc_                 VARCHAR2(300),
-  proc_start_user_          VARCHAR2(40),
-  proc_start_user_name_     VARCHAR2(60),
-  proc_end_user_            VARCHAR2(40),
-  proc_end_user_name_       VARCHAR2(60),
-  proc_end_date_            TIMESTAMP(6),
-  proc_status_              VARCHAR2(20),
-  creation_date_            TIMESTAMP(6)
+  PROC_OP_ID_               VARCHAR2(40) not null,
+  OPERATION_ID_             VARCHAR2(40) not null,
+  OPERATION_TYPE_           VARCHAR2(20) not null,
+  OPERATION_ORDER_          INTEGER,
+  OPERATION_DATE_           TIMESTAMP(6),
+  OPERATION_STATUS_         VARCHAR2(20),
+  PROC_ID_                  VARCHAR2(40) not null,
+  PROC_DEF_ID_              VARCHAR2(40),
+  ADJUST_PROC_DEF_ID_       VARCHAR2(40),
+  ISOLATE_SUB_PROC_NODE_ID_ VARCHAR2(40),
+  BIZ_ID_                   VARCHAR2(40),
+  BIZ_TYPE_                 VARCHAR2(60),
+  BIZ_CODE_                 VARCHAR2(100),
+  BIZ_NAME_                 VARCHAR2(100),
+  BIZ_DESC_                 VARCHAR2(300),
+  PROC_START_USER_          VARCHAR2(40),
+  PROC_START_USER_NAME_     VARCHAR2(60),
+  PROC_END_USER_            VARCHAR2(40),
+  PROC_END_USER_NAME_       VARCHAR2(60),
+  PROC_END_DATE_            TIMESTAMP(6),
+  PROC_STATUS_              VARCHAR2(20),
+  CREATION_DATE_            TIMESTAMP(6)
 )
 ;
 comment on table FF_PROC_OP
   is '流程操作';
-comment on column FF_PROC_OP.proc_op_id_
+comment on column FF_PROC_OP.PROC_OP_ID_
   is '流程操作ID';
-comment on column FF_PROC_OP.operation_id_
+comment on column FF_PROC_OP.OPERATION_ID_
   is '操作ID';
-comment on column FF_PROC_OP.operation_type_
+comment on column FF_PROC_OP.OPERATION_TYPE_
   is '操作类型';
-comment on column FF_PROC_OP.operation_order_
+comment on column FF_PROC_OP.OPERATION_ORDER_
   is '操作顺序';
-comment on column FF_PROC_OP.operation_date_
+comment on column FF_PROC_OP.OPERATION_DATE_
   is '操作日期';
-comment on column FF_PROC_OP.operation_status_
+comment on column FF_PROC_OP.OPERATION_STATUS_
   is '操作状态';
-comment on column FF_PROC_OP.proc_id_
+comment on column FF_PROC_OP.PROC_ID_
   is '流程ID';
-comment on column FF_PROC_OP.proc_def_id_
+comment on column FF_PROC_OP.PROC_DEF_ID_
   is '流程定义ID';
-comment on column FF_PROC_OP.adjust_proc_def_id_
+comment on column FF_PROC_OP.ADJUST_PROC_DEF_ID_
   is '调整流程定义ID';
-comment on column FF_PROC_OP.isolate_sub_proc_node_id_
+comment on column FF_PROC_OP.ISOLATE_SUB_PROC_NODE_ID_
   is '独立子流程所属节点ID';
-comment on column FF_PROC_OP.biz_id_
+comment on column FF_PROC_OP.BIZ_ID_
   is '业务主键';
-comment on column FF_PROC_OP.biz_type_
+comment on column FF_PROC_OP.BIZ_TYPE_
   is '业务类型';
-comment on column FF_PROC_OP.biz_code_
+comment on column FF_PROC_OP.BIZ_CODE_
   is '业务编码';
-comment on column FF_PROC_OP.biz_name_
+comment on column FF_PROC_OP.BIZ_NAME_
   is '业务名称';
-comment on column FF_PROC_OP.biz_desc_
+comment on column FF_PROC_OP.BIZ_DESC_
   is '业务备注';
-comment on column FF_PROC_OP.proc_start_user_
+comment on column FF_PROC_OP.PROC_START_USER_
   is '流程开始人员';
-comment on column FF_PROC_OP.proc_start_user_name_
+comment on column FF_PROC_OP.PROC_START_USER_NAME_
   is '流程开始人员名称';
-comment on column FF_PROC_OP.proc_end_user_
+comment on column FF_PROC_OP.PROC_END_USER_
   is '流程完成人员';
-comment on column FF_PROC_OP.proc_end_user_name_
+comment on column FF_PROC_OP.PROC_END_USER_NAME_
   is '流程完成人员名称';
-comment on column FF_PROC_OP.proc_end_date_
+comment on column FF_PROC_OP.PROC_END_DATE_
   is '流程完成日期';
-comment on column FF_PROC_OP.proc_status_
+comment on column FF_PROC_OP.PROC_STATUS_
   is '流程状态';
-comment on column FF_PROC_OP.creation_date_
+comment on column FF_PROC_OP.CREATION_DATE_
   is '创建日期';
 alter table FF_PROC_OP
   add constraint PK_FF_PROC_OP primary key (PROC_OP_ID_);
@@ -718,60 +725,63 @@ prompt ======================
 prompt
 create table FF_TASK
 (
-  task_id_            VARCHAR2(40) not null,
-  node_id_            VARCHAR2(40),
-  previous_task_id_   VARCHAR2(40),
-  task_type_          VARCHAR2(20) not null,
-  assignee_           VARCHAR2(40),
-  assignee_name_      VARCHAR2(60),
-  action_             VARCHAR2(300),
-  due_date_           TIMESTAMP(6),
-  claim_              VARCHAR2(20) not null,
-  forwardable_        VARCHAR2(20) not null,
-  priority_           INTEGER not null,
-  forward_status_     VARCHAR2(20) not null,
-  task_end_user_      VARCHAR2(40),
-  task_end_user_name_ VARCHAR2(60),
-  task_end_date_      TIMESTAMP(6),
-  task_status_        VARCHAR2(20) not null,
-  creation_date_      TIMESTAMP(6) not null
+  TASK_ID_            VARCHAR2(40) not null,
+  NODE_ID_            VARCHAR2(40),
+  PREVIOUS_TASK_ID_   VARCHAR2(40),
+  TASK_TYPE_          VARCHAR2(20) not null,
+  ASSIGNEE_           VARCHAR2(40),
+  ASSIGNEE_NAME_      VARCHAR2(60),
+  ACTION_             VARCHAR2(300),
+  DUE_DATE_           TIMESTAMP(6),
+  CLAIM_              VARCHAR2(20) not null,
+  FORWARDABLE_        VARCHAR2(20) not null,
+  PRIORITY_           INTEGER not null,
+  FORWARD_STATUS_     VARCHAR2(20) not null,
+  TASK_END_USER_      VARCHAR2(40),
+  TASK_END_USER_NAME_ VARCHAR2(60),
+  TASK_END_DATE_      TIMESTAMP(6),
+  NEXT_CANDIDATE_     CLOB,
+  TASK_STATUS_        VARCHAR2(20) not null,
+  CREATION_DATE_      TIMESTAMP(6) not null
 )
 ;
 comment on table FF_TASK
   is '任务';
-comment on column FF_TASK.task_id_
+comment on column FF_TASK.TASK_ID_
   is '任务ID';
-comment on column FF_TASK.node_id_
+comment on column FF_TASK.NODE_ID_
   is '节点ID';
-comment on column FF_TASK.previous_task_id_
+comment on column FF_TASK.PREVIOUS_TASK_ID_
   is '前一个任务ID';
-comment on column FF_TASK.task_type_
+comment on column FF_TASK.TASK_TYPE_
   is '任务类型';
-comment on column FF_TASK.assignee_
+comment on column FF_TASK.ASSIGNEE_
   is '办理人';
-comment on column FF_TASK.assignee_name_
+comment on column FF_TASK.ASSIGNEE_NAME_
   is '办理人名称';
-comment on column FF_TASK.action_
+comment on column FF_TASK.ACTION_
   is '业务行为';
-comment on column FF_TASK.due_date_
+comment on column FF_TASK.DUE_DATE_
   is '截止日期';
-comment on column FF_TASK.claim_
+comment on column FF_TASK.CLAIM_
   is '认领';
-comment on column FF_TASK.forwardable_
+comment on column FF_TASK.FORWARDABLE_
   is '可转发';
-comment on column FF_TASK.priority_
+comment on column FF_TASK.PRIORITY_
   is '优先级';
-comment on column FF_TASK.forward_status_
+comment on column FF_TASK.FORWARD_STATUS_
   is '转发状态';
-comment on column FF_TASK.task_end_user_
+comment on column FF_TASK.TASK_END_USER_
   is '任务完成人员';
-comment on column FF_TASK.task_end_user_name_
+comment on column FF_TASK.TASK_END_USER_NAME_
   is '任务完成人员名称';
-comment on column FF_TASK.task_end_date_
+comment on column FF_TASK.TASK_END_DATE_
   is '任务完成日期';
-comment on column FF_TASK.task_status_
+comment on column FF_TASK.NEXT_CANDIDATE_
+  is '下个候选人';
+comment on column FF_TASK.TASK_STATUS_
   is '任务状态';
-comment on column FF_TASK.creation_date_
+comment on column FF_TASK.CREATION_DATE_
   is '创建日期';
 alter table FF_TASK
   add constraint PK_FF_TASK primary key (TASK_ID_);
@@ -788,78 +798,81 @@ prompt =========================
 prompt
 create table FF_TASK_OP
 (
-  task_op_id_         VARCHAR2(40) not null,
-  operation_id_       VARCHAR2(40) not null,
-  operation_type_     VARCHAR2(20) not null,
-  operation_order_    INTEGER,
-  operation_date_     TIMESTAMP(6),
-  operation_status_   VARCHAR2(20),
-  task_id_            VARCHAR2(40) not null,
-  node_id_            VARCHAR2(40),
-  previous_task_id_   VARCHAR2(40),
-  task_type_          VARCHAR2(20),
-  assignee_           VARCHAR2(40),
-  assignee_name_      VARCHAR2(60),
-  action_             VARCHAR2(300),
-  due_date_           TIMESTAMP(6),
-  claim_              VARCHAR2(20),
-  forwardable_        VARCHAR2(20),
-  priority_           INTEGER,
-  forward_status_     VARCHAR2(20),
-  task_end_user_      VARCHAR2(40),
-  task_end_user_name_ VARCHAR2(60),
-  task_end_date_      TIMESTAMP(6),
-  task_status_        VARCHAR2(20),
-  creation_date_      TIMESTAMP(6)
+  TASK_OP_ID_         VARCHAR2(40) not null,
+  OPERATION_ID_       VARCHAR2(40) not null,
+  OPERATION_TYPE_     VARCHAR2(20) not null,
+  OPERATION_ORDER_    INTEGER,
+  OPERATION_DATE_     TIMESTAMP(6),
+  OPERATION_STATUS_   VARCHAR2(20),
+  TASK_ID_            VARCHAR2(40) not null,
+  NODE_ID_            VARCHAR2(40),
+  PREVIOUS_TASK_ID_   VARCHAR2(40),
+  TASK_TYPE_          VARCHAR2(20),
+  ASSIGNEE_           VARCHAR2(40),
+  ASSIGNEE_NAME_      VARCHAR2(60),
+  ACTION_             VARCHAR2(300),
+  DUE_DATE_           TIMESTAMP(6),
+  CLAIM_              VARCHAR2(20),
+  FORWARDABLE_        VARCHAR2(20),
+  PRIORITY_           INTEGER,
+  FORWARD_STATUS_     VARCHAR2(20),
+  TASK_END_USER_      VARCHAR2(40),
+  TASK_END_USER_NAME_ VARCHAR2(60),
+  TASK_END_DATE_      TIMESTAMP(6),
+  NEXT_CANDIDATE_     CLOB,
+  TASK_STATUS_        VARCHAR2(20),
+  CREATION_DATE_      TIMESTAMP(6)
 )
 ;
 comment on table FF_TASK_OP
   is '任务操作';
-comment on column FF_TASK_OP.task_op_id_
+comment on column FF_TASK_OP.TASK_OP_ID_
   is '任务操作ID';
-comment on column FF_TASK_OP.operation_id_
+comment on column FF_TASK_OP.OPERATION_ID_
   is '操作ID';
-comment on column FF_TASK_OP.operation_type_
+comment on column FF_TASK_OP.OPERATION_TYPE_
   is '操作类型';
-comment on column FF_TASK_OP.operation_order_
+comment on column FF_TASK_OP.OPERATION_ORDER_
   is '操作顺序';
-comment on column FF_TASK_OP.operation_date_
+comment on column FF_TASK_OP.OPERATION_DATE_
   is '操作日期';
-comment on column FF_TASK_OP.operation_status_
+comment on column FF_TASK_OP.OPERATION_STATUS_
   is '操作状态';
-comment on column FF_TASK_OP.task_id_
+comment on column FF_TASK_OP.TASK_ID_
   is '任务ID';
-comment on column FF_TASK_OP.node_id_
+comment on column FF_TASK_OP.NODE_ID_
   is '节点ID';
-comment on column FF_TASK_OP.previous_task_id_
+comment on column FF_TASK_OP.PREVIOUS_TASK_ID_
   is '前一个任务ID';
-comment on column FF_TASK_OP.task_type_
+comment on column FF_TASK_OP.TASK_TYPE_
   is '任务类型';
-comment on column FF_TASK_OP.assignee_
+comment on column FF_TASK_OP.ASSIGNEE_
   is '办理人';
-comment on column FF_TASK_OP.assignee_name_
+comment on column FF_TASK_OP.ASSIGNEE_NAME_
   is '办理人名称';
-comment on column FF_TASK_OP.action_
+comment on column FF_TASK_OP.ACTION_
   is '业务行为';
-comment on column FF_TASK_OP.due_date_
+comment on column FF_TASK_OP.DUE_DATE_
   is '截止日期';
-comment on column FF_TASK_OP.claim_
+comment on column FF_TASK_OP.CLAIM_
   is '认领';
-comment on column FF_TASK_OP.forwardable_
+comment on column FF_TASK_OP.FORWARDABLE_
   is '可转发';
-comment on column FF_TASK_OP.priority_
+comment on column FF_TASK_OP.PRIORITY_
   is '优先级';
-comment on column FF_TASK_OP.forward_status_
+comment on column FF_TASK_OP.FORWARD_STATUS_
   is '转发状态';
-comment on column FF_TASK_OP.task_end_user_
+comment on column FF_TASK_OP.TASK_END_USER_
   is '任务完成人员';
-comment on column FF_TASK_OP.task_end_user_name_
+comment on column FF_TASK_OP.TASK_END_USER_NAME_
   is '任务完成人员名称';
-comment on column FF_TASK_OP.task_end_date_
+comment on column FF_TASK_OP.TASK_END_DATE_
   is '任务完成日期';
-comment on column FF_TASK_OP.task_status_
+comment on column FF_TASK_OP.NEXT_CANDIDATE_
+  is '下个候选人';
+comment on column FF_TASK_OP.TASK_STATUS_
   is '任务状态';
-comment on column FF_TASK_OP.creation_date_
+comment on column FF_TASK_OP.CREATION_DATE_
   is '创建日期';
 alter table FF_TASK_OP
   add constraint PK_FF_TASK_OP primary key (TASK_OP_ID_);
@@ -871,29 +884,29 @@ prompt
 prompt Creating view FFV_ADJUST_PROC_DEF
 prompt =================================
 prompt
-create or replace force view ffv_adjust_proc_def as
+create or replace view ffv_adjust_proc_def as
 select APD.ADJUST_PROC_DEF_ID_, APD.PROC_DEF_ID_, APD.PROC_DEF_MODEL_, APD.PROC_DEF_DIAGRAM_FILE_, APD.PROC_DEF_DIAGRAM_FILE_NAME_, APD.PROC_DEF_DIAGRAM_FILE_LENGTH_, APD.PROC_DEF_DIAGRAM_WIDTH_, APD.PROC_DEF_DIAGRAM_HEIGHT_, APD.CREATION_DATE_, APD.UPDATE_DATE_, APD.OPERATOR_ID_, APD.OPERATOR_NAME_ from FF_ADJUST_PROC_DEF APD;
 
 prompt
 prompt Creating view FFV_DELEGATE
 prompt ==========================
 prompt
-create or replace force view ffv_delegate as
+create or replace view ffv_delegate as
 select D.DELEGATE_ID_, D.ASSIGNEE_, D.ASSIGNEE_NAME_, D.DELEGATOR_, D.DELEGATOR_NAME_, D.START_DATE_, D.END_DATE_ from FF_DELEGATE D;
 
 prompt
 prompt Creating view FFV_NODE
 prompt ======================
 prompt
-create or replace force view ffv_node as
-select N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ from FF_NODE N;
+create or replace view ffv_node as
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.NEXT_CANDIDATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ from FF_NODE N;
 
 prompt
 prompt Creating view FFV_NODE_P
 prompt ========================
 prompt
-create or replace force view ffv_node_p as
-select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
+create or replace view ffv_node_p as
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.NEXT_CANDIDATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
   from FF_NODE N
  inner join FF_PROC P
     on P.PROC_ID_ = N.PROC_ID_;
@@ -902,76 +915,75 @@ prompt
 prompt Creating view FFV_NODE_PD
 prompt =========================
 prompt
-create or replace force view ffv_node_pd as
-select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_
+create or replace view ffv_node_pd as
+select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.ASSIGNEE_, N.ACTION_, N.DUE_DATE_, N.CLAIM_, N.FORWARDABLE_, N.PRIORITY_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.NEXT_CANDIDATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_, SPD.PROC_DEF_CODE_ as SUB_PROC_DEF_CODE_
   from FF_NODE N
- inner join FF_PROC P
-    on P.PROC_ID_ = N.PROC_ID_
- inner join FF_PROC_DEF PD
-    on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
+ inner join FF_PROC P on P.PROC_ID_ = N.PROC_ID_
+ inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_
+ inner join FF_PROC_DEF SPD on SPD.PROC_DEF_ID_ = N.SUB_PROC_DEF_ID_;
 
 prompt
 prompt Creating view FFV_NODE_VAR
 prompt ==========================
 prompt
-create or replace force view ffv_node_var as
+create or replace view ffv_node_var as
 select PV.NODE_VAR_ID_, PV.NODE_ID_, PV.VAR_TYPE_, PV.VAR_NAME_, PV.VALUE_, PV.OBJ_, PV.CREATION_DATE_, N.PARENT_NODE_ID_, N.PROC_ID_ from FF_NODE_VAR PV inner join FF_NODE N on N.NODE_ID_ = PV.NODE_ID_;
 
 prompt
 prompt Creating view FFV_OPERATION
 prompt ===========================
 prompt
-create or replace force view ffv_operation as
+create or replace view ffv_operation as
 select O.OPERATION_ID_, O.OPERATION_, O.PROC_ID_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_ from FF_OPERATION O;
 
 prompt
 prompt Creating view FFV_PROC
 prompt ======================
 prompt
-create or replace force view ffv_proc as
+create or replace view ffv_proc as
 select P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ from FF_PROC P;
 
 prompt
 prompt Creating view FFV_OPERATION_P
 prompt =============================
 prompt
-create or replace force view ffv_operation_p as
+create or replace view ffv_operation_p as
 select O.OPERATION_ID_, O.OPERATION_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ from FF_OPERATION O left outer join FFV_PROC P on P.PROC_ID_ = O.PROC_ID_;
 
 prompt
 prompt Creating view FFV_OPERATION_PD
 prompt ==============================
 prompt
-create or replace force view ffv_operation_pd as
+create or replace view ffv_operation_pd as
 select O.OPERATION_ID_, O.OPERATION_, O.NODE_ID_, O.TASK_ID_, O.MEMO_, O.OPERATOR_, O.OPERATOR_NAME_, O.OPERATION_DATE_, O.OPERATION_STATUS_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_ from FF_OPERATION O left outer join FFV_PROC P on P.PROC_ID_ = O.PROC_ID_ inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
 
 prompt
 prompt Creating view FFV_PROC_DEF
 prompt ==========================
 prompt
-create or replace force view ffv_proc_def as
+create or replace view ffv_proc_def as
 select PROC_DEF_ID_, PROC_DEF_CODE_, PROC_DEF_NAME_, PROC_DEF_CAT_, PROC_DEF_MODEL_, PROC_DEF_DIAGRAM_FILE_, PROC_DEF_DIAGRAM_FILE_NAME_, PROC_DEF_DIAGRAM_FILE_LENGTH_, PROC_DEF_DIAGRAM_WIDTH_, PROC_DEF_DIAGRAM_HEIGHT_, MEMO_, VERSION_, PROC_DEF_STATUS_, CREATION_DATE_, UPDATE_DATE_, OPERATOR_ID_, OPERATOR_NAME_ from FF_PROC_DEF;
 
 prompt
 prompt Creating view FFV_PROC_PD
 prompt =========================
 prompt
-create or replace force view ffv_proc_pd as
+create or replace view ffv_proc_pd as
 select P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_ from FF_PROC P inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
 
 prompt
 prompt Creating view FFV_TASK
 prompt ======================
 prompt
-create or replace force view ffv_task as
-select T.TASK_ID_, T.NODE_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_ from FF_TASK T;
+create or replace view ffv_task as
+select T.TASK_ID_, T.NODE_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.NEXT_CANDIDATE_, T.TASK_STATUS_, T.CREATION_DATE_ from FF_TASK T;
 
 prompt
 prompt Creating view FFV_TASK_N
 prompt ========================
 prompt
-create or replace force view ffv_task_n as
-select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_
+create or replace view ffv_task_n as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.NEXT_CANDIDATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PROC_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_
   from FF_TASK T
  inner join FF_NODE N
     on N.NODE_ID_ = T.NODE_ID_;
@@ -980,8 +992,8 @@ prompt
 prompt Creating view FFV_TASK_P
 prompt ========================
 prompt
-create or replace force view ffv_task_p as
-select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
+create or replace view ffv_task_p as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.NEXT_CANDIDATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.PROC_DEF_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_
   from FF_TASK T
  inner join FF_NODE N
     on N.NODE_ID_ = T.NODE_ID_
@@ -992,8 +1004,8 @@ prompt
 prompt Creating view FFV_TASK_PD
 prompt =========================
 prompt
-create or replace force view ffv_task_pd as
-select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_
+create or replace view ffv_task_pd as
+select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NAME_, T.ACTION_, T.DUE_DATE_, T.CLAIM_, T.FORWARDABLE_, T.PRIORITY_, T.FORWARD_STATUS_, T.TASK_END_USER_, T.TASK_END_USER_NAME_, T.TASK_END_DATE_, T.NEXT_CANDIDATE_, T.TASK_STATUS_, T.CREATION_DATE_, N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE_IDS_, N.SUB_PROC_DEF_ID_, N.ADJUST_SUB_PROC_DEF_ID_, N.NODE_TYPE_, N.NODE_CODE_, N.NODE_NAME_, N.PARENT_NODE_CODE_, N.CANDIDATE_ASSIGNEE_, N.COMPLETE_EXPRESSION_, N.COMPLETE_RETURN_, N.EXCLUSIVE_, N.AUTO_COMPLETE_SAME_ASSIGNEE_, N.AUTO_COMPLETE_EMPTY_ASSIGNEE_, N.INFORM_, N.NODE_END_USER_, N.NODE_END_USER_NAME_, N.NODE_END_DATE_, N.ISOLATE_SUB_PROC_DEF_CODE_, N.ISOLATE_SUB_PROC_CANDIDATE_, N.ISOLATE_SUB_PROC_STATUS_, N.NODE_STATUS_, N.CREATION_DATE_ as NODE_CREATION_DATE_, P.PROC_ID_, P.ADJUST_PROC_DEF_ID_, P.ISOLATE_SUB_PROC_NODE_ID_, P.BIZ_ID_, P.BIZ_TYPE_, P.BIZ_CODE_, P.BIZ_NAME_, P.BIZ_DESC_, P.PROC_START_USER_, P.PROC_START_USER_NAME_, P.PROC_END_USER_, P.PROC_END_USER_NAME_, P.PROC_END_DATE_, P.PROC_STATUS_, P.CREATION_DATE_ as PROC_CREATION_DATE_, PD.PROC_DEF_ID_, PD.PROC_DEF_CODE_, PD.PROC_DEF_NAME_, PD.PROC_DEF_CAT_, PD.VERSION_, PD.PROC_DEF_STATUS_
   from FF_TASK T
  inner join FF_NODE N
     on N.NODE_ID_ = T.NODE_ID_
@@ -1001,8 +1013,3 @@ select T.TASK_ID_, T.PREVIOUS_TASK_ID_, T.TASK_TYPE_, T.ASSIGNEE_, T.ASSIGNEE_NA
     on P.PROC_ID_ = N.PROC_ID_
  inner join FF_PROC_DEF PD
     on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_;
-
-
-prompt Done
-spool off
-set define on
