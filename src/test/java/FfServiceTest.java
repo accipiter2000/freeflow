@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opendynamic.OdUtils;
 import com.opendynamic.ff.service.FfService;
+import com.opendynamic.ff.vo.Candidate;
+import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.Operation;
 import com.opendynamic.ff.vo.ProcDef;
@@ -29,12 +31,15 @@ public class FfServiceTest {
     @Test
     public void startProcByProcDefCode() throws Exception {
         Map<String, Object> nodeVarMap = new HashMap<>();
-        nodeVarMap.put("assignee", "zhang");
         nodeVarMap.put("INIT_COM_ID_", "259");
         nodeVarMap.put("initPosiEmpId", "abcde12345");
         nodeVarMap.put("amountOfMoney", "2000");
+        nodeVarMap.put("assignee", "zhang");
 
-        FfResult ffResult = ffService.startProcByProcDefCode("isolateSubProcDemo", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap);
+        CandidateList candidateList = new CandidateList();
+        candidateList.add(new Candidate(null, "departmentLeader", "zhang"));
+
+        FfResult ffResult = ffService.startProcByProcDefCode("nestSubProcDemo", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap, candidateList);
 
         System.out.println(ffResult);
     }
@@ -46,18 +51,100 @@ public class FfServiceTest {
         nodeVarMap.put("INIT_COM_ID_", "259");
         nodeVarMap.put("initPosiEmpId", "abcde12345");
 
-        FfResult ffResult = ffService.startIsolateSubProc("04ddee031d394751846296963316ba01", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap);
+        FfResult ffResult = ffService.startIsolateSubProc("04ddee031d394751846296963316ba01", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap, null);
+
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void startProcToNodeByProcDefCode() throws Exception {
+        Map<String, Object> nodeVarMap = new HashMap<>();
+        nodeVarMap.put("INIT_COM_ID_", "259");
+        nodeVarMap.put("initPosiEmpId", "abcde12345");
+        nodeVarMap.put("amountOfMoney", "2000");
+        nodeVarMap.put("assignee", "zhang");
+
+        CandidateList candidateList = new CandidateList();
+        candidateList.add(new Candidate(null, "departmentLeader", "zhang"));
+        candidateList.add(new Candidate(null, "hrLeader", "hrLeader1"));
+        candidateList.add(new Candidate(null, "财务审计专员", "se"));
+
+        FfResult ffResult = ffService.startProcToNodeByProcDefCode("subProcDemo", "厂矿内部审批子流程:subProcDemo1", "A厂长审批", "bizId", "bizType", "bizCode", "bizName", "bizDesc", "li", nodeVarMap, candidateList);
 
         System.out.println(ffResult);
     }
 
     @Test
     public void completeTask() throws Exception {
-        String taskId = "7acb4c300b2d418985be8dba79f28c03";
+        String taskId = "5867aa7b4a384b6798d671cb350c42e4";
         Map<String, Object> branchNodeVar = new HashMap<>();
-        branchNodeVar.put("assignee", "z3");
         // branchNodeVar.put("STEP", "3");
-        FfResult ffResult = ffService.completeTask(taskId, "SYSADMIN", branchNodeVar);
+
+        CandidateList candidateList = new CandidateList();
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo1", "subDepartmentLeader", "zhang1"));
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo2", "subDepartmentLeader", "zhang2"));
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo2", "B厂长审批", "B厂长"));
+
+        //
+        // candidateList.add(new Candidate(null, "厂矿内部审批子流程", "subProcDemo1,subProcDemo2"));
+        //
+        // candidateList.add(new Candidate(null, "departmentLeader", "dl"));
+        // candidateList.add(new Candidate(null, "factorys", "subProcDemo1"));
+        // candidateList.add(new Candidate(null, "人力资源审批", "wang"));
+        // candidateList.add(new Candidate(null, "factory1", "f1"));
+        // candidateList.add(new Candidate(null, "factory2", "f2,f22"));
+        // candidateList.add(new Candidate(null, "hrLeader", "hr"));
+        // candidateList.add(new Candidate(null, "hqLeader", "hq"));
+        // candidateList.add(new Candidate(null, "subHrLeader", "subHrLeader22"));
+        // candidateList.add(new Candidate(null, "文书", "S2"));
+        candidateList.add(new Candidate(null, "集团领导审批", "T"));
+
+        FfResult ffResult = ffService.completeTask(taskId, branchNodeVar, candidateList, "SYSADMIN");
+
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void completeTaskToNode() throws Exception {
+        String taskId = "aee4259e42a44831b55e0df9af962241";
+        Map<String, Object> branchNodeVar = new HashMap<>();
+        // branchNodeVar.put("STEP", "3");
+
+        CandidateList candidateList = new CandidateList();
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo1", "subDepartmentLeader", "zhang1"));
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo2", "subDepartmentLeader", "zhang2"));
+        // candidateList.add(new Candidate("厂矿内部审批子流程:subProcDemo2", "B厂长审批", "B厂长"));
+
+        //
+        // candidateList.add(new Candidate(null, "厂矿内部审批子流程", "subProcDemo1,subProcDemo2"));
+        //
+        // candidateList.add(new Candidate(null, "departmentLeader", "dl"));
+        // candidateList.add(new Candidate(null, "factorys", "subProcDemo1"));
+        // candidateList.add(new Candidate(null, "人力资源审批", "wang"));
+        // candidateList.add(new Candidate(null, "factory1", "f1"));
+        // candidateList.add(new Candidate(null, "factory2", "f2,f22"));
+        // candidateList.add(new Candidate(null, "hrLeader", "hr"));
+        // candidateList.add(new Candidate(null, "hqLeader", "hq"));
+        // candidateList.add(new Candidate(null, "subHrLeader", "subHrLeader22"));
+        // candidateList.add(new Candidate(null, "文书", "S2"));
+        candidateList.add(new Candidate(null, "财务审计专员", "T"));
+
+        FfResult ffResult = ffService.completeTaskToNode(taskId, "厂矿内部审批子流程:subProcDemo3.厂矿内部审批子流程:subProcDemo1", "A设备部长审批", branchNodeVar, candidateList, "SYSADMIN");
+
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void appendCandidate() {
+        String nodeId = "7cf7eb6289c54a58aba1c3763694cc54";
+
+        CandidateList candidateList = new CandidateList();
+        candidateList.add(new Candidate("null", "departmentLeader", "zhang1"));
+        candidateList.add(new Candidate(null, "factorys", "subProcDemo2"));
+        candidateList.add(new Candidate("subProcDemo2", "subDepartmentLeader", "zhang2"));
+        candidateList.add(new Candidate(null, "人力资源审批", "wang2"));
+
+        FfResult ffResult = ffService.appendCandidate(nodeId, candidateList, "SYSADMIN");
 
         System.out.println(ffResult);
     }
@@ -90,16 +177,21 @@ public class FfServiceTest {
     public void rejectTask() throws Exception {
         String taskId = "52d0bef1873842728bd8afe199c0ddb6";
         String executor = "SYSADMIN";
-        FfResult ffResult = ffService.rejectTask(taskId, executor);
+        FfResult ffResult = ffService.rejectTask(taskId, null, executor);
         System.out.println(ffResult);
     }
 
     @Test
     public void rejectTaskToNode() throws Exception {
-        String fromTaskId = "fd05099b4204440db98fcc1ae45e77aa";
-        String toNodeId = "f7ce8bda91854b96947ed2a042af33da";
-        String executor = "SYSADMIN";
-        FfResult ffResult = ffService.rejectTaskToNode(fromTaskId, toNodeId, executor);
+        String taskId = "f0ee46cff9fb45cfbce45136b5b6e53d";
+        // branchNodeVar.put("STEP", "3");
+
+        CandidateList candidateList = new CandidateList();
+
+        candidateList.add(new Candidate(null, "财务审计专员", "T"));
+
+        FfResult ffResult = ffService.rejectTaskToNode(taskId, "厂矿内部审批子流程:subProcDemo3.厂矿内部审批子流程:subProcDemo2", "B财务部长审批", candidateList, "SYSADMIN");
+
         System.out.println(ffResult);
     }
 
@@ -107,24 +199,7 @@ public class FfServiceTest {
     public void activateNode() throws Exception {
         String nodeId = "f33fbfe3937747f2ae7f580a4b750a2d";
         String executor = "SYSADMIN";
-        FfResult ffResult = ffService.activateNode(nodeId, executor);
-        System.out.println(ffResult);
-    }
-
-    @Test
-    public void insertSubProc() throws Exception {
-        String nodeId = "8711b60fba344869b271f12d8e576032";
-        String subProcDefCode = "subProcDemo3";
-        String executor = "SYSADMIN";
-        FfResult ffResult = ffService.insertSubProc(nodeId, subProcDefCode, executor);
-        System.out.println(ffResult);
-    }
-
-    @Test
-    public void deleteSubProc() throws Exception {
-        String nodeId = "5fd2114ab76e4b89bdd85ca40e596feb";
-        String executor = "SYSADMIN";
-        FfResult ffResult = ffService.deleteSubProc(nodeId, executor);
+        FfResult ffResult = ffService.activateNode(nodeId, null, executor);
         System.out.println(ffResult);
     }
 
@@ -138,19 +213,19 @@ public class FfServiceTest {
 
     @Test
     public void undo() throws Exception {
-        String operationId = "670c5e76de2449c9a588e83874c33c5a";
+        String operationId = "9393267ad50040d78cd96d2a63299d8c";
         FfResult ffResult = ffService.undo(operationId);
         System.out.println(ffResult);
     }
 
     @Test
     public void getStartRunningNodeDefList() throws Exception {
-        ProcDef procDef = ffService.loadProcDefByCode("centerForwardDemo");
+        ProcDef procDef = ffService.loadProcDefByCode("demo");
         Map<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.put("assignee", "assi");
         nodeVarMap.put("initPosiEmpId", "initer");
 
-        List<RunningNodeDef> runningNodeDefList = ffService.getStartRunningNodeDefList(procDef, nodeVarMap);
+        List<RunningNodeDef> runningNodeDefList = ffService.getStartRunningNodeDefList(null, procDef, nodeVarMap);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(runningNodeDefList));
     }
@@ -179,22 +254,15 @@ public class FfServiceTest {
 
     @Test
     public void getNextRunningNodeDefList() throws Exception {
-        String taskId = "e8828c0d205a4630a4c0c5d7cb169521";
+        String taskId = "72aa1659f1634ffc93e51dc0470bc720";
         Map<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.put("assignee", "assi");
         nodeVarMap.put("initPosiEmpId", "initer");
         nodeVarMap.put("STEP", "3");
 
         List<RunningNodeDef> runningNodeDefList = ffService.getNextRunningNodeDefList(taskId, nodeVarMap);
-        System.out.println(new Gson().toJson(runningNodeDefList));
-    }
-
-    @Test
-    public void getRunningNodeDef() throws Exception {
-        String nodeId = "3799d6fb94994c959e7780f6fe461d54";
-
-        RunningNodeDef runningNodeDef = ffService.getRunningNodeDef(nodeId);
-        System.out.println(new Gson().toJson(runningNodeDef));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(runningNodeDefList));
     }
 
     @Test
@@ -211,4 +279,5 @@ public class FfServiceTest {
             System.out.println(operation.getNodeId());
         }
     }
+
 }

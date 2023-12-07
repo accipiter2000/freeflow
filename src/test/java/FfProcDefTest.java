@@ -20,16 +20,19 @@ public class FfProcDefTest {
         InputStream inputStream;
         // inputStream = this.getClass().getResource("/procdef/demo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/stageDemo.json").openStream();
+        // inputStream = this.getClass().getResource("/procdef/stageDemo2.json").openStream();
+        // inputStream = this.getClass().getResource("/procdef/nestStageDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/completeReturnDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/centerForwardDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/subProcDemo1.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/subProcDemo2.json").openStream();
-        // inputStream = this.getClass().getResource("/procdef/subProcDemo3.json").openStream();
+         inputStream = this.getClass().getResource("/procdef/subProcDemo3.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/subProcDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/isolateSubProcDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/gatewayDemo.json").openStream();
-        inputStream = this.getClass().getResource("/procdef/serviceTaskDemo.json").openStream();
+        // inputStream = this.getClass().getResource("/procdef/serviceTaskDemo.json").openStream();
         // inputStream = this.getClass().getResource("/procdef/endDemo.json").openStream();
+//        inputStream = this.getClass().getResource("/procdef/nestSubProcDemo.json").openStream();
 
         String procDef = OdUtils.inputStreamToString(inputStream);
         inputStream.close();

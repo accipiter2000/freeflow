@@ -85,7 +85,7 @@ public class FfTaskTest {
     @Test
     public void completeTask() throws Exception {
         String taskId = "569e82bd9a004f10ab7690fd1c6f9a25";
-        FfResult ffResult = ffService.completeTask(taskId, "e", null);
+        FfResult ffResult = ffService.completeTask(taskId, null, null, "e");
         System.out.println(ffResult);
     }
 
@@ -99,7 +99,7 @@ public class FfTaskTest {
     @Test
     public void rejectTask() throws Exception {
         String taskId = "68db8c1015444e4d9d6586e22441c14d";
-        FfResult ffResult = ffService.rejectTask(taskId, "e");
+        FfResult ffResult = ffService.rejectTask(taskId, null, "e");
         System.out.println(ffResult);
     }
 

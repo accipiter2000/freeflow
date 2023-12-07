@@ -74,21 +74,21 @@ public class FfNodeTest {
     @Test
     public void activateNode() throws Exception {
         String nodeId = "0e825f821ebe4faeb3ac36f082a0bf2d";
-        FfResult ffResult = ffService.activateNode(nodeId, "exe");
+        FfResult ffResult = ffService.activateNode(nodeId, null, "exe");
         System.out.println(ffResult);
     }
 
     @Test
     public void completeNode() throws Exception {
         String nodeId = "0e825f821ebe4faeb3ac36f082a0bf2d";
-        FfResult ffResult = ffService.completeNode(nodeId, "exe");
+        FfResult ffResult = ffService.completeNode(nodeId, null, "exe");
         System.out.println(ffResult);
     }
 
     @Test
     public void terminateNode() throws Exception {
         String nodeId = "3bb986b35e1e4ae29291681e6fe0a0d1";
-        FfResult ffResult = ffService.terminateNode(nodeId, "exe");
+        FfResult ffResult = ffService.terminateNode(nodeId, null, "exe");
         System.out.println(ffResult);
     }
 }
