@@ -6,7 +6,7 @@
 
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>2.0.0-RELEASE</version>
+    <version>3.1.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>freeflow</name>
@@ -29,7 +29,27 @@
         </developer>
     </developers>
 
+    <scm>
+        <connection>scm:git:git://github.com/accipiter2000/freeflow.git</connection>
+        <developerConnection>scm:git:ssh://github.com/accipiter2000/freeflow.git</developerConnection>
+        <url>https://github.com/accipiter2000/freeflow</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>io.github.accipiter2000</groupId>
+            <artifactId>od</artifactId>
+            <version>1.0.1-RELEASE</version>
+        </dependency>
+
+        <!-- commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -45,34 +65,10 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.3</version>
         </dependency>
-
         <dependency>
-            <groupId>io.github.accipiter2000</groupId>
-            <artifactId>od</artifactId>
-            <version>1.0.0-RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jhlabs</groupId>
-            <artifactId>filters</artifactId>
-            <version>2.0.235-1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>3.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.janeluo</groupId>
-            <artifactId>ikanalyzer</artifactId>
-            <version>2012_u6</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
         <!-- spring -->
@@ -122,7 +118,6 @@
             <version>4.3.12.RELEASE</version>
         </dependency>
 
-
         <!-- fasterxml.jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -162,7 +157,7 @@
             <version>3.13</version>
         </dependency>
 
-
+        <!-- gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -174,12 +169,7 @@
             <version>1.2.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.jhlabs</groupId>
-            <artifactId>filters</artifactId>
-            <version>2.0.235-1</version>
-        </dependency>
-
+        <!-- juel -->
         <dependency>
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel-api</artifactId>
@@ -189,6 +179,12 @@
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel-impl</artifactId>
             <version>2.2.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jhlabs</groupId>
+            <artifactId>filters</artifactId>
+            <version>2.0.235-1</version>
         </dependency>
     </dependencies>
 </project>
