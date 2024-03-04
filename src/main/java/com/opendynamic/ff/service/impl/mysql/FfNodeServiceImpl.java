@@ -1,4 +1,4 @@
-package com.opendynamic.ff.service.impl.oracle;
+package com.opendynamic.ff.service.impl.mysql;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,9 +72,7 @@ public class FfNodeServiceImpl implements FfNodeService {
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
         if (page != null && limit != null && limit > 0) {// 分页
-            int start = (page - 1) * limit + 1;
-            int end = page * limit;
-            sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
+            sql = sql + " limit " + (page - 1) * limit + ", " + limit;
         }
 
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
@@ -131,11 +129,11 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PARENT_NODE_ID_LIST", PARENT_NODE_ID_LIST);
         }
         if (StringUtils.isNotEmpty(PREVIOUS_NODE_IDS_)) {
-            sql += " and PREVIOUS_NODE_IDS_ like '%' || :PREVIOUS_NODE_IDS_ || '%'";
+            sql += " and PREVIOUS_NODE_IDS_ like concat('%',:PREVIOUS_NODE_IDS_,'%')";
             paramMap.put("PREVIOUS_NODE_IDS_", PREVIOUS_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(LAST_COMPLETE_NODE_IDS_)) {
-            sql += " and LAST_COMPLETE_NODE_IDS_ like '%' || :LAST_COMPLETE_NODE_IDS_ || '%'";
+            sql += " and LAST_COMPLETE_NODE_IDS_ like concat('%',:LAST_COMPLETE_NODE_IDS_,'%')";
             paramMap.put("LAST_COMPLETE_NODE_IDS_", LAST_COMPLETE_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(SUB_PROC_DEF_ID_)) {
@@ -171,7 +169,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_CODE_LIST", NODE_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_NAME_)) {
-            sql += " and NODE_NAME_ like '%' || :NODE_NAME_ || '%'";
+            sql += " and NODE_NAME_ like concat('%',:NODE_NAME_,'%')";
             paramMap.put("NODE_NAME_", NODE_NAME_);
         }
         if (NODE_NAME_LIST != null && NODE_NAME_LIST.size() > 0) {
@@ -195,7 +193,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_END_USER_LIST", NODE_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_END_USER_NAME_)) {
-            sql += " and NODE_END_USER_NAME_ like '%' || :NODE_END_USER_NAME_ || '%'";
+            sql += " and NODE_END_USER_NAME_ like concat('%',:NODE_END_USER_NAME_,'%')";
             paramMap.put("NODE_END_USER_NAME_", NODE_END_USER_NAME_);
         }
         if (NODE_END_USER_NAME_LIST != null && NODE_END_USER_NAME_LIST.size() > 0) {
@@ -292,7 +290,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_CODE_LIST", BIZ_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_NAME_)) {
-            sql += " and BIZ_NAME_ like '%' || :BIZ_NAME_ || '%'";
+            sql += " and BIZ_NAME_ like concat('%',:BIZ_NAME_,'%')";
             paramMap.put("BIZ_NAME_", BIZ_NAME_);
         }
         if (BIZ_NAME_LIST != null && BIZ_NAME_LIST.size() > 0) {
@@ -300,7 +298,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_NAME_LIST", BIZ_NAME_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_DESC_)) {
-            sql += " and BIZ_DESC_ like '%' || :BIZ_DESC_ || '%'";
+            sql += " and BIZ_DESC_ like concat('%',:BIZ_DESC_,'%')";
             paramMap.put("BIZ_DESC_", BIZ_DESC_);
         }
         if (BIZ_DESC_LIST != null && BIZ_DESC_LIST.size() > 0) {
@@ -316,7 +314,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_START_USER_LIST", PROC_START_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_START_USER_NAME_)) {
-            sql += " and PROC_START_USER_NAME_ like '%' || :PROC_START_USER_NAME_ || '%'";
+            sql += " and PROC_START_USER_NAME_ like concat('%',:PROC_START_USER_NAME_,'%')";
             paramMap.put("PROC_START_USER_NAME_", PROC_START_USER_NAME_);
         }
         if (PROC_START_USER_NAME_LIST != null && PROC_START_USER_NAME_LIST.size() > 0) {
@@ -332,7 +330,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_END_USER_LIST", PROC_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_END_USER_NAME_)) {
-            sql += " and PROC_END_USER_NAME_ like '%' || :PROC_END_USER_NAME_ || '%'";
+            sql += " and PROC_END_USER_NAME_ like concat('%',:PROC_END_USER_NAME_,'%')";
             paramMap.put("PROC_END_USER_NAME_", PROC_END_USER_NAME_);
         }
         if (PROC_END_USER_NAME_LIST != null && PROC_END_USER_NAME_LIST.size() > 0) {
@@ -381,7 +379,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
-            sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
+            sql += " and PROC_DEF_NAME_ like concat('%',:PROC_DEF_NAME_,'%')";
             paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
         }
         if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
@@ -450,11 +448,11 @@ public class FfNodeServiceImpl implements FfNodeService {
         paramMap.put("NODE_ID_", NODE_ID_);
 
         if (StringUtils.isNotEmpty(PREVIOUS_NODE_IDS_)) {
-            sql += " and PREVIOUS_NODE_IDS_ like '%' || :PREVIOUS_NODE_IDS_ || '%'";
+            sql += " and PREVIOUS_NODE_IDS_ like concat('%',:PREVIOUS_NODE_IDS_,'%')";
             paramMap.put("PREVIOUS_NODE_IDS_", PREVIOUS_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(LAST_COMPLETE_NODE_IDS_)) {
-            sql += " and LAST_COMPLETE_NODE_IDS_ like '%' || :LAST_COMPLETE_NODE_IDS_ || '%'";
+            sql += " and LAST_COMPLETE_NODE_IDS_ like concat('%',:LAST_COMPLETE_NODE_IDS_,'%')";
             paramMap.put("LAST_COMPLETE_NODE_IDS_", LAST_COMPLETE_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(SUB_PROC_DEF_ID_)) {
@@ -490,7 +488,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_CODE_LIST", NODE_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_NAME_)) {
-            sql += " and NODE_NAME_ like '%' || :NODE_NAME_ || '%'";
+            sql += " and NODE_NAME_ like concat('%',:NODE_NAME_,'%')";
             paramMap.put("NODE_NAME_", NODE_NAME_);
         }
         if (NODE_NAME_LIST != null && NODE_NAME_LIST.size() > 0) {
@@ -514,7 +512,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_END_USER_LIST", NODE_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_END_USER_NAME_)) {
-            sql += " and NODE_END_USER_NAME_ like '%' || :NODE_END_USER_NAME_ || '%'";
+            sql += " and NODE_END_USER_NAME_ like concat('%',:NODE_END_USER_NAME_,'%')";
             paramMap.put("NODE_END_USER_NAME_", NODE_END_USER_NAME_);
         }
         if (NODE_END_USER_NAME_LIST != null && NODE_END_USER_NAME_LIST.size() > 0) {
@@ -611,7 +609,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_CODE_LIST", BIZ_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_NAME_)) {
-            sql += " and BIZ_NAME_ like '%' || :BIZ_NAME_ || '%'";
+            sql += " and BIZ_NAME_ like concat('%',:BIZ_NAME_,'%')";
             paramMap.put("BIZ_NAME_", BIZ_NAME_);
         }
         if (BIZ_NAME_LIST != null && BIZ_NAME_LIST.size() > 0) {
@@ -619,7 +617,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_NAME_LIST", BIZ_NAME_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_DESC_)) {
-            sql += " and BIZ_DESC_ like '%' || :BIZ_DESC_ || '%'";
+            sql += " and BIZ_DESC_ like concat('%',:BIZ_DESC_,'%')";
             paramMap.put("BIZ_DESC_", BIZ_DESC_);
         }
         if (BIZ_DESC_LIST != null && BIZ_DESC_LIST.size() > 0) {
@@ -635,7 +633,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_START_USER_LIST", PROC_START_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_START_USER_NAME_)) {
-            sql += " and PROC_START_USER_NAME_ like '%' || :PROC_START_USER_NAME_ || '%'";
+            sql += " and PROC_START_USER_NAME_ like concat('%',:PROC_START_USER_NAME_,'%')";
             paramMap.put("PROC_START_USER_NAME_", PROC_START_USER_NAME_);
         }
         if (PROC_START_USER_NAME_LIST != null && PROC_START_USER_NAME_LIST.size() > 0) {
@@ -651,7 +649,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_END_USER_LIST", PROC_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_END_USER_NAME_)) {
-            sql += " and PROC_END_USER_NAME_ like '%' || :PROC_END_USER_NAME_ || '%'";
+            sql += " and PROC_END_USER_NAME_ like concat('%',:PROC_END_USER_NAME_,'%')";
             paramMap.put("PROC_END_USER_NAME_", PROC_END_USER_NAME_);
         }
         if (PROC_END_USER_NAME_LIST != null && PROC_END_USER_NAME_LIST.size() > 0) {
@@ -700,7 +698,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
-            sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
+            sql += " and PROC_DEF_NAME_ like concat('%',:PROC_DEF_NAME_,'%')";
             paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
         }
         if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
@@ -749,7 +747,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             sql += " and (NODE_ID_ = (select PARENT_NODE_ID_ from FF_NODE where NODE_ID_ = :NODE_ID_) or NODE_ID_ = :NODE_ID_)";
         }
         else {
-            sql += " connect by prior PARENT_NODE_ID_ = NODE_ID_ start with NODE_ID_ = :NODE_ID_";
+            sql += " and NODE_ID_ in (with recursive CTE as (select NODE_ID_, PARENT_NODE_ID_ from FF_NODE where NODE_ID_ = :NODE_ID_ union all select FF_NODE.NODE_ID_, FF_NODE.PARENT_NODE_ID_ from FF_NODE inner join CTE on CTE.PARENT_NODE_ID_ = FF_NODE.NODE_ID_) select NODE_ID_ from CTE)";
         }
 
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
@@ -776,11 +774,11 @@ public class FfNodeServiceImpl implements FfNodeService {
         paramMap.put("NODE_ID_", NODE_ID_);
 
         if (StringUtils.isNotEmpty(PREVIOUS_NODE_IDS_)) {
-            sql += " and PREVIOUS_NODE_IDS_ like '%' || :PREVIOUS_NODE_IDS_ || '%'";
+            sql += " and PREVIOUS_NODE_IDS_ like concat('%',:PREVIOUS_NODE_IDS_,'%')";
             paramMap.put("PREVIOUS_NODE_IDS_", PREVIOUS_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(LAST_COMPLETE_NODE_IDS_)) {
-            sql += " and LAST_COMPLETE_NODE_IDS_ like '%' || :LAST_COMPLETE_NODE_IDS_ || '%'";
+            sql += " and LAST_COMPLETE_NODE_IDS_ like concat('%',:LAST_COMPLETE_NODE_IDS_,'%')";
             paramMap.put("LAST_COMPLETE_NODE_IDS_", LAST_COMPLETE_NODE_IDS_);
         }
         if (StringUtils.isNotEmpty(SUB_PROC_DEF_ID_)) {
@@ -816,7 +814,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_CODE_LIST", NODE_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_NAME_)) {
-            sql += " and NODE_NAME_ like '%' || :NODE_NAME_ || '%'";
+            sql += " and NODE_NAME_ like concat('%',:NODE_NAME_,'%')";
             paramMap.put("NODE_NAME_", NODE_NAME_);
         }
         if (NODE_NAME_LIST != null && NODE_NAME_LIST.size() > 0) {
@@ -840,7 +838,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("NODE_END_USER_LIST", NODE_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(NODE_END_USER_NAME_)) {
-            sql += " and NODE_END_USER_NAME_ like '%' || :NODE_END_USER_NAME_ || '%'";
+            sql += " and NODE_END_USER_NAME_ like concat('%',:NODE_END_USER_NAME_,'%')";
             paramMap.put("NODE_END_USER_NAME_", NODE_END_USER_NAME_);
         }
         if (NODE_END_USER_NAME_LIST != null && NODE_END_USER_NAME_LIST.size() > 0) {
@@ -937,7 +935,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_CODE_LIST", BIZ_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_NAME_)) {
-            sql += " and BIZ_NAME_ like '%' || :BIZ_NAME_ || '%'";
+            sql += " and BIZ_NAME_ like concat('%',:BIZ_NAME_,'%')";
             paramMap.put("BIZ_NAME_", BIZ_NAME_);
         }
         if (BIZ_NAME_LIST != null && BIZ_NAME_LIST.size() > 0) {
@@ -945,7 +943,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("BIZ_NAME_LIST", BIZ_NAME_LIST);
         }
         if (StringUtils.isNotEmpty(BIZ_DESC_)) {
-            sql += " and BIZ_DESC_ like '%' || :BIZ_DESC_ || '%'";
+            sql += " and BIZ_DESC_ like concat('%',:BIZ_DESC_,'%')";
             paramMap.put("BIZ_DESC_", BIZ_DESC_);
         }
         if (BIZ_DESC_LIST != null && BIZ_DESC_LIST.size() > 0) {
@@ -961,7 +959,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_START_USER_LIST", PROC_START_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_START_USER_NAME_)) {
-            sql += " and PROC_START_USER_NAME_ like '%' || :PROC_START_USER_NAME_ || '%'";
+            sql += " and PROC_START_USER_NAME_ like concat('%',:PROC_START_USER_NAME_,'%')";
             paramMap.put("PROC_START_USER_NAME_", PROC_START_USER_NAME_);
         }
         if (PROC_START_USER_NAME_LIST != null && PROC_START_USER_NAME_LIST.size() > 0) {
@@ -977,7 +975,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_END_USER_LIST", PROC_END_USER_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_END_USER_NAME_)) {
-            sql += " and PROC_END_USER_NAME_ like '%' || :PROC_END_USER_NAME_ || '%'";
+            sql += " and PROC_END_USER_NAME_ like concat('%',:PROC_END_USER_NAME_,'%')";
             paramMap.put("PROC_END_USER_NAME_", PROC_END_USER_NAME_);
         }
         if (PROC_END_USER_NAME_LIST != null && PROC_END_USER_NAME_LIST.size() > 0) {
@@ -1026,7 +1024,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
         }
         if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
-            sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
+            sql += " and PROC_DEF_NAME_ like concat('%',:PROC_DEF_NAME_,'%')";
             paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
         }
         if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
@@ -1075,7 +1073,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             sql += " and (PARENT_NODE_ID_ = :NODE_ID_ or NODE_ID_ = :NODE_ID_)";
         }
         else {
-            sql += " connect by prior NODE_ID_ = PARENT_NODE_ID_ start with NODE_ID_ = :NODE_ID_";
+            sql += " and NODE_ID_ in (with recursive CTE as (select NODE_ID_, PARENT_NODE_ID_ from FF_NODE where NODE_ID_ = :NODE_ID_ union all select FF_NODE.NODE_ID_, FF_NODE.PARENT_NODE_ID_ from FF_NODE inner join CTE on CTE.NODE_ID_ = FF_NODE.PARENT_NODE_ID_) select NODE_ID_ from CTE)";
         }
 
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
@@ -1093,9 +1091,9 @@ public class FfNodeServiceImpl implements FfNodeService {
 
         sql.append("select * from FFV_NODE where NODE_ID_ in (:NODE_ID_LIST)");
         paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
-        sql.append(" order by DECODE(NODE_ID_,");// 按主键列表顺序排序
+        sql.append(" order by FIELD(NODE_ID_,");// 按主键列表顺序排序
         for (int i = 0; i < NODE_ID_LIST.size(); i++) {
-            sql.append(" '").append(NODE_ID_LIST.get(i)).append("', ").append(i);
+            sql.append(" '").append(NODE_ID_LIST.get(i)).append("'");
             if (i < NODE_ID_LIST.size() - 1) {
                 sql.append(",");
             }
@@ -1145,13 +1143,13 @@ public class FfNodeServiceImpl implements FfNodeService {
 
     @Override
     public int updateBranchAdjustSubProcDefId(String BRANCH_ID_, String ADJUST_SUB_PROC_DEF_ID_) {
-        String sql = "select NODE_ID_ from FF_NODE connect by prior NODE_ID_ = PARENT_NODE_ID_ and NODE_TYPE_ != 'BRANCH' start with NODE_ID_ = ?";
+        String sql = "with recursive CTE as (select NODE_ID_, PARENT_NODE_ID_ from FF_NODE where NODE_ID_ = ? union all select FF_NODE.NODE_ID_, FF_NODE.PARENT_NODE_ID_ from FF_NODE inner join CTE on CTE.NODE_ID_ = FF_NODE.PARENT_NODE_ID_ and FF_NODE.NODE_TYPE_ != 'BRANCH') select NODE_ID_ from CTE";
         List<Map<String, Object>> result = ffJdbcTemplate.queryForList(sql, BRANCH_ID_);
         for (Map<String, Object> node : result) {
             ffOperationService.insertNodeOp(OdUtils.getUuid(), (String) node.get("NODE_ID_"), FfOperationService.OPERATION_TYPE_UPDATE);
         }
 
-        sql = "update FF_NODE set ADJUST_SUB_PROC_DEF_ID_ = ? where NODE_ID_ in (select NODE_ID_ from FF_NODE connect by prior NODE_ID_ = PARENT_NODE_ID_ and NODE_TYPE_ != 'BRANCH' start with NODE_ID_ = ?)";
+        sql = "update FF_NODE set ADJUST_SUB_PROC_DEF_ID_ = ? where NODE_ID_ in (with recursive CTE as (select NODE_ID_, PARENT_NODE_ID_ from FF_NODE where NODE_ID_ = ? union all select FF_NODE.NODE_ID_, FF_NODE.PARENT_NODE_ID_ from FF_NODE inner join CTE on CTE.NODE_ID_ = FF_NODE.PARENT_NODE_ID_ and FF_NODE.NODE_TYPE_ != 'BRANCH') select NODE_ID_ from CTE)";
         return ffJdbcTemplate.update(sql, ADJUST_SUB_PROC_DEF_ID_, BRANCH_ID_);
     }
 
