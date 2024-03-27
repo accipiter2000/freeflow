@@ -1,5 +1,6 @@
 package com.opendynamic.ff.service.impl.oracle;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,8 +34,8 @@ public class FfNodeServiceImpl implements FfNodeService {
         String sql = "select count(*) TOTAL, count(case when T.TASK_STATUS_ = '9' then 1 else null end) COMPLETE from FF_TASK T where T.NODE_ID_ = ? and T.TASK_STATUS_ in ('1', '9') and T.TASK_TYPE_ != 'FORWARD_TASK'";
         Map<String, Object> result = ffJdbcTemplate.queryForMap(sql, NODE_ID_);
         Map<String, Object> taskStatistic = new HashMap<>();
-        taskStatistic.put("TOTAL", ((Long) result.get("TOTAL")).doubleValue());
-        taskStatistic.put("COMPLETE", ((Long) result.get("COMPLETE")).doubleValue());
+        taskStatistic.put("TOTAL", ((BigDecimal) result.get("TOTAL")).doubleValue());
+        taskStatistic.put("COMPLETE", ((BigDecimal) result.get("COMPLETE")).doubleValue());
 
         return taskStatistic;
     }
@@ -44,8 +45,8 @@ public class FfNodeServiceImpl implements FfNodeService {
         String sql = "select count(*) TOTAL, count(case when N.NODE_STATUS_ = '9' then 1 else null end) COMPLETE from FF_NODE N where N.PARENT_NODE_ID_ = ? and N.NODE_STATUS_ in ('1', '9')";
         Map<String, Object> result = ffJdbcTemplate.queryForMap(sql, NODE_ID_);
         Map<String, Object> subProcStatistic = new HashMap<>();
-        subProcStatistic.put("TOTAL", ((Long) result.get("TOTAL")).doubleValue());
-        subProcStatistic.put("COMPLETE", ((Long) result.get("COMPLETE")).doubleValue());
+        subProcStatistic.put("TOTAL", ((BigDecimal) result.get("TOTAL")).doubleValue());
+        subProcStatistic.put("COMPLETE", ((BigDecimal) result.get("COMPLETE")).doubleValue());
 
         return subProcStatistic;
     }
