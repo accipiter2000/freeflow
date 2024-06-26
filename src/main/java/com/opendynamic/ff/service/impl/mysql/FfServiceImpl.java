@@ -48,6 +48,7 @@ import com.opendynamic.ff.query.NodeQuery;
 import com.opendynamic.ff.query.NodeVarQuery;
 import com.opendynamic.ff.query.OperationQuery;
 import com.opendynamic.ff.query.ParentNodeQuery;
+import com.opendynamic.ff.query.ProcDefQuery;
 import com.opendynamic.ff.query.ProcQuery;
 import com.opendynamic.ff.query.TaskQuery;
 import com.opendynamic.ff.service.FfAdjustProcDefService;
@@ -130,7 +131,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     public boolean refreshProcDefCache() {
         System.out.println("Initializing workflow definition...");
 
-        List<Map<String, Object>> procDefList = ffProcDefService.selectProcDef(null, null, null, null, null, null, null, null, null, null, null, null, 1, -1);
+        List<Map<String, Object>> procDefList = ffProcDefService.selectProcDef(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1, -1);
         List<ProcDef> latestProcDefList = new ArrayList<>(procDefList.size());
         for (Map<String, Object> procDef : procDefList) {
             latestProcDefList.add(new ProcDef(procDef));
@@ -231,79 +232,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     }
 
     @Override
-    public List<ProcDef> selectProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList, Integer page, Integer limit) {
-        List<ProcDef> subProcDefList = selectProcDef(procDefId, procDefCode, procDefName, procDefCat, procDefStatusList);
-
-        if (page != null && limit != null && limit > 0) {// 分页
-            int start = (page - 1) * limit;
-            int end = page * limit;
-            if (end > subProcDefList.size()) {
-                end = subProcDefList.size();
-            }
-            subProcDefList = subProcDefList.subList(start, end);
-        }
-
-        return subProcDefList;
-    }
-
-    @Override
-    public int countProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList) {
-        return selectProcDef(procDefId, procDefCode, procDefName, procDefCat, procDefStatusList).size();
-    }
-
-    private List<ProcDef> selectProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList) {
-        if (StringUtils.isEmpty(procDefId) && StringUtils.isEmpty(procDefCode) && StringUtils.isEmpty(procDefName) && StringUtils.isEmpty(procDefCat) && (procDefStatusList == null || procDefStatusList.size() == 0)) {
-            return procDefList;
-        }
-
-        List<ProcDef> subProcDefList = new ArrayList<>();
-        subProcDefList.addAll(procDefList);
-        ProcDef procDef;
-        if (StringUtils.isNotEmpty(procDefId)) {
-            for (int i = subProcDefList.size() - 1; i >= 0; i--) {
-                procDef = subProcDefList.get(i);
-                if (!procDefId.equals(procDef.getProcDefId())) {
-                    subProcDefList.remove(procDef);
-                }
-            }
-        }
-        if (StringUtils.isNotEmpty(procDefCode)) {
-            for (int i = subProcDefList.size() - 1; i >= 0; i--) {
-                procDef = subProcDefList.get(i);
-                if (!procDefCode.equals(procDef.getProcDefCode())) {
-                    subProcDefList.remove(procDef);
-                }
-            }
-        }
-        if (StringUtils.isNotEmpty(procDefName)) {
-            for (int i = subProcDefList.size() - 1; i >= 0; i--) {
-                procDef = subProcDefList.get(i);
-                if (!procDef.getProcDefName().contains(procDefName)) {
-                    subProcDefList.remove(procDef);
-                }
-            }
-        }
-        if (StringUtils.isNotEmpty(procDefCat)) {
-            for (int i = subProcDefList.size() - 1; i >= 0; i--) {
-                procDef = subProcDefList.get(i);
-                if (!procDef.getProcDefCat().startsWith(procDefCat)) {
-                    subProcDefList.remove(procDef);
-                }
-            }
-        }
-        if (procDefStatusList != null && procDefStatusList.size() > 0) {
-            for (int i = subProcDefList.size() - 1; i >= 0; i--) {
-                procDef = subProcDefList.get(i);
-                if (!procDefStatusList.contains(procDef.getProcDefStatus())) {
-                    subProcDefList.remove(procDef);
-                }
-            }
-        }
-
-        return subProcDefList;
-    }
-
-    @Override
     public boolean deployProcDef(String procDefId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, String operatorId, String operatorName) {
         RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
         runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
@@ -352,7 +280,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             procDefDiagramFileLength = baos.size();
         }
 
-        ffProcDefService.insertProcDef(procDefId, _procDef.getProcDefCode(), _procDef.getProcDefName(), _procDef.getProcDefCat(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), _procDef.getMemo(), FfService.PROC_DEF_STATUS_ACTIVE, new Date(), new Date(), operatorId, operatorName);
+        ffProcDefService.insertProcDef(procDefId, _procDef.getProcDefCode(), _procDef.getProcDefName(), _procDef.getProcDefCat(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), _procDef.getMemo(), _procDef.getExtAttr1(), _procDef.getExtAttr2(), _procDef.getExtAttr3(), _procDef.getExtAttr4(), _procDef.getExtAttr5(), _procDef.getExtAttr6(), _procDef.getExtAttr7(), _procDef.getExtAttr8(), FfService.PROC_DEF_STATUS_ACTIVE, new Date(), new Date(), operatorId, operatorName);
 
         refreshProcDefCache();
 
@@ -503,14 +431,19 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
     @Override
     public List<RunningNodeDef> getNextRunningNodeDefList(String taskId, Map<String, Object> nodeVarMap) {
-        List<RunningNodeDef> nextRunningNodeDefList = new ArrayList<>();
-
         Task task = loadTask(taskId);
         if (task.getTaskType().equals(FfService.TASK_TYPE_FORWARD_TASK)) {
-            return nextRunningNodeDefList;
+            return new ArrayList<>();
         }
 
         Node node = loadNode(task.getNodeId());
+        return getNextRunningNodeDefList(node, nodeVarMap);
+    }
+
+    @Override
+    public List<RunningNodeDef> getNextRunningNodeDefList(Node node, Map<String, Object> nodeVarMap) {
+        List<RunningNodeDef> nextRunningNodeDefList = new ArrayList<>();
+
         Map<String, Object> fullNodeVarMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : internalServiceMap.entrySet()) {// 添加内部服务
             fullNodeVarMap.put(entry.getKey(), entry.getValue());
@@ -651,22 +584,20 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         // TASK,CENTER_FORWARD_TASK候选人解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK)) && StringUtils.isNotEmpty(nodeDef.getCandidateAssignee())) {
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateAssignee(), Object.class);
-            Object object = expression.getValue(simpleContext);// 获取候选人
+            Object object;
+            try {
+                object = expression.getValue(simpleContext);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                object = (String) null;
+            }
             List<FfUser> candidateAssigneeList;// 解析后候选人列表
             if (object instanceof List) {
                 candidateAssigneeList = (List<FfUser>) object;
             }
             else {
-                candidateAssigneeList = new ArrayList<>();
-                if (StringUtils.isNotEmpty((String) object)) {
-                    String[] assignees = ((String) object).split(",");
-                    for (int i = 0; i < assignees.length; i++) {
-                        FfUser ffUser = new FfUser();
-                        ffUser.setId(assignees[i]);
-                        ffUser.setUserName(ffHelper.getUserName(assignees[i]));
-                        candidateAssigneeList.add(ffUser);
-                    }
-                }
+                candidateAssigneeList = getAssigneeList((String) object);
             }
 
             RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
@@ -674,10 +605,41 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             runningNodeDef.setCandidateAssigneeList(candidateAssigneeList);
             runningNodeDefList.add(runningNodeDef);
         }
+        // TASK,CENTER_FORWARD_TASK办理人解析
+        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK)) && StringUtils.isNotEmpty(nodeDef.getAssignee())) {
+            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
+            Object object;
+            try {
+                object = expression.getValue(simpleContext);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                object = (String) null;
+            }
+            List<FfUser> assigneeList;// 解析后办理人列表
+            if (object instanceof List) {
+                assigneeList = (List<FfUser>) object;
+            }
+            else {
+                assigneeList = getAssigneeList((String) object);
+            }
+
+            RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
+            runningNodeDef.setSubProcPath(subProcPath);
+            runningNodeDef.setAssigneeList(assigneeList);
+            runningNodeDefList.add(runningNodeDef);
+        }
         // SUB_PROC候选子流程定义解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_SUB_PROC) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_ISOLATE_SUB_PROC)) && StringUtils.isNotEmpty(nodeDef.getCandidateSubProcDef())) {
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateSubProcDef(), Object.class);
-            Object object = expression.getValue(simpleContext);// 获取候选子流程定义
+            Object object = null;
+            try {
+                object = expression.getValue(simpleContext);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                object = (String) null;
+            }
             List<RunningProcDef> candidateSubProcDefList = new ArrayList<>();// 解析后候选子流程定义列表
             if (object instanceof List) {
                 List<ProcDef> procDefList = (List<ProcDef>) object;
@@ -709,29 +671,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             runningNodeDef.setCandidateSubProcDefList(candidateSubProcDefList);
             runningNodeDefList.add(runningNodeDef);
         }
-        // TASK,CENTER_FORWARD_TASK办理人解析
-        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK)) && StringUtils.isNotEmpty(nodeDef.getAssignee())) {
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
-            Object object;
-            try {
-                object = expression.getValue(simpleContext);
-            }
-            catch (Exception e) {
-                object = (String) null;
-            }
-            List<FfUser> assigneeList;// 解析后办理人列表
-            if (object instanceof List) {
-                assigneeList = (List<FfUser>) object;
-            }
-            else {
-                assigneeList = getAssigneeList((String) object);
-            }
-
-            RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
-            runningNodeDef.setSubProcPath(subProcPath);
-            runningNodeDef.setAssigneeList(assigneeList);
-            runningNodeDefList.add(runningNodeDef);
-        }
         // SUB_PROC子流程定义解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_SUB_PROC) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_ISOLATE_SUB_PROC)) && StringUtils.isNotEmpty(nodeDef.getAssignSubProcDef())) {
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignSubProcDef(), Object.class);
@@ -740,28 +679,33 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 object = expression.getValue(simpleContext);
             }
             catch (Exception e) {
+                e.printStackTrace();
                 object = (String) null;
             }
-            List<RunningProcDef> assignSubProcDefList;// 解析后办理子流程定义列表
+            List<RunningProcDef> assignSubProcDefList = new ArrayList<>();// 解析后候选子流程定义列表
             if (object instanceof List) {
-                assignSubProcDefList = (List<RunningProcDef>) object;
+                List<ProcDef> procDefList = (List<ProcDef>) object;
+                for (ProcDef procDef : procDefList) {
+                    assignSubProcDefList.add(new RunningProcDef(procDef));
+                }
             }
             else {
-                assignSubProcDefList = new ArrayList<>();
                 if (StringUtils.isNotEmpty((String) object)) {
                     String[] assignSubProcDefs = ((String) object).split(",");
                     for (int i = 0; i < assignSubProcDefs.length; i++) {
                         RunningProcDef runningProcDef = new RunningProcDef(loadProcDefByCode(assignSubProcDefs[i]));
                         assignSubProcDefList.add(runningProcDef);
-
-                        // 递归处理内部子流程定义起始节点定义列表
-                        Map<String, Object> subProcAllNodeVarMap = new HashMap<>();
-                        subProcAllNodeVarMap.putAll(allNodeVarMap);
-                        subProcAllNodeVarMap.putAll(runningProcDef.getProcVarDefMap());
-                        List<RunningNodeDef> startRunningNodeDefList = getStartRunningNodeDefList(StringUtils.isNotEmpty(subProcPath) ? subProcPath + "." + nodeDef.getNodeCode() + ":" + runningProcDef.getProcDefCode() : nodeDef.getNodeCode() + ":" + runningProcDef.getProcDefCode(), runningProcDef, subProcAllNodeVarMap);
-                        runningProcDef.setNextRunningNodeDefList(startRunningNodeDefList);
                     }
                 }
+            }
+
+            // 递归处理内部子流程定义起始节点定义列表
+            for (RunningProcDef runningProcDef : assignSubProcDefList) {
+                Map<String, Object> subProcAllNodeVarMap = new HashMap<>();
+                subProcAllNodeVarMap.putAll(allNodeVarMap);
+                subProcAllNodeVarMap.putAll(runningProcDef.getProcVarDefMap());
+                List<RunningNodeDef> startRunningNodeDefList = getStartRunningNodeDefList(StringUtils.isNotEmpty(subProcPath) ? subProcPath + "." + nodeDef.getNodeCode() + ":" + runningProcDef.getProcDefCode() : nodeDef.getNodeCode() + ":" + runningProcDef.getProcDefCode(), runningProcDef, subProcAllNodeVarMap);
+                runningProcDef.setNextRunningNodeDefList(startRunningNodeDefList);
             }
 
             RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
@@ -776,6 +720,11 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     @Override
     public Proc loadProc(String procId) {
         return createProcQuery().setProcId(procId).queryForObject();
+    }
+
+    @Override
+    public ProcDefQuery createProcDefQuery() {
+        return new ProcDefQuery().setProcDefList(procDefList);
     }
 
     @Override
@@ -854,7 +803,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         String procId = OdUtils.getUuid();
         ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
         ffResult.addCreateProc(createProcQuery().setProcId(procId).queryForObject());
-        ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         Node branchNode = createNodeQuery().setNodeId(procId).queryForObject();
         ffResult.addCreateNode(branchNode);
 
@@ -901,7 +850,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         String procId = OdUtils.getUuid();
         ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
         ffResult.addCreateProc(createProcQuery().setProcId(procId).queryForObject());
-        ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         Node branchNode = createNodeQuery().setNodeId(procId).queryForObject();
         ffResult.addCreateNode(branchNode);
 
@@ -930,7 +879,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 // 新增子流程分支节点
                 subProcDef = loadProcDefByCode(path[1]);
                 branchNodeId = OdUtils.getUuid();
-                ffNodeService.insertNode(branchNodeId, branchNode.getNodeId(), procId, null, null, subProcDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, subProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+                ffNodeService.insertNode(branchNodeId, branchNode.getNodeId(), procId, null, null, subProcDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, subProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
                 branchNode = createNodeQuery().setNodeId(branchNodeId).queryForObject();
                 ffResult.addCreateNode(branchNode);
             }
@@ -973,7 +922,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
             parentNodeDef = parentNodeDefList.get(i);
             nodeId = OdUtils.getUuid();
-            ffNodeService.insertNode(nodeId, parentNodeId, procId, null, null, procDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            ffNodeService.insertNode(nodeId, parentNodeId, procId, null, null, procDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getWaitingForCompleteNode(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
             ffResult.addCreateNode(createNodeQuery().setNodeId(nodeId).queryForObject());
             parentNodeId = nodeId;
         }
@@ -1057,8 +1006,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     // 递归处理子流程，绘制流程图节点状态，
     private void handleChildNode(Node node, List<Node> childNodeList, Node currentNode, RunningProcDef runningProcDef, ProcDef procDef, boolean drawOptional, Graphics2D g2d) {
         NodeDef nodeDef;
-        Pattern outerPattern = Pattern.compile(FfService.CENTER_FORWARD_STEP + " *== *\\d+");
-        Pattern innerPattern = Pattern.compile("\\d+");
+        Pattern outerPattern = Pattern.compile(FfService.CENTER_FORWARD_STEP + " *== *-?\\d+");
+        Pattern innerPattern = Pattern.compile("-?\\d+");
         int centerForwardStep = 0;
         int maxCenterForwardStep = 0;
         for (Node childNode : childNodeList) {
@@ -1316,6 +1265,11 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     }
 
     @Override
+    public void cleanProc(String procId) {
+        ffProcService.cleanProc(procId);
+    }
+
+    @Override
     public Node loadNode(String nodeId) {
         return createNodeQuery().setNodeId(nodeId).queryForObject();
     }
@@ -1366,14 +1320,14 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         }
 
         Node node = loadNode(nodeId);
-        List<Task> taskList = createTaskQuery().setNodeId(nodeId).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE)).queryForObjectList();
+        List<Task> taskList = createTaskQuery().setNodeId(nodeId).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
             ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_COMPLETE);
             task.setTaskEndUser(executor);
             task.setTaskEndUserName(ffHelper.getUserName(executor));
             task.setTaskEndDate(COMPLETE_DATE_);
-            task.setNodeStatus(FfService.TASK_STATUS_COMPLETE);
+            task.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
             ffResult.addCompleteTask(task);
         }
 
@@ -1596,7 +1550,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
             Node node = loadNode(task.getNodeId());
             String exclusive = node.getExclusive();
-            if (exclusive != null && exclusive.indexOf("${") != -1) {// JUEL解析
+            String waitingForCompleteNode = node.getWaitingForCompleteNode();
+            if ((exclusive != null && exclusive.indexOf("${") != -1) || (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1)) {// JUEL解析
                 // 设置JUEL解析环境
                 Map<String, Object> nodeVarMap = createNodeVarQuery().setNodeId(node.getParentNodeId()).setRecursive(true).queryForMap();// 获取节点变量
                 nodeVarMap.putAll(getInternalServiceMap());
@@ -1614,8 +1569,11 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                     simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+                ValueExpression expression = null;
+                expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
                 exclusive = (String) expression.getValue(simpleContext);
+                expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+                waitingForCompleteNode = (String) expression.getValue(simpleContext);
             }
             if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
                 List<Task> remainActiveTaskList = createTaskQuery().setNodeId(node.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).queryForObjectList();
@@ -1629,7 +1587,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 }
             }
 
-            ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, FfService.OPERATION_COMPLETE, executor));
+            if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
+                ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, FfService.OPERATION_COMPLETE, executor));
+            }
 
             return ffResult;
         }
@@ -1772,7 +1732,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                     }
 
                     nodeId = OdUtils.getUuid();
-                    ffNodeService.insertNode(nodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+                    ffNodeService.insertNode(nodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getWaitingForCompleteNode(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null,
+                            FfService.NODE_STATUS_ACTIVE, new Date());
                     branchNode = createNodeQuery().setNodeId(nodeId).queryForObject();
                     ffResult.addCreateNode(branchNode);
                 }
@@ -1780,7 +1741,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 // 新增子流程分支节点
                 subProcDef = loadProcDefByCode(path[1]);
                 branchNodeId = OdUtils.getUuid();
-                ffNodeService.insertNode(branchNodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, subProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+                ffNodeService.insertNode(branchNodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, subProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
                 branchNode = createNodeQuery().setNodeId(branchNodeId).queryForObject();
                 ffResult.addCreateNode(branchNode);
             }
@@ -1807,7 +1768,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
             if (j < parentNodeDefList.size() - 1) {
                 nodeId = OdUtils.getUuid();
-                ffNodeService.insertNode(nodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+                ffNodeService.insertNode(nodeId, branchNode.getNodeId(), currentNode.getProcId(), null, null, subProcDef.getProcDefId(), null, parentNodeDef.getNodeType(), parentNodeDef.getNodeCode(), parentNodeDef.getNodeName(), parentNodeDef.getParentNodeCode(), parentNodeDef.getCandidateAssignee(), parentNodeDef.getCompleteExpression(), parentNodeDef.getCompleteReturn(), parentNodeDef.getExclusive(), parentNodeDef.getWaitingForCompleteNode(), parentNodeDef.getAutoCompleteSameAssignee(), parentNodeDef.getAutoCompleteEmptyAssignee(), parentNodeDef.getInform(), parentNodeDef.getAssignee(), parentNodeDef.getAction(), parentNodeDef.getDueDate(), parentNodeDef.getClaim(), parentNodeDef.getForwardable(), parentNodeDef.getPriority(), null, null, null, null, null, null, null,
+                        FfService.NODE_STATUS_ACTIVE, new Date());
                 branchNode = createNodeQuery().setNodeId(nodeId).queryForObject();
                 ffResult.addCreateNode(branchNode);
             }

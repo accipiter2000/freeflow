@@ -74,4 +74,9 @@ public interface FfProcService {
      * 删除对象。
      */
     public int deleteProc(String PROC_ID_);
+
+    /**
+     * 清除流程.
+     */
+    public int cleanProc(String PROC_ID_);
 }

@@ -55,7 +55,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
 
         // 新增节点
         String serviceTaskNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(serviceTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SERVICE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(serviceTaskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SERVICE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         serviceTaskNode = ffService.loadNode(serviceTaskNodeId);
         ffResult.addCreateNode(serviceTaskNode);
 
@@ -72,12 +72,19 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        // JUEL解析
+        // 执行Service调用
         ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
         expression.getValue(simpleContext);
 
-        // 完成节点
-        ffResult.addAll(completeNode(serviceTaskNode, serviceTaskNode.getNodeId(), candidateList, FfService.OPERATION_INSERT, executor));
+        String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
+        if (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            waitingForCompleteNode = (String) expression.getValue(simpleContext);
+        }
+        if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
+            // 完成节点
+            ffResult.addAll(completeNode(serviceTaskNode, serviceTaskNode.getNodeId(), candidateList, FfService.OPERATION_INSERT, executor));
+        }
 
         return ffResult;
     }

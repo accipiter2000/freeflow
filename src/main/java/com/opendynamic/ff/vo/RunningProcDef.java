@@ -40,6 +40,14 @@ public class RunningProcDef extends ProcDef implements Serializable {
         this.procDefDiagramWidth = procDef.getProcDefDiagramWidth();
         this.procDefDiagramHeight = procDef.getProcDefDiagramHeight();
         this.memo = procDef.getMemo();
+        this.extAttr1 = procDef.getExtAttr1();
+        this.extAttr2 = procDef.getExtAttr2();
+        this.extAttr3 = procDef.getExtAttr3();
+        this.extAttr4 = procDef.getExtAttr4();
+        this.extAttr5 = procDef.getExtAttr5();
+        this.extAttr6 = procDef.getExtAttr6();
+        this.extAttr7 = procDef.getExtAttr7();
+        this.extAttr8 = procDef.getExtAttr8();
         this.version = procDef.getVersion();
         this.procDefStatus = procDef.getProcDefStatus();
         this.creationDate = procDef.getCreationDate();
@@ -52,6 +60,7 @@ public class RunningProcDef extends ProcDef implements Serializable {
         this.noteDefList = new ArrayList<>();
         this.procVarDefList = new ArrayList<>();
 
+        // 节点定义，流转定义，注释定义，依次转化为Running
         for (NodeDef nodeDef : procDef.getNodeDefList()) {
             nodeDefList.add(new RunningNodeDef(nodeDef, this));
         }
@@ -65,7 +74,7 @@ public class RunningProcDef extends ProcDef implements Serializable {
             procVarDefList.add(new RunningProcVarDef(procVarDef, this));
         }
 
-        init();
+        super.init();
     }
 
     public void setProcDefId(String procDefId) {

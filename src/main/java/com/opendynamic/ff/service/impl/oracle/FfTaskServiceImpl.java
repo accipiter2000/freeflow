@@ -576,14 +576,14 @@ public class FfTaskServiceImpl implements FfTaskService {
         String sql = "insert into FF_TASK (TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int count = ffJdbcTemplate.update(sql, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_);
 
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_INSERT);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_INSERT);
 
         return count;
     }
 
     @Override
     public int updateTask(String TASK_ID_, String NODE_ID_, String PREVIOUS_TASK_ID_, String TASK_TYPE_, String ASSIGNEE_, String ASSIGNEE_NAME_, String ACTION_, Date DUE_DATE_, String CLAIM_, String FORWARDABLE_, Integer PRIORITY_, String FORWARD_STATUS_, String TASK_END_USER_, String TASK_END_USER_NAME_, Date TASK_END_DATE_, String NEXT_CANDIDATE_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set NODE_ID_ = ?, PREVIOUS_TASK_ID_ = ?, TASK_TYPE_ = ?, ASSIGNEE_ = ?, ASSIGNEE_NAME_ = ?, ACTION_ = ?, DUE_DATE_ = ?, CLAIM_ = ?, FORWARDABLE_ = ?, PRIORITY_ = ?, FORWARD_STATUS_ = ?, TASK_END_USER_ = ?, TASK_END_USER_NAME_ = ?, TASK_END_DATE_ = ?, NEXT_CANDIDATE_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_ID_);
@@ -591,7 +591,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskAssignee(String TASK_ID_, String ASSIGNEE_, String ASSIGNEE_NAME_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set ASSIGNEE_ = ?, ASSIGNEE_NAME_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, ASSIGNEE_, ASSIGNEE_NAME_, TASK_ID_);
@@ -599,7 +599,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskClaim(String TASK_ID_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set CLAIM_ = '0' where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_ID_);
@@ -607,7 +607,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskForwardStatus(String TASK_ID_, String FORWARD_STATUS_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set FORWARD_STATUS_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, FORWARD_STATUS_, TASK_ID_);
@@ -615,7 +615,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskNextCandidate(String TASK_ID_, String NEXT_CANDIDATE_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set NEXT_CANDIDATE_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, NEXT_CANDIDATE_, TASK_ID_);
@@ -623,7 +623,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskStatus(String TASK_ID_, String TASK_STATUS_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set TASK_STATUS_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_STATUS_, TASK_ID_);
@@ -631,7 +631,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskStatus(String TASK_ID_, String TASK_END_USER_, String TASK_END_USER_NAME_, Date TASK_END_DATE_, String TASK_STATUS_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set TASK_END_USER_ = ?, TASK_END_USER_NAME_ = ?, TASK_END_DATE_ = ?, TASK_STATUS_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, TASK_STATUS_, TASK_ID_);
@@ -639,7 +639,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int updateTaskStatus(String TASK_ID_, String TASK_END_USER_, String TASK_END_USER_NAME_, Date TASK_END_DATE_, String NEXT_CANDIDATE_, String TASK_STATUS_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_TASK set TASK_END_USER_ = ?, TASK_END_USER_NAME_ = ?, TASK_END_DATE_ = ?, NEXT_CANDIDATE_ = ?, TASK_STATUS_ = ? where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, TASK_ID_);
@@ -647,7 +647,7 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public int deleteTask(String TASK_ID_) {
-        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfOperationService.OPERATION_TYPE_DELETE);
+        ffOperationService.insertTaskOp(OdUtils.getUuid(), TASK_ID_, FfService.OPERATION_TYPE_DELETE);
 
         String sql = "delete from FF_TASK where TASK_ID_ = ?";
         return ffJdbcTemplate.update(sql, TASK_ID_);

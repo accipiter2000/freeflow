@@ -57,7 +57,7 @@ public class SubProcNodeHandler implements NodeHandler {
 
         // 新增子流程节点
         String subProcNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(subProcNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SUB_PROC, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(subProcNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SUB_PROC, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         subProcNode = ffService.loadNode(subProcNodeId);
         ffResult.addCreateNode(subProcNode);
 
@@ -112,7 +112,7 @@ public class SubProcNodeHandler implements NodeHandler {
         for (ProcDef assignSubProcDef : assignSubProcDefList) {
             String subProcBranchNodeId = OdUtils.getUuid();
             ProcDef procDef = ffService.loadProcDefByCode(assignSubProcDef.getProcDefCode());// 获取子流程定义对应的流程定义
-            ffNodeService.insertNode(subProcBranchNodeId, subProcNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            ffNodeService.insertNode(subProcBranchNodeId, subProcNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
             Node subProcBranchNode = ffService.loadNode(subProcBranchNodeId);
             ffResult.addCreateNode(subProcBranchNode);
 
@@ -129,14 +129,21 @@ public class SubProcNodeHandler implements NodeHandler {
             }
         }
 
+        String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String inform = nodeDef.getInform();
+        if (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            waitingForCompleteNode = (String) expression.getValue(simpleContext);
+        }
         if (inform != null && inform.indexOf("${") != -1) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
-        // 自动完成通知节点
-        if (FfService.BOOLEAN_TRUE.equals(inform)) {
-            ffResult.addAll(completeNode(subProcNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+        if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
+            // 自动完成通知节点
+            if (FfService.BOOLEAN_TRUE.equals(inform)) {
+                ffResult.addAll(completeNode(subProcNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+            }
         }
 
         return ffResult;
@@ -183,7 +190,7 @@ public class SubProcNodeHandler implements NodeHandler {
         for (ProcDef assignSubProcDef : assignSubProcDefList) {
             String subProcBranchNodeId = OdUtils.getUuid();
             ProcDef procDef = ffService.loadProcDefByCode(assignSubProcDef.getProcDefCode());// 获取子流程定义对应的流程定义
-            ffNodeService.insertNode(subProcBranchNodeId, node.getNodeId(), branchNode.getProcId(), node.getPreviousNodeIds(), null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            ffNodeService.insertNode(subProcBranchNodeId, node.getNodeId(), branchNode.getProcId(), node.getPreviousNodeIds(), null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
             Node subProcBranchNode = ffService.loadNode(subProcBranchNodeId);
             ffResult.addCreateNode(subProcBranchNode);
 

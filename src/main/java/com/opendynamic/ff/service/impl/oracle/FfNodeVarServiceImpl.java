@@ -207,7 +207,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             }
         }
 
-        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfOperationService.OPERATION_TYPE_INSERT);
+        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfService.OPERATION_TYPE_INSERT);
 
         return count;
     }
@@ -216,7 +216,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
     public int updateNodeVar(String NODE_VAR_ID_, String VAR_TYPE_, String VAR_NAME_, String VALUE_, Serializable OBJ_) {
         int count = 0;
 
-        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         if (!FfService.VAR_TYPE_OBJECT.equals(VAR_TYPE_)) {// String
             String sql = "update FF_NODE_VAR set VAR_TYPE_ = ?, VAR_NAME_ = ?, VALUE_ = ?, OBJ_ = null where NODE_VAR_ID_ = ?";
@@ -296,7 +296,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
 
     @Override
     public int deleteNodeVar(String NODE_VAR_ID_) {
-        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfOperationService.OPERATION_TYPE_DELETE);
+        ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfService.OPERATION_TYPE_DELETE);
 
         String sql = "delete from FF_NODE_VAR where NODE_VAR_ID_ = ?";
         return ffJdbcTemplate.update(sql, NODE_VAR_ID_);

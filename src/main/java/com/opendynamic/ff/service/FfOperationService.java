@@ -14,14 +14,6 @@ import com.opendynamic.ff.vo.ThreadOperation;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public interface FfOperationService {
-    public static final String OPERATION_STATUS_UNDOABLE = "1";
-    public static final String OPERATION_STATUS_NOT_UNDOABLE = "0";
-    public static final String OPERATION_STATUS_UNDOED = "9";
-
-    public static final String OPERATION_TYPE_INSERT = "INSERT";
-    public static final String OPERATION_TYPE_UPDATE = "UPDATE";
-    public static final String OPERATION_TYPE_DELETE = "DELETE";
-
     /**
      * 按主键查询,返回单个对象。
      */

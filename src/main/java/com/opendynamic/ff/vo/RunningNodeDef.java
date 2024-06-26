@@ -28,6 +28,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.completeExpression = nodeDef.getCompleteExpression();
         this.completeReturn = nodeDef.getCompleteReturn();
         this.exclusive = nodeDef.getExclusive();
+        this.waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         this.autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
         this.autoCompleteEmptyAssignee = nodeDef.getAutoCompleteEmptyAssignee();
         this.inform = nodeDef.getInform();
@@ -78,6 +79,10 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     public void setExclusive(String exclusive) {
         this.exclusive = exclusive;
+    }
+
+    public void setWaitingForCompleteNode(String waitingForCompleteNode) {
+        this.waitingForCompleteNode = waitingForCompleteNode;
     }
 
     public void setAutoCompleteSameAssignee(String autoCompleteSameAssignee) {

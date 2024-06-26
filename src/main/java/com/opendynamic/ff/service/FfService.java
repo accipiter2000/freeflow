@@ -18,6 +18,7 @@ import com.opendynamic.ff.query.NodeQuery;
 import com.opendynamic.ff.query.NodeVarQuery;
 import com.opendynamic.ff.query.OperationQuery;
 import com.opendynamic.ff.query.ParentNodeQuery;
+import com.opendynamic.ff.query.ProcDefQuery;
 import com.opendynamic.ff.query.ProcQuery;
 import com.opendynamic.ff.query.TaskQuery;
 import com.opendynamic.ff.vo.CandidateList;
@@ -145,12 +146,10 @@ public interface FfService {
      * 节点类型-子流程。
      */
     public static final String NODE_TYPE_SUB_PROC = "SUB_PROC";
-
     /**
      * 节点类型-子流程。
      */
     public static final String NODE_TYPE_ISOLATE_SUB_PROC = "ISOLATE_SUB_PROC";
-
     /**
      * 节点类型-网关。
      */
@@ -203,6 +202,30 @@ public interface FfService {
      * 操作-激活。
      */
     public static final String OPERATION_ACTIVATE = "ACTIVATE";
+    /**
+     * 操作状态-可取消。
+     */
+    public static final String OPERATION_STATUS_UNDOABLE = "1";
+    /**
+     * 操作状态-不可取消。
+     */
+    public static final String OPERATION_STATUS_NOT_UNDOABLE = "0";
+    /**
+     * 操作状态-已取消。
+     */
+    public static final String OPERATION_STATUS_UNDOED = "9";
+    /**
+     * 操作类型-新增。
+     */
+    public static final String OPERATION_TYPE_INSERT = "INSERT";
+    /**
+     * 操作类型-修改。
+     */
+    public static final String OPERATION_TYPE_UPDATE = "UPDATE";
+    /**
+     * 操作类型-删除。
+     */
+    public static final String OPERATION_TYPE_DELETE = "DELETE";
     /**
      * 数据范围-流程定义。
      */
@@ -300,44 +323,6 @@ public interface FfService {
      * @return 流程定义图文件流。
      */
     public InputStream loadProcDefDiagramFile(String procDefId);
-
-    /**
-     * 通用条件综合查询。
-     * 
-     * @param procDefId
-     *        流程定义ID。
-     * @param procDefCode
-     *        流程定义编码。
-     * @param procDefName
-     *        流程定义名称。
-     * @param procDefCat
-     *        流程定义分类。
-     * @param procDefStatusList
-     *        流程定义状态。
-     * @param page
-     *        分页参数，页码。
-     * @param limit
-     *        分页参数，每页大小。
-     * @return 流程定义列表。
-     */
-    public List<ProcDef> selectProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList, Integer page, Integer limit);
-
-    /**
-     * 统计总数，在分页时与通用条件综合查询配套使用。
-     * 
-     * @param procDefId
-     *        流程定义ID。
-     * @param procDefCode
-     *        流程定义编码。
-     * @param procDefName
-     *        流程定义名称。
-     * @param procDefCat
-     *        流程定义分类。
-     * @param procDefStatusList
-     *        流程定义状态。
-     * @return 流程定义总数。
-     */
-    public int countProcDef(String procDefId, String procDefCode, String procDefName, String procDefCat, List<String> procDefStatusList);
 
     /**
      * 部署流程定义。
@@ -478,12 +463,27 @@ public interface FfService {
     public List<RunningNodeDef> getNextRunningNodeDefList(String taskId, Map<String, Object> nodeVarMap);
 
     /**
+     * 获取下个准备运行的运行期节点定义列表。
+     * 
+     * @param node
+     * @param nodeVarMap
+     */
+    public List<RunningNodeDef> getNextRunningNodeDefList(Node node, Map<String, Object> nodeVarMap);
+
+    /**
      * 按主键查询流程。
      * 
      * @param procId
      * @return 流程。
      */
     public Proc loadProc(String procId);
+
+    /**
+     * 创建流程查询。
+     * 
+     * @return 流程查询。
+     */
+    public ProcDefQuery createProcDefQuery();
 
     /**
      * 创建流程查询。
@@ -704,6 +704,14 @@ public interface FfService {
      */
     @FfOperation
     public FfResult deleteProc(String procId, String executor);
+
+    /**
+     * 彻底清除流程。包括流程数据和操作数据
+     * 
+     * @param procId
+     *        流程ID。
+     */
+    public void cleanProc(String procId);
 
     /**
      * 按主键查询节点。

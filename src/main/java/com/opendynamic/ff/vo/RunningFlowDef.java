@@ -16,6 +16,7 @@ public class RunningFlowDef extends FlowDef implements Serializable {
         this.sourceNodeCode = flowDef.getSourceNodeCode();
         this.targetNodeCode = flowDef.getTargetNodeCode();
         this.conditionExpression = flowDef.getConditionExpression();
+
         this.shape = flowDef.getShape();
 
         this.procDef = runningProcDef;

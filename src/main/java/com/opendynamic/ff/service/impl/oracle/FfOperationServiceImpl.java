@@ -419,40 +419,40 @@ public class FfOperationServiceImpl implements FfOperationService {
     public int insertProcOp(String PROC_OP_ID_, String PROC_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
         String sql = "insert into FF_PROC_OP (PROC_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC where PROC_ID_ = ?";
-        return ffJdbcTemplate.update(sql, PROC_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, PROC_ID_);
+        return ffJdbcTemplate.update(sql, PROC_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfService.OPERATION_STATUS_UNDOABLE, PROC_ID_);
     }
 
     @Override
     public int insertNodeOp(String NODE_OP_ID_, String NODE_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
-        String sql = "insert into FF_NODE_OP (NODE_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_ from FF_NODE where NODE_ID_ = ?";
-        return ffJdbcTemplate.update(sql, NODE_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, NODE_ID_);
+        String sql = "insert into FF_NODE_OP (NODE_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, NODE_ID_, PARENT_NODE_ID_, PROC_ID_, PREVIOUS_NODE_IDS_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, NODE_STATUS_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, CREATION_DATE_ from FF_NODE where NODE_ID_ = ?";
+        return ffJdbcTemplate.update(sql, NODE_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfService.OPERATION_STATUS_UNDOABLE, NODE_ID_);
     }
 
     @Override
     public int insertTaskOp(String TASK_OP_ID_, String TASK_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
         String sql = "insert into FF_TASK_OP (TASK_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_ from FF_TASK where TASK_ID_ = ?";
-        return ffJdbcTemplate.update(sql, TASK_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, TASK_ID_);
+        return ffJdbcTemplate.update(sql, TASK_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfService.OPERATION_STATUS_UNDOABLE, TASK_ID_);
     }
 
     @Override
     public int insertNodeVarOp(String NODE_VAR_OP_ID_, String NODE_VAR_ID_, String OPERATION_TYPE_) {
         ThreadOperation threadOperation = getCurrentThreadOperation();
         String sql = "insert into FF_NODE_VAR_OP (NODE_VAR_OP_ID_, OPERATION_ID_, OPERATION_TYPE_, OPERATION_ORDER_, OPERATION_DATE_, OPERATION_STATUS_, NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_) select ?, ?, ?, ?, ?, ?, NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_ from FF_NODE_VAR where NODE_VAR_ID_ = ?";
-        return ffJdbcTemplate.update(sql, NODE_VAR_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE, NODE_VAR_ID_);
+        return ffJdbcTemplate.update(sql, NODE_VAR_OP_ID_, threadOperation.getOperationId(), OPERATION_TYPE_, threadOperation.getNextOrder(), new Date(), FfService.OPERATION_STATUS_UNDOABLE, NODE_VAR_ID_);
     }
 
     @Override
     public void init(String operationType, String procId, String nodeId, String taskId, String memo, String operator, String operatorName) {
         String operationId = OdUtils.getUuid();
-        insertOperation(operationId, operationType, procId, nodeId, taskId, memo, operator, operatorName, new Date(), FfOperationService.OPERATION_STATUS_UNDOABLE);
+        insertOperation(operationId, operationType, procId, nodeId, taskId, memo, operator, operatorName, new Date(), FfService.OPERATION_STATUS_UNDOABLE);
         threadLocal.set(new ThreadOperation(operationId));
     }
 
     @Override
     public void finalize() {
-        threadLocal.set(null);
+        threadLocal.remove();
     }
 
     @Override
@@ -466,10 +466,10 @@ public class FfOperationServiceImpl implements FfOperationService {
 
         // 操作状态为不能取消和已经取消时，抛异常。
         Map<String, Object> operation = loadOperation(operationId);
-        if (operation.get("OPERATION_STATUS_").equals(FfOperationService.OPERATION_STATUS_NOT_UNDOABLE)) {
+        if (operation.get("OPERATION_STATUS_").equals(FfService.OPERATION_STATUS_NOT_UNDOABLE)) {
             throw new RuntimeException("errors.cannotUndo");
         }
-        if (operation.get("OPERATION_STATUS_").equals(FfOperationService.OPERATION_STATUS_UNDOED)) {
+        if (operation.get("OPERATION_STATUS_").equals(FfService.OPERATION_STATUS_UNDOED)) {
             throw new RuntimeException("errors.alreadyUndoed");
         }
 
@@ -543,12 +543,12 @@ public class FfOperationServiceImpl implements FfOperationService {
 
         String OPERATION_TYPE_ = (String) procOp.get("OPERATION_TYPE_");
         String sql;
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_INSERT)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_INSERT)) {
             ffResult.addDeleteProc(ffService.loadProc((String) procOp.get("PROC_ID_")));
             sql = "delete from FF_PROC where PROC_ID_ = ?";
             ffJdbcTemplate.update(sql, procOp.get("PROC_ID_"));
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_UPDATE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_UPDATE)) {
             sql = "select * from FF_PROC where PROC_ID_ = ?";
             List<Map<String, Object>> procList = ffJdbcTemplate.queryForList(sql, procOp.get("PROC_ID_"));
             String CURRENT_PROC_STATUS_ = (String) procList.get(0).get("PROC_STATUS_");
@@ -573,7 +573,7 @@ public class FfOperationServiceImpl implements FfOperationService {
                 }
             }
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_DELETE)) {
             sql = "insert into FF_PROC(PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) select PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_ from FF_PROC_OP where PROC_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, procOp.get("PROC_OP_ID_"));
             ffResult.addCreateProc(ffService.loadProc((String) procOp.get("PROC_ID_")));
@@ -592,18 +592,18 @@ public class FfOperationServiceImpl implements FfOperationService {
 
         String OPERATION_TYPE_ = (String) nodeOp.get("OPERATION_TYPE_");
         String sql;
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_INSERT)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_INSERT)) {
             ffResult.addDeleteNode(ffService.loadNode((String) nodeOp.get("NODE_ID_")));
             sql = "delete from FF_NODE where NODE_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeOp.get("NODE_ID_"));
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_UPDATE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_UPDATE)) {
             sql = "select * from FF_NODE where NODE_ID_ = ?";
             List<Map<String, Object>> nodeList = ffJdbcTemplate.queryForList(sql, nodeOp.get("NODE_ID_"));
             String CURRENT_NODE_STATUS_ = (String) nodeList.get(0).get("NODE_STATUS_");
             String UNDO_NODE_STATUS_ = (String) nodeOp.get("NODE_STATUS_");
 
-            sql = "update FF_NODE set (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) = (select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?) where NODE_ID_ = ?";
+            sql = "update FF_NODE set (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) = (select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?) where NODE_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeOp.get("NODE_OP_ID_"), nodeOp.get("NODE_ID_"));
 
             Node node = ffService.loadNode((String) nodeOp.get("NODE_ID_"));
@@ -622,8 +622,8 @@ public class FfOperationServiceImpl implements FfOperationService {
                 }
             }
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
-            sql = "insert into FF_NODE (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?";
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_DELETE)) {
+            sql = "insert into FF_NODE (NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_) select NODE_ID_, PARENT_NODE_ID_, PROC_ID_, LAST_COMPLETE_NODE_IDS_, SUB_PROC_DEF_ID_, ADJUST_SUB_PROC_DEF_ID_, NODE_TYPE_, NODE_CODE_, NODE_NAME_, PARENT_NODE_CODE_, CANDIDATE_ASSIGNEE_, COMPLETE_EXPRESSION_, COMPLETE_RETURN_, EXCLUSIVE_, WAITING_FOR_COMPLETE_NODE_, AUTO_COMPLETE_SAME_ASSIGNEE_, AUTO_COMPLETE_EMPTY_ASSIGNEE_, INFORM_, ASSIGNEE_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, NODE_END_USER_, NODE_END_USER_NAME_, NODE_END_DATE_, NEXT_CANDIDATE_, ISOLATE_SUB_PROC_DEF_CODE_, ISOLATE_SUB_PROC_CANDIDATE_, ISOLATE_SUB_PROC_STATUS_, NODE_STATUS_, CREATION_DATE_ from FF_NODE_OP where NODE_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeOp.get("NODE_OP_ID_"));
             ffResult.addCreateNode(ffService.loadNode((String) nodeOp.get("NODE_ID_")));
         }
@@ -641,12 +641,12 @@ public class FfOperationServiceImpl implements FfOperationService {
 
         String OPERATION_TYPE_ = (String) taskOp.get("OPERATION_TYPE_");
         String sql;
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_INSERT)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_INSERT)) {
             ffResult.addDeleteTask(ffService.loadTask((String) taskOp.get("TASK_ID_")));
             sql = "delete from FF_TASK where TASK_ID_ = ?";
             ffJdbcTemplate.update(sql, taskOp.get("TASK_ID_"));
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_UPDATE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_UPDATE)) {
             sql = "select * from FF_TASK where TASK_ID_ = ?";
             List<Map<String, Object>> taskList = ffJdbcTemplate.queryForList(sql, taskOp.get("TASK_ID_"));
             String CURRENT_TASK_STATUS_ = (String) taskList.get(0).get("TASK_STATUS_");
@@ -671,7 +671,7 @@ public class FfOperationServiceImpl implements FfOperationService {
                 }
             }
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_DELETE)) {
             sql = "insert into FF_TASK(TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_) select TASK_ID_, NODE_ID_, PREVIOUS_TASK_ID_, TASK_TYPE_, ASSIGNEE_, ASSIGNEE_NAME_, ACTION_, DUE_DATE_, CLAIM_, FORWARDABLE_, PRIORITY_, FORWARD_STATUS_, TASK_END_USER_, TASK_END_USER_NAME_, TASK_END_DATE_, NEXT_CANDIDATE_, TASK_STATUS_, CREATION_DATE_ from FF_TASK_OP where TASK_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, taskOp.get("TASK_OP_ID_"));
             ffResult.addCreateTask(ffService.loadTask((String) taskOp.get("TASK_ID_")));
@@ -688,15 +688,15 @@ public class FfOperationServiceImpl implements FfOperationService {
     private void undoNodeVarOp(Map<String, Object> nodeVarOp) {
         String OPERATION_TYPE_ = (String) nodeVarOp.get("OPERATION_TYPE_");
         String sql;
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_INSERT)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_INSERT)) {
             sql = "delete from FF_NODE_VAR where NODE_VAR_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeVarOp.get("NODE_VAR_ID_"));
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_UPDATE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_UPDATE)) {
             sql = "update FF_NODE_VAR set (NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_) = (select NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_ from FF_NODE_VAR_OP where NODE_VAR_OP_ID_ = ?) where NODE_VAR_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeVarOp.get("NODE_VAR_OP_ID_"), nodeVarOp.get("NODE_VAR_ID_"));
         }
-        if (OPERATION_TYPE_.equals(FfOperationService.OPERATION_TYPE_DELETE)) {
+        if (OPERATION_TYPE_.equals(FfService.OPERATION_TYPE_DELETE)) {
             sql = "insert into FF_NODE_VAR(NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_)  select NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, OBJ_, CREATION_DATE_ from FF_NODE_VAR_OP where NODE_VAR_OP_ID_ = ?";
             ffJdbcTemplate.update(sql, nodeVarOp.get("NODE_VAR_OP_ID_"));
         }

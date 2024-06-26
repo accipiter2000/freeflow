@@ -61,7 +61,7 @@ public class TaskNodeHandler implements NodeHandler {
 
         // 新增节点
         String taskNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(taskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(taskNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         taskNode = ffService.loadNode(taskNodeId);
         ffResult.addCreateNode(taskNode);
 
@@ -162,12 +162,17 @@ public class TaskNodeHandler implements NodeHandler {
         String systemExecutor = FfService.USER_FF_SYSTEM;
         String systemExecutorName = ffHelper.getUserName(systemExecutor);
         String exclusive = nodeDef.getExclusive();
+        String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
         String autoCompleteEmptyAssignee = nodeDef.getAutoCompleteEmptyAssignee();
         String inform = nodeDef.getInform();
         if (exclusive != null && exclusive.indexOf("${") != -1) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
             exclusive = (String) expression.getValue(simpleContext);
+        }
+        if (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) {// JUEL解析
+            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            waitingForCompleteNode = (String) expression.getValue(simpleContext);
         }
         if (autoCompleteSameAssignee != null && autoCompleteSameAssignee.indexOf("${") != -1) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
@@ -182,44 +187,46 @@ public class TaskNodeHandler implements NodeHandler {
             inform = (String) expression.getValue(simpleContext);
         }
 
-        // 自动完成通知节点
-        if (FfService.BOOLEAN_TRUE.equals(inform)) {
-            ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, systemExecutor));
-        }
-        // 自动完成相同办理人任务
-        if (FfService.BOOLEAN_TRUE.equals(autoCompleteSameAssignee)) {
-            for (Task createTask : createTaskList) {
-                if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssigneeList(ffHelper.getAllUserIdList(createTask.getAssignee())).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_COMPLETE)).count() > 0) {
-                    Date completeDate = new Date();
-                    ffTaskService.updateTaskStatus(createTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
-                    createTask.setTaskEndUser(systemExecutor);
-                    createTask.setTaskEndUserName(systemExecutorName);
-                    createTask.setTaskEndDate(completeDate);
-                    createTask.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
-                    ffResult.addCompleteTask(createTask);
+        if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
+            // 自动完成通知节点
+            if (FfService.BOOLEAN_TRUE.equals(inform)) {
+                ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, systemExecutor));
+            }
+            // 自动完成相同办理人任务
+            if (FfService.BOOLEAN_TRUE.equals(autoCompleteSameAssignee)) {
+                for (Task createTask : createTaskList) {
+                    if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssigneeList(ffHelper.getAllUserIdList(createTask.getAssignee())).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_COMPLETE)).count() > 0) {
+                        Date completeDate = new Date();
+                        ffTaskService.updateTaskStatus(createTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
+                        createTask.setTaskEndUser(systemExecutor);
+                        createTask.setTaskEndUserName(systemExecutorName);
+                        createTask.setTaskEndDate(completeDate);
+                        createTask.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
+                        ffResult.addCompleteTask(createTask);
 
-                    if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
-                        List<Task> remainActiveTaskList = ffService.createTaskQuery().setNodeId(taskNode.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).queryForObjectList();
-                        for (Task remainActiveTask : remainActiveTaskList) {
-                            ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                            remainActiveTask.setTaskEndUser(systemExecutor);
-                            remainActiveTask.setTaskEndUserName(systemExecutorName);
-                            remainActiveTask.setTaskEndDate(completeDate);
-                            remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
-                            ffResult.addTerminateTask(remainActiveTask);
+                        if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
+                            List<Task> remainActiveTaskList = ffService.createTaskQuery().setNodeId(taskNode.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).queryForObjectList();
+                            for (Task remainActiveTask : remainActiveTaskList) {
+                                ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_TERMINATE);
+                                remainActiveTask.setTaskEndUser(systemExecutor);
+                                remainActiveTask.setTaskEndUserName(systemExecutorName);
+                                remainActiveTask.setTaskEndDate(completeDate);
+                                remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
+                                ffResult.addTerminateTask(remainActiveTask);
+                            }
+
+                            ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, systemExecutor));
+                            break;
                         }
 
                         ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, systemExecutor));
-                        break;
                     }
-
-                    ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, systemExecutor));
                 }
             }
-        }
-        // 自动完成没有办理人节点
-        if (createTaskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
-            ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+            // 自动完成没有办理人节点
+            if (createTaskList.size() == 0 && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
+                ffResult.addAll(completeNode(taskNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+            }
         }
 
         return ffResult;

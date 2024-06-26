@@ -14,6 +14,7 @@ public class RunningNoteDef extends NoteDef implements Serializable {
         this.noteCode = noteDef.getNoteCode();
         this.noteName = noteDef.getNoteName();
         this.dynamic = noteDef.getDynamic();
+
         this.shape = noteDef.getShape();
 
         this.procDef = runningProcDef;

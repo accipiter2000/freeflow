@@ -30,12 +30,13 @@ public interface FfProcDefService {
     /**
      * 通用查询，返回对象列表。
      */
-    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Integer page, Integer limit);
+    public List<Map<String, Object>> selectProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, String EXT_ATTR_1_, List<String> EXT_ATTR_1_LIST, String EXT_ATTR_2_, List<String> EXT_ATTR_2_LIST, String EXT_ATTR_3_, List<String> EXT_ATTR_3_LIST, String EXT_ATTR_4_, List<String> EXT_ATTR_4_LIST, String EXT_ATTR_5_, List<String> EXT_ATTR_5_LIST, String EXT_ATTR_6_, List<String> EXT_ATTR_6_LIST, String EXT_ATTR_7_, List<String> EXT_ATTR_7_LIST, String EXT_ATTR_8_, List<String> EXT_ATTR_8_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Integer page,
+            Integer limit);
 
     /**
      * 总数查询，在分页时与通用查询配套使用。
      */
-    public int countProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST);
+    public int countProcDef(String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, String EXT_ATTR_1_, List<String> EXT_ATTR_1_LIST, String EXT_ATTR_2_, List<String> EXT_ATTR_2_LIST, String EXT_ATTR_3_, List<String> EXT_ATTR_3_LIST, String EXT_ATTR_4_, List<String> EXT_ATTR_4_LIST, String EXT_ATTR_5_, List<String> EXT_ATTR_5_LIST, String EXT_ATTR_6_, List<String> EXT_ATTR_6_LIST, String EXT_ATTR_7_, List<String> EXT_ATTR_7_LIST, String EXT_ATTR_8_, List<String> EXT_ATTR_8_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST);
 
     /**
      * 按主键列表查询，返回对象列表，按主键列表顺序排序。
@@ -45,7 +46,7 @@ public interface FfProcDefService {
     /**
      * 新增对象。
      */
-    public int insertProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, String PROC_DEF_MODEL_, InputStream PROC_DEF_DIAGRAM_FILE_, String PROC_DEF_DIAGRAM_FILE_NAME_, Integer PROC_DEF_DIAGRAM_FILE_LENGTH_, Integer PROC_DEF_DIAGRAM_WIDTH_, Integer PROC_DEF_DIAGRAM_HEIGHT_, String MEMO_, String PROC_DEF_STATUS_, Date CREATION_DATE_, Date UPDATE_DATE_, String OPERATOR_ID_, String OPERATOR_NAME_);
+    public int insertProcDef(String PROC_DEF_ID_, String PROC_DEF_CODE_, String PROC_DEF_NAME_, String PROC_DEF_CAT_, String PROC_DEF_MODEL_, InputStream PROC_DEF_DIAGRAM_FILE_, String PROC_DEF_DIAGRAM_FILE_NAME_, Integer PROC_DEF_DIAGRAM_FILE_LENGTH_, Integer PROC_DEF_DIAGRAM_WIDTH_, Integer PROC_DEF_DIAGRAM_HEIGHT_, String MEMO_, String EXT_ATTR_1_, String EXT_ATTR_2_, String EXT_ATTR_3_, String EXT_ATTR_4_, String EXT_ATTR_5_, String EXT_ATTR_6_, String EXT_ATTR_7_, String EXT_ATTR_8_, String PROC_DEF_STATUS_, Date CREATION_DATE_, Date UPDATE_DATE_, String OPERATOR_ID_, String OPERATOR_NAME_);
 
     /**
      * 修改对象。

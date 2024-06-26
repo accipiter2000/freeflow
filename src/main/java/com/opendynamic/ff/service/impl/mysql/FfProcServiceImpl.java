@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.OdSqlCriteria;
 import com.opendynamic.OdUtils;
+import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfOperationService;
 import com.opendynamic.ff.service.FfProcService;
 import com.opendynamic.ff.service.FfService;
@@ -23,6 +24,8 @@ import com.opendynamic.ff.service.FfService;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class FfProcServiceImpl implements FfProcService {
+    @Autowired
+    private FfNodeService ffNodeService;
     @Autowired
     private FfOperationService ffOperationService;
     @Autowired
@@ -526,14 +529,14 @@ public class FfProcServiceImpl implements FfProcService {
         String sql = "insert into FF_PROC (PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int count = ffJdbcTemplate.update(sql, PROC_ID_, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, CREATION_DATE_);
 
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_INSERT);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_INSERT);
 
         return count;
     }
 
     @Override
     public int updateProc(String PROC_ID_, String PROC_DEF_ID_, String ADJUST_PROC_DEF_ID_, String ISOLATE_SUB_PROC_NODE_ID_, String BIZ_ID_, String BIZ_TYPE_, String BIZ_CODE_, String BIZ_NAME_, String BIZ_DESC_, String PROC_START_USER_, String PROC_START_USER_NAME_, String PROC_END_USER_, String PROC_END_USER_NAME_, Date PROC_END_DATE_) {
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_PROC set PROC_DEF_ID_ = ?, ADJUST_PROC_DEF_ID_ = ?, ISOLATE_SUB_PROC_NODE_ID_ = ?, BIZ_ID_ = ?, BIZ_TYPE_ = ?, BIZ_CODE_ = ?, BIZ_NAME_ = ?, BIZ_DESC_ = ?, PROC_START_USER_ = ?, PROC_START_USER_NAME_ = ?, PROC_END_USER_ = ?, PROC_END_USER_NAME_ = ?, PROC_END_DATE_ = ? where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, PROC_DEF_ID_, ADJUST_PROC_DEF_ID_, ISOLATE_SUB_PROC_NODE_ID_, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_START_USER_, PROC_START_USER_NAME_, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_ID_);
@@ -541,7 +544,7 @@ public class FfProcServiceImpl implements FfProcService {
 
     @Override
     public int updateProcBizInfo(String PROC_ID_, String BIZ_ID_, String BIZ_TYPE_, String BIZ_CODE_, String BIZ_NAME_, String BIZ_DESC_) {
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_PROC set BIZ_ID_ = ?, BIZ_TYPE_ = ?, BIZ_CODE_ = ?, BIZ_NAME_ = ?, BIZ_DESC_ = ? where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, BIZ_ID_, BIZ_TYPE_, BIZ_CODE_, BIZ_NAME_, BIZ_DESC_, PROC_ID_);
@@ -549,7 +552,7 @@ public class FfProcServiceImpl implements FfProcService {
 
     @Override
     public int updateProcStatus(String PROC_ID_, String PROC_STATUS_) {
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_PROC set PROC_STATUS_ = ? where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, PROC_STATUS_, PROC_ID_);
@@ -557,7 +560,7 @@ public class FfProcServiceImpl implements FfProcService {
 
     @Override
     public int updateProcStatus(String PROC_ID_, String PROC_END_USER_, String PROC_END_USER_NAME_, Date PROC_END_DATE_, String PROC_STATUS_) {
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_UPDATE);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_UPDATE);
 
         String sql = "update FF_PROC set PROC_END_USER_ = ?, PROC_END_USER_NAME_ = ?, PROC_END_DATE_ = ?, PROC_STATUS_ = ? where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, PROC_END_USER_, PROC_END_USER_NAME_, PROC_END_DATE_, PROC_STATUS_, PROC_ID_);
@@ -565,9 +568,64 @@ public class FfProcServiceImpl implements FfProcService {
 
     @Override
     public int deleteProc(String PROC_ID_) {
-        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfOperationService.OPERATION_TYPE_DELETE);
+        ffOperationService.insertProcOp(OdUtils.getUuid(), PROC_ID_, FfService.OPERATION_TYPE_DELETE);
 
         String sql = "delete from FF_PROC where PROC_ID_ = ?";
         return ffJdbcTemplate.update(sql, PROC_ID_);
+    }
+
+    @Override
+    public int cleanProc(String PROC_ID_) {
+        String sql;
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
+
+        List<Map<String, Object>> operationList = ffOperationService.selectOperation(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, PROC_ID_, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1, -1, null);
+        if (operationList.size() > 0) {
+            List<String> OPERATION_ID_LIST = OdUtils.collect(operationList, "OPERATION_ID_", String.class);
+            paramMap.put("OPERATION_ID_LIST", OPERATION_ID_LIST);
+
+            sql = "delete from FF_NODE_VAR_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+            sql = "delete from FF_TASK_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+            sql = "delete from FF_NODE_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+            sql = "delete from FF_PROC_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+
+            sql = "with recursive CTE as (select * from FF_OPERATION_FOLLOW_UP where OPERATION_ID_ = ? union all select FF_OPERATION_FOLLOW_UP.* from FF_OPERATION_FOLLOW_UP inner join CTE on CTE.FOLLOW_UP_OPERATION_ID_ = FF_OPERATION_FOLLOW_UP.OPERATION_ID_) select * from CTE";
+            List<Map<String, Object>> operationFollowUpList = ffJdbcTemplate.queryForList(sql, operationList.get(operationList.size() - 1).get("OPERATION_ID_"));
+            List<String> OPERATION_FOLLOW_UP_ID_LIST = OdUtils.collect(operationFollowUpList, "OPERATION_FOLLOW_UP_ID_", String.class);
+            for (int i = OPERATION_FOLLOW_UP_ID_LIST.size() - 1; i >= 0; i--) {
+                sql = "delete from FF_OPERATION_FOLLOW_UP where OPERATION_FOLLOW_UP_ID_ = ?";
+                ffJdbcTemplate.update(sql, OPERATION_FOLLOW_UP_ID_LIST.get(i));
+            }
+
+            sql = "delete from FF_OPERATION where PROC_ID_ = ?";
+            ffJdbcTemplate.update(sql, PROC_ID_);
+        }
+
+        List<Map<String, Object>> nodeList = ffNodeService.selectChildNode(PROC_ID_, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, true, true, null);
+        if (nodeList.size() > 0) {
+            List<String> NODE_ID_LIST = OdUtils.collect(nodeList, "NODE_ID_", String.class);
+            paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
+
+            sql = "delete from FF_NODE_VAR where NODE_ID_ in (:NODE_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+
+            sql = "delete from FF_TASK where NODE_ID_ in (:NODE_ID_LIST)";
+            namedParameterJdbcTemplate.update(sql, paramMap);
+
+            for (int i = NODE_ID_LIST.size() - 1; i >= 0; i--) {
+                sql = "delete from FF_NODE where NODE_ID_ = ?";
+                ffJdbcTemplate.update(sql, NODE_ID_LIST.get(i));
+            }
+        }
+
+        sql = "delete from FF_PROC where PROC_ID_ = ?";
+        ffJdbcTemplate.update(sql, PROC_ID_);
+
+        return 1;
     }
 }

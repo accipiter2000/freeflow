@@ -50,7 +50,7 @@ public class FfOperationAspect {
     private JdbcTemplate ffJdbcTemplate;
 
     @Around("@annotation(com.opendynamic.ff.FfOperation)")
-    public Object wrapper(ProceedingJoinPoint point) throws Throwable {
+    public Object wrapper(ProceedingJoinPoint point) {
         FfResult ffResult = null;
 
         Object[] arguments = point.getArgs();
@@ -103,7 +103,13 @@ public class FfOperationAspect {
             ffOperationService.init(signature.getName(), procId, nodeId, taskId, memo, operator, operatorName);// 初始化ffOperation。
         }
 
-        ffResult = (FfResult) point.proceed(arguments);// 执行原方法
+        try {
+            ffResult = (FfResult) point.proceed(arguments);// 执行原方法
+        }
+        catch (Throwable e) {
+            ffOperationService.finalize();// 清理threadLocal
+            throw new RuntimeException(e);
+        }
 
         // 后期处理。
         // 新增流程补上流程ID.
@@ -206,17 +212,17 @@ public class FfOperationAspect {
         List<String> insertIdList = new ArrayList<>();// 获取所有新增操作的原表ID
         List<Map<String, Object>> insertDataList = new ArrayList<>();// 获取所有新增操作的原表记录
         for (Map<String, Object> data : dataList) {
-            if (data.get("OPERATION_TYPE_").equals(FfOperationService.OPERATION_TYPE_INSERT)) {
+            if (data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT)) {
                 insertIdList.add((String) data.get(key));
                 insertDataList.add(data);
             }
         }
 
         for (Map<String, Object> data : dataList) {// 汇总受影响的原表ID
-            if (data.get("OPERATION_TYPE_").equals(FfOperationService.OPERATION_TYPE_INSERT)) {// 本次的新增操作。
+            if (data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT)) {// 本次的新增操作。
                 continue;
             }
-            if (!data.get("OPERATION_TYPE_").equals(FfOperationService.OPERATION_TYPE_INSERT) && insertIdList.contains(data.get(key))) {// 本次的更新操作，但更新的是本次新增的记录
+            if (!data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT) && insertIdList.contains(data.get(key))) {// 本次的更新操作，但更新的是本次新增的记录
                 continue;
             }
 
@@ -285,7 +291,7 @@ public class FfOperationAspect {
 
         if ("PROC_ID_".equals(key)) {// 终止挂起流程，影响所有本次操作外的操作
             for (Map<String, Object> data : dataList) {
-                if (!data.get("OPERATION_TYPE_").equals(FfOperationService.OPERATION_TYPE_INSERT) && !data.get("OPERATION_TYPE_").equals(FfOperationService.OPERATION_TYPE_DELETE)) {
+                if (!data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT) && !data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_DELETE)) {
                     String sql = "select * from FF_PROC where PROC_ID_ = ?";
                     List<Map<String, Object>> procList = ffJdbcTemplate.queryForList(sql, data.get("PROC_ID_"));
                     if (!procList.get(0).get("PROC_STATUS_").equals(data.get("PROC_STATUS_"))) {

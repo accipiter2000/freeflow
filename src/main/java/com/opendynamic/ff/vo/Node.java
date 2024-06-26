@@ -22,6 +22,7 @@ public class Node implements Serializable {
     private String completeExpression; // 完成表达式
     private String completeReturn; // 完成后返回前一个节点
     private String exclusive; // 排他
+    private String waitingForCompleteNode;// 等待完成节点
     private String autoCompleteSameAssignee; // 自动完成相同办理人任务
     private String autoCompleteEmptyAssignee; // 自动完成没有办理人节点
     private String inform; // 通知
@@ -86,6 +87,7 @@ public class Node implements Serializable {
         this.completeExpression = (String) data.get("COMPLETE_EXPRESSION_");
         this.completeReturn = (String) data.get("COMPLETE_RETURN_");
         this.exclusive = (String) data.get("EXCLUSIVE_");
+        this.waitingForCompleteNode = (String) data.get("WAITING_FOR_COMPLETE_NODE_");
         this.autoCompleteSameAssignee = (String) data.get("AUTO_COMPLETE_SAME_ASSIGNEE_");
         this.autoCompleteEmptyAssignee = (String) data.get("AUTO_COMPLETE_EMPTY_ASSIGNEE_");
         this.inform = (String) data.get("INFORM_");
@@ -238,6 +240,14 @@ public class Node implements Serializable {
 
     public void setExclusive(String exclusive) {
         this.exclusive = exclusive;
+    }
+
+    public String getWaitingForCompleteNode() {
+        return waitingForCompleteNode;
+    }
+
+    public void setWaitingForCompleteNode(String waitingForCompleteNode) {
+        this.waitingForCompleteNode = waitingForCompleteNode;
     }
 
     public String getAutoCompleteSameAssignee() {

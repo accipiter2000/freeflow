@@ -28,6 +28,7 @@ public class NodeDef implements Serializable {
     protected String completeExpression = FfService.DEFAULT_COMPLETE_EXPRESSION_;// 完成表达式
     protected String completeReturn = FfService.BOOLEAN_FALSE;// 完成后返回前一个节点
     protected String exclusive = FfService.BOOLEAN_FALSE;// 排他
+    protected String waitingForCompleteNode = FfService.BOOLEAN_FALSE;// 等待完成节点
     protected String autoCompleteSameAssignee = FfService.BOOLEAN_FALSE;// 自动完成相同办理人任务
     protected String autoCompleteEmptyAssignee = FfService.BOOLEAN_FALSE;// 自动完成没有办理人节点
     protected String inform = FfService.BOOLEAN_FALSE;// 通知
@@ -46,13 +47,13 @@ public class NodeDef implements Serializable {
     @JsonIgnore
     protected transient NodeDef parentNodeDef;// 上级节点定义
     @JsonIgnore
-    protected transient List<NodeDef> childNodeDefList;// 下级节点定义列表
+    protected transient List<NodeDef> childNodeDefList = new ArrayList<>();// 下级节点定义列表
     @JsonIgnore
-    protected transient List<NodeDef> startChildNodeDefList;// 下级节点定义列表
+    protected transient List<NodeDef> startChildNodeDefList = new ArrayList<>();// 下级节点定义列表
     @JsonIgnore
-    protected transient List<FlowDef> incomingFlowDefList;// 入口流转定义列表
+    protected transient List<FlowDef> incomingFlowDefList = new ArrayList<>();// 入口流转定义列表
     @JsonIgnore
-    protected transient List<FlowDef> outgoingFlowDefList;// 出口流转定义列表
+    protected transient List<FlowDef> outgoingFlowDefList = new ArrayList<>();// 出口流转定义列表
 
     /**
      * 初始化。
@@ -79,23 +80,15 @@ public class NodeDef implements Serializable {
             throw new RuntimeException("errors.candidateCannotCoexistWithAssignee");
         }
 
-        childNodeDefList = new ArrayList<>();
-        startChildNodeDefList = new ArrayList<>();
-        incomingFlowDefList = new ArrayList<>();
-        outgoingFlowDefList = new ArrayList<>();
-
         shape.init(this);
     }
 
-    /**
-     * 初始化阶段。
-     */
-    public void initStage() {
+    // 初始化节点关系
+    public void initNodeDefRelation() {
         parentNodeDef = procDef.getNodeDef(parentNodeCode);
         if (parentNodeCode != null && parentNodeDef == null) {
             throw new RuntimeException("errors.parentNodeDefNotFound");
         }
-
         if (nodeType.equals(FfService.NODE_TYPE_STAGE)) {
             for (NodeDef nodeDef : procDef.getNodeDefList()) {
                 if (nodeCode.equals(nodeDef.getParentNodeCode())) {
@@ -145,6 +138,10 @@ public class NodeDef implements Serializable {
 
     public String getExclusive() {
         return exclusive;
+    }
+
+    public String getWaitingForCompleteNode() {
+        return waitingForCompleteNode;
     }
 
     public String getAutoCompleteSameAssignee() {

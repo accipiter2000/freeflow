@@ -29,6 +29,14 @@ public class ProcDef implements Serializable {
     protected int procDefDiagramWidth; // 流程定义图宽度
     protected int procDefDiagramHeight; // 流程定义图高度
     protected String memo; // 备注
+    protected String extAttr1; // 扩展属性1
+    protected String extAttr2; // 扩展属性2
+    protected String extAttr3; // 扩展属性3
+    protected String extAttr4; // 扩展属性4
+    protected String extAttr5; // 扩展属性5
+    protected String extAttr6; // 扩展属性6
+    protected String extAttr7; // 扩展属性7
+    protected String extAttr8; // 扩展属性8
     protected int version; // 版本
     protected String procDefStatus; // 流程定义状态
     protected Date creationDate; // 创建日期
@@ -77,6 +85,14 @@ public class ProcDef implements Serializable {
         this.procDefDiagramWidth = procDef.getProcDefDiagramWidth();
         this.procDefDiagramHeight = procDef.getProcDefDiagramHeight();
         this.memo = procDef.getMemo();
+        this.extAttr1 = (String) data.get("EXT_ATTR_1_");
+        this.extAttr2 = (String) data.get("EXT_ATTR_2_");
+        this.extAttr3 = (String) data.get("EXT_ATTR_3_");
+        this.extAttr4 = (String) data.get("EXT_ATTR_4_");
+        this.extAttr5 = (String) data.get("EXT_ATTR_5_");
+        this.extAttr6 = (String) data.get("EXT_ATTR_6_");
+        this.extAttr7 = (String) data.get("EXT_ATTR_7_");
+        this.extAttr8 = (String) data.get("EXT_ATTR_8_");
         this.version = (data.get("VERSION_") != null) ? ((BigDecimal) data.get("VERSION_")).intValue() : 0;
         this.procDefStatus = (data.get("PROC_DEF_STATUS_") != null) ? (String) data.get("PROC_DEF_STATUS_") : "1";
         this.creationDate = (Date) data.get("CREATION_DATE_");
@@ -132,9 +148,9 @@ public class ProcDef implements Serializable {
             procVarDef.init(this);
         }
 
-        // 初始化阶段
+        // 初始化节点关联关系
         for (NodeDef nodeDef : nodeDefList) {
-            nodeDef.initStage();
+            nodeDef.initNodeDefRelation();
         }
 
         // 初始化起始节点定义列表
@@ -227,6 +243,38 @@ public class ProcDef implements Serializable {
 
     public String getMemo() {
         return memo;
+    }
+
+    public String getExtAttr1() {
+        return extAttr1;
+    }
+
+    public String getExtAttr2() {
+        return extAttr2;
+    }
+
+    public String getExtAttr3() {
+        return extAttr3;
+    }
+
+    public String getExtAttr4() {
+        return extAttr4;
+    }
+
+    public String getExtAttr5() {
+        return extAttr5;
+    }
+
+    public String getExtAttr6() {
+        return extAttr6;
+    }
+
+    public String getExtAttr7() {
+        return extAttr7;
+    }
+
+    public String getExtAttr8() {
+        return extAttr8;
     }
 
     public int getVersion() {
@@ -325,6 +373,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有流程变量定义MAP。
+     * 
      * @return
      */
     public Map<String, Object> getProcVarDefMap() {

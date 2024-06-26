@@ -54,7 +54,7 @@ public class StageNodeHandler implements NodeHandler {
 
         // 新增阶段节点
         String stageNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(stageNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_STAGE, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        ffNodeService.insertNode(stageNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_STAGE, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         stageNode = ffService.loadNode(stageNodeId);
         ffResult.addCreateNode(stageNode);
 
@@ -63,8 +63,9 @@ public class StageNodeHandler implements NodeHandler {
             ffResult.addAll(ffService.getNodeHandler(startChildNodeDef.getNodeType()).insertNodeByNodeDef(startChildNodeDef, stageNode, previousNodeIds, candidateList, triggerOperation, executor));
         }
 
+        String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String inform = nodeDef.getInform();
-        if (inform != null && inform.indexOf("${") != -1) {// JUEL解析
+        if ((waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) || (inform != null && inform.indexOf("${") != -1)) {// JUEL解析
             // 设置JUEL解析环境
             Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
             nodeVarMap.putAll(ffService.getInternalServiceMap());
@@ -77,13 +78,19 @@ public class StageNodeHandler implements NodeHandler {
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
                 simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
             }
-            // JUEL解析
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
+
+            ValueExpression expression = null;
+            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            waitingForCompleteNode = (String) expression.getValue(simpleContext);
+            expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
-        // 自动完成通知节点
-        if (FfService.BOOLEAN_TRUE.equals(inform)) {
-            ffResult.addAll(completeNode(stageNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+
+        if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
+            // 自动完成通知节点
+            if (FfService.BOOLEAN_TRUE.equals(inform)) {
+                ffResult.addAll(completeNode(stageNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+            }
         }
 
         return ffResult;
