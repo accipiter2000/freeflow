@@ -340,11 +340,11 @@ comment on column FF_NODE.NODE_END_USER_NAME_
 comment on column FF_NODE.NODE_END_DATE_
   is '节点完成日期';
 comment on column FF_NODE.NEXT_CANDIDATE_
-  is '下个候选人';
+  is '下一个候选';
 comment on column FF_NODE.ISOLATE_SUB_PROC_DEF_CODE_
   is '独立子流程定义编码';
 comment on column FF_NODE.ISOLATE_SUB_PROC_CANDIDATE_
-  is '独立子流程候选人';
+  is '独立子流程候选';
 comment on column FF_NODE.ISOLATE_SUB_PROC_STATUS_
   is '独立子流程状态';
 comment on column FF_NODE.NODE_STATUS_
@@ -530,11 +530,11 @@ comment on column FF_NODE_OP.NODE_END_USER_NAME_
 comment on column FF_NODE_OP.NODE_END_DATE_
   is '节点完成日期';
 comment on column FF_NODE_OP.NEXT_CANDIDATE_
-  is '下个候选人';
+  is '下一个候选';
 comment on column FF_NODE_OP.ISOLATE_SUB_PROC_DEF_CODE_
   is '独立子流程定义编码';
 comment on column FF_NODE_OP.ISOLATE_SUB_PROC_CANDIDATE_
-  is '独立子流程候选人';
+  is '独立子流程候选';
 comment on column FF_NODE_OP.ISOLATE_SUB_PROC_STATUS_
   is '独立子流程状态';
 comment on column FF_NODE_OP.NODE_STATUS_
@@ -810,7 +810,7 @@ comment on column FF_TASK.TASK_END_USER_NAME_
 comment on column FF_TASK.TASK_END_DATE_
   is '任务完成日期';
 comment on column FF_TASK.NEXT_CANDIDATE_
-  is '下个候选人';
+  is '下一个候选';
 comment on column FF_TASK.TASK_STATUS_
   is '任务状态';
 comment on column FF_TASK.CREATION_DATE_
@@ -901,7 +901,7 @@ comment on column FF_TASK_OP.TASK_END_USER_NAME_
 comment on column FF_TASK_OP.TASK_END_DATE_
   is '任务完成日期';
 comment on column FF_TASK_OP.NEXT_CANDIDATE_
-  is '下个候选人';
+  is '下一个候选';
 comment on column FF_TASK_OP.TASK_STATUS_
   is '任务状态';
 comment on column FF_TASK_OP.CREATION_DATE_
