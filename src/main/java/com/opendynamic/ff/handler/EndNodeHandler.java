@@ -42,11 +42,11 @@ public class EndNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();
 
         // 终止该节点所属子流程或独立子流程内的所有节点。如该节点直属于主流程，则终止流程所有节点
-        List<Node> nodeList = null;// 需要终止的节点
+        List<Node> nodeList; // 需要终止的节点
         Node subProc = ffService.createParentNodeQuery().setNodeId(branchNode.getNodeId()).setNodeTypeList(Arrays.asList(FfService.NODE_TYPE_SUB_PROC, FfService.NODE_TYPE_ISOLATE_SUB_PROC)).setRecursive(true).queryForObject();// 查询子流程
         // 计算子流程或独立子流程的分支节点
         Node subProcBranchNode = null;
@@ -92,7 +92,7 @@ public class EndNodeHandler implements NodeHandler {
         }
 
         if (subProcBranchNode != null) {// 终止子流程或独立子路程
-            ffResult.addAll(ffService.getNodeHandler(subProcBranchNode.getNodeType()).completeNode(subProcBranchNode, null, candidateList, triggerOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(subProcBranchNode.getNodeType()).completeNode(subProcBranchNode, null, candidateList, initialOperation, executor));
         }
         else {// 终止流程
             ffProcService.updateProcStatus(branchNode.getProcId(), executor, ffHelper.getUserName(executor), new Date(), FfService.PROC_STATUS_COMPLETE);
@@ -109,17 +109,17 @@ public class EndNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();
     }
 }

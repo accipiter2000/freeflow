@@ -56,17 +56,17 @@ public interface FfProcService {
     public int updateProc(String PROC_ID_, String PROC_DEF_ID_, String ADJUST_PROC_DEF_ID_, String ISOLATE_SUB_PROC_NODE_ID_, String BIZ_ID_, String BIZ_TYPE_, String BIZ_CODE_, String BIZ_NAME_, String BIZ_DESC_, String PROC_START_USER_, String PROC_START_USER_NAME_, String PROC_END_USER_, String PROC_END_USER_NAME_, Date PROC_END_DATE_);
 
     /**
-     * 更新流程业务数据。
+     * 修改流程业务数据。
      */
     public int updateProcBizInfo(String PROC_ID_, String BIZ_ID_, String BIZ_TYPE_, String BIZ_CODE_, String BIZ_NAME_, String BIZ_DESC_);
 
     /**
-     * 更新流程状态。
+     * 修改流程状态。
      */
     public int updateProcStatus(String PROC_ID_, String PROC_STATUS_);
 
     /**
-     * 更新流程状态。
+     * 修改流程状态。
      */
     public int updateProcStatus(String PROC_ID_, String PROC_END_USER_, String PROC_END_USER_NAME_, Date PROC_END_DATE_, String PROC_STATUS_);
 

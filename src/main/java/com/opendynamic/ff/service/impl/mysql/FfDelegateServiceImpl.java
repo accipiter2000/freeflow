@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -61,7 +60,7 @@ public class FfDelegateServiceImpl implements FfDelegateService {
 
     private OdSqlCriteria buildSqlCriteriaDelegate(boolean count, String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {// 组装查询SQL语句
         String sql;
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         if (count) {
             sql = "select count(*) from FFV_DELEGATE where 1 = 1";
@@ -70,43 +69,43 @@ public class FfDelegateServiceImpl implements FfDelegateService {
             sql = "select * from FFV_DELEGATE where 1 = 1";
         }
 
-        if (StringUtils.isNotEmpty(DELEGATE_ID_)) {
+        if (DELEGATE_ID_ != null) {
             sql += " and DELEGATE_ID_ = :DELEGATE_ID_";
             paramMap.put("DELEGATE_ID_", DELEGATE_ID_);
         }
-        if (DELEGATE_ID_LIST != null && DELEGATE_ID_LIST.size() > 0) {
+        if (DELEGATE_ID_LIST != null && !DELEGATE_ID_LIST.isEmpty()) {
             sql += " and DELEGATE_ID_ in (:DELEGATE_ID_LIST)";
             paramMap.put("DELEGATE_ID_LIST", DELEGATE_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(ASSIGNEE_)) {
+        if (ASSIGNEE_ != null) {
             sql += " and ASSIGNEE_ = :ASSIGNEE_";
             paramMap.put("ASSIGNEE_", ASSIGNEE_);
         }
-        if (ASSIGNEE_LIST != null && ASSIGNEE_LIST.size() > 0) {
+        if (ASSIGNEE_LIST != null && !ASSIGNEE_LIST.isEmpty()) {
             sql += " and ASSIGNEE_ in (:ASSIGNEE_LIST)";
             paramMap.put("ASSIGNEE_LIST", ASSIGNEE_LIST);
         }
-        if (StringUtils.isNotEmpty(ASSIGNEE_NAME_)) {
+        if (ASSIGNEE_NAME_ != null) {
             sql += " and ASSIGNEE_NAME_ like concat('%',:ASSIGNEE_NAME_,'%')";
             paramMap.put("ASSIGNEE_NAME_", ASSIGNEE_NAME_);
         }
-        if (ASSIGNEE_NAME_LIST != null && ASSIGNEE_NAME_LIST.size() > 0) {
+        if (ASSIGNEE_NAME_LIST != null && !ASSIGNEE_NAME_LIST.isEmpty()) {
             sql += " and ASSIGNEE_NAME_ in (:ASSIGNEE_NAME_LIST)";
             paramMap.put("ASSIGNEE_NAME_LIST", ASSIGNEE_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(DELEGATOR_)) {
+        if (DELEGATOR_ != null) {
             sql += " and DELEGATOR_ = :DELEGATOR_";
             paramMap.put("DELEGATOR_", DELEGATOR_);
         }
-        if (DELEGATOR_LIST != null && DELEGATOR_LIST.size() > 0) {
+        if (DELEGATOR_LIST != null && !DELEGATOR_LIST.isEmpty()) {
             sql += " and DELEGATOR_ in (:DELEGATOR_LIST)";
             paramMap.put("DELEGATOR_LIST", DELEGATOR_LIST);
         }
-        if (StringUtils.isNotEmpty(DELEGATOR_NAME_)) {
+        if (DELEGATOR_NAME_ != null) {
             sql += " and DELEGATOR_NAME_ like concat('%',:DELEGATOR_NAME_,'%')";
             paramMap.put("DELEGATOR_NAME_", DELEGATOR_NAME_);
         }
-        if (DELEGATOR_NAME_LIST != null && DELEGATOR_NAME_LIST.size() > 0) {
+        if (DELEGATOR_NAME_LIST != null && !DELEGATOR_NAME_LIST.isEmpty()) {
             sql += " and DELEGATOR_NAME_ in (:DELEGATOR_NAME_LIST)";
             paramMap.put("DELEGATOR_NAME_LIST", DELEGATOR_NAME_LIST);
         }
@@ -132,12 +131,12 @@ public class FfDelegateServiceImpl implements FfDelegateService {
 
     @Override
     public List<Map<String, Object>> selectDelegateByIdList(List<String> DELEGATE_ID_LIST) {
-        if (DELEGATE_ID_LIST == null || DELEGATE_ID_LIST.size() == 0) {
+        if (DELEGATE_ID_LIST == null || DELEGATE_ID_LIST.isEmpty()) {
             return new ArrayList<>();
         }
 
         StringBuilder sql = new StringBuilder(DELEGATE_ID_LIST.size() * 50 + 200);
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         sql.append("select * from FFV_DELEGATE where DELEGATE_ID_ in (:DELEGATE_ID_LIST)");
         paramMap.put("DELEGATE_ID_LIST", DELEGATE_ID_LIST);

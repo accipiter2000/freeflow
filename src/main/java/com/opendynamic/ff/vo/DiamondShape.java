@@ -10,13 +10,16 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opendynamic.OdUtils;
 
+/**
+ * 菱形形状。
+ */
 public class DiamondShape extends Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonIgnore
-    private int[] xPoints;
+    private int[] xPoints;// 所有点的横坐标。
     @JsonIgnore
-    private int[] yPoints;
+    private int[] yPoints;// 所有点的纵坐标。
 
     @Override
     public void init(Object owner) {

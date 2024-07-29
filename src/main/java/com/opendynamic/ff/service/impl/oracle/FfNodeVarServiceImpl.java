@@ -81,13 +81,13 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             if (StringUtils.isEmpty(NODE_ID_)) {
                 throw new RuntimeException("errors.idRequired");
             }
-            if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+            if (NODE_ID_LIST != null && !NODE_ID_LIST.isEmpty()) {
                 throw new RuntimeException("errors.cannotRecursiveOnMultipulNodes");
             }
         }
 
         String sql;
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         if (count) {
             sql = "select count(*) from FFV_NODE_VAR where 1 = 1";
@@ -96,11 +96,11 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             sql = "select * from FFV_NODE_VAR where 1 = 1";
         }
 
-        if (StringUtils.isNotEmpty(NODE_VAR_ID_)) {
+        if (NODE_VAR_ID_ != null) {
             sql += " and NODE_VAR_ID_ = :NODE_VAR_ID_";
             paramMap.put("NODE_VAR_ID_", NODE_VAR_ID_);
         }
-        if (NODE_VAR_ID_LIST != null && NODE_VAR_ID_LIST.size() > 0) {
+        if (NODE_VAR_ID_LIST != null && !NODE_VAR_ID_LIST.isEmpty()) {
             sql += " and NODE_VAR_ID_ in (:NODE_VAR_ID_LIST)";
             paramMap.put("NODE_VAR_ID_LIST", NODE_VAR_ID_LIST);
         }
@@ -115,24 +115,24 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
                 sql += " and NODE_ID_ = :NODE_ID_";
                 paramMap.put("NODE_ID_", NODE_ID_);
             }
-            if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+            if (NODE_ID_LIST != null && !NODE_ID_LIST.isEmpty()) {
                 sql += " and NODE_ID_ in (:NODE_ID_LIST)";
                 paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
             }
         }
-        if (StringUtils.isNotEmpty(VAR_TYPE_)) {
+        if (VAR_TYPE_ != null) {
             sql += " and VAR_TYPE_ = :VAR_TYPE_";
             paramMap.put("VAR_TYPE_", VAR_TYPE_);
         }
-        if (VAR_TYPE_LIST != null && VAR_TYPE_LIST.size() > 0) {
+        if (VAR_TYPE_LIST != null && !VAR_TYPE_LIST.isEmpty()) {
             sql += " and VAR_TYPE_ in (:VAR_TYPE_LIST)";
             paramMap.put("VAR_TYPE_LIST", VAR_TYPE_LIST);
         }
-        if (StringUtils.isNotEmpty(VAR_NAME_)) {
+        if (VAR_NAME_ != null) {
             sql += " and VAR_NAME_ like '%' || :VAR_NAME_ || '%'";
             paramMap.put("VAR_NAME_", VAR_NAME_);
         }
-        if (VAR_NAME_LIST != null && VAR_NAME_LIST.size() > 0) {
+        if (VAR_NAME_LIST != null && !VAR_NAME_LIST.isEmpty()) {
             sql += " and VAR_NAME_ in (:VAR_NAME_LIST)";
             paramMap.put("VAR_NAME_LIST", VAR_NAME_LIST);
         }
@@ -150,12 +150,12 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
 
     @Override
     public List<Map<String, Object>> selectNodeVarByIdList(List<String> NODE_VAR_ID_LIST) {
-        if (NODE_VAR_ID_LIST == null || NODE_VAR_ID_LIST.size() == 0) {
+        if (NODE_VAR_ID_LIST == null || NODE_VAR_ID_LIST.isEmpty()) {
             return new ArrayList<>();
         }
 
         StringBuilder sql = new StringBuilder(NODE_VAR_ID_LIST.size() * 50 + 200);
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         sql.append("select * from FFV_NODE_VAR where NODE_VAR_ID_ in (:NODE_VAR_ID_LIST)");
         paramMap.put("NODE_VAR_ID_LIST", NODE_VAR_ID_LIST);
@@ -176,7 +176,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
 
     @Override
     public int insertNodeVar(String NODE_VAR_ID_, String NODE_ID_, String VAR_TYPE_, String VAR_NAME_, String VALUE_, Serializable OBJ_, Date CREATION_DATE_) {
-        int count = 0;
+        int count;
 
         if (!FfService.VAR_TYPE_OBJECT.equals(VAR_TYPE_)) {// String
             String sql = "insert into FF_NODE_VAR (NODE_VAR_ID_, NODE_ID_, VAR_TYPE_, VAR_NAME_, VALUE_, CREATION_DATE_) values (?, ?, ?, ?, ?, ?)";
@@ -214,7 +214,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
 
     @Override
     public int updateNodeVar(String NODE_VAR_ID_, String VAR_TYPE_, String VAR_NAME_, String VALUE_, Serializable OBJ_) {
-        int count = 0;
+        int count;
 
         ffOperationService.insertNodeVarOp(OdUtils.getUuid(), NODE_VAR_ID_, FfService.OPERATION_TYPE_UPDATE);
 
@@ -261,10 +261,10 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         List<Map<String, Object>> nodeVarList = selectNodeVar(null, null, NODE_ID_, null, null, null, null, null, false, 1, -1);
         List<String> nodeVarKeyList = OdUtils.collect(nodeVarList, "VAR_NAME_", String.class);
 
-        String NODE_VAR_ID_ = null;
-        String VAR_TYPE_ = null;
-        String VALUE_ = null;
-        Serializable OBJ_ = null;
+        String NODE_VAR_ID_;
+        String VAR_TYPE_;
+        String VALUE_;
+        Serializable OBJ_;
         int index;
         for (String key : nodeVarMap.keySet()) {
             if (nodeVarMap.get(key) instanceof String) {

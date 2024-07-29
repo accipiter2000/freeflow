@@ -10,19 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 操作。
+ */
 @Service
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public @interface FfOperation {
-    String procId() default "";// 流程ID
+    String procId() default "";// 流程ID。
 
-    String nodeId() default "";// 节点ID
+    String nodeId() default "";// 节点ID。
 
-    String taskId() default "";// 任务ID
+    String taskId() default "";// 任务ID。
 
-    String memo() default "";// 备注
+    String memo() default "";// 备注。
 
-    String operator() default "";// 操作人
+    String operator() default "";// 操作人。
 }

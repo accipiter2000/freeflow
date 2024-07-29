@@ -147,7 +147,7 @@ public interface FfService {
      */
     public static final String NODE_TYPE_SUB_PROC = "SUB_PROC";
     /**
-     * 节点类型-子流程。
+     * 节点类型-独立子流程。
      */
     public static final String NODE_TYPE_ISOLATE_SUB_PROC = "ISOLATE_SUB_PROC";
     /**
@@ -231,15 +231,15 @@ public interface FfService {
      */
     public static final String DATA_SCOPE_PROC_DEF = "PROC_DEF";
     /**
-     * 数据范围-流程定义。
+     * 数据范围-流程。
      */
     public static final String DATA_SCOPE_PROC = "PROC";
     /**
-     * 数据范围-流程定义。
+     * 数据范围-节点。
      */
     public static final String DATA_SCOPE_NODE = "NODE";
     /**
-     * 数据范围-流程定义。
+     * 数据范围-任务。
      */
     public static final String DATA_SCOPE_TASK = "TASK";
     /**
@@ -256,14 +256,14 @@ public interface FfService {
     public static final String CENTER_FORWARD_STEP = "CENTER_FORWARD_STEP";
 
     /**
-     * 系统。
+     * 用户-FF系统。
      */
     public static final String USER_FF_SYSTEM = "FF_SYSTEM";
 
     /**
      * 刷新流程定义缓存。
      * 
-     * @return
+     * @return 成功返回true，否则返回false。
      */
     public boolean refreshProcDefCache();
 
@@ -271,31 +271,104 @@ public interface FfService {
      * 获取节点处理器。
      * 
      * @param nodeType
-     * @return
+     *        节点类型。
+     * @return 节点处理器。
      */
     public NodeHandler getNodeHandler(String nodeType);
 
     /**
-     * 获取内部服务MAP，用于JUEL解析，
+     * 获取内部服务MAP，用于JUEL解析。
      * 
-     * @return
+     * @return 内部服务MAP。
      */
     public Map<String, Object> getInternalServiceMap();
 
     /**
-     * 获取外部服务MAP，用于JUEL解析，
+     * 获取外部服务MAP，用于JUEL解析。
      * 
-     * @return
+     * @return 外部服务MAP。
      */
     public Map<String, Object> getExternalServiceMap();
 
     /**
-     * 添加外部服务，用于JUEL解析，
+     * 添加外部服务，用于JUEL解析。
      * 
      * @param serviceName
+     *        服务名称。
      * @param service
+     *        服务。
      */
     public void addExternalService(String serviceName, Object service);
+
+    /**
+     * 创建流程定义查询。
+     * 
+     * @return 流程定义查询。
+     */
+    public ProcDefQuery createProcDefQuery();
+
+    /**
+     * 创建流程查询。
+     * 
+     * @return 流程查询。
+     */
+    public ProcQuery createProcQuery();
+
+    /**
+     * 创建参与的流程查询。
+     * 
+     * @return 参与的流程查询。
+     */
+    public InvolvedProcQuery createInvolvedProcQuery();
+
+    /**
+     * 创建节点查询。
+     * 
+     * @return 节点查询。
+     */
+    public NodeQuery createNodeQuery();
+
+    /**
+     * 创建上级节点查询。
+     * 
+     * @return 上级节点查询。
+     */
+    public ParentNodeQuery createParentNodeQuery();
+
+    /**
+     * 创建下级节点查询。
+     * 
+     * @return 下级节点查询。
+     */
+    public ChildNodeQuery createChildNodeQuery();
+
+    /**
+     * 创建任务查询。
+     * 
+     * @return 任务查询。
+     */
+    public TaskQuery createTaskQuery();
+
+    /**
+     * 创建节点变量查询。
+     * 
+     * @return 节点变量查询。
+     */
+    public NodeVarQuery createNodeVarQuery();
+
+    /**
+     * 创建代理查询。
+     * 
+     * @return 任务查询。
+     */
+    public DelegateQuery createDelegateQuery();
+
+    /**
+     * 创建操作查询。
+     * 
+     * @return 操作查询。
+     */
+    public OperationQuery createOperationQuery();
 
     /**
      * 按主键查询流程定义。
@@ -307,7 +380,7 @@ public interface FfService {
     public ProcDef loadProcDef(String procDefId);
 
     /**
-     * 按流程定义编码查询，返回生效的最新版本的流程定义。
+     * 按流程定义编码查询流程定义。
      * 
      * @param procDefCode
      *        流程定义编码。
@@ -320,7 +393,7 @@ public interface FfService {
      * 
      * @param procDefId
      *        流程定义ID。
-     * @return 流程定义图文件流。
+     * @return 流程定义图文件。
      */
     public InputStream loadProcDefDiagramFile(String procDefId);
 
@@ -341,22 +414,30 @@ public interface FfService {
      *        操作人ID。
      * @param operatorName
      *        操作人名称。
-     * @return
+     * @return 成功返回true，否则返回false。
      */
     public boolean deployProcDef(String procDefId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, String operatorId, String operatorName);
 
     /**
-     * 更新流程定义图文件。
+     * 修改流程定义图文件。
      * 
      * @param procDefId
+     *        流程定义ID。
      * @param procDefDiagramFile
+     *        流程定义图文件。
      * @param procDefDiagramFileName
+     *        流程定义图文件名称。
      * @param procDefDiagramFileLength
+     *        流程定义图文件大小。
      * @param procDefDiagramWidth
+     *        流程定义图宽度。
      * @param procDefDiagramHeight
+     *        流程定义图高度。
      * @param operatorId
+     *        操作人ID。
      * @param operatorName
-     * @return
+     *        操作人名称。
+     * @return 成功返回true，否则返回false。
      */
     public boolean updateProcDefDiagramFile(String procDefId, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, Integer procDefDiagramWidth, Integer procDefDiagramHeight, String operatorId, String operatorName);
 
@@ -369,7 +450,7 @@ public interface FfService {
      *        操作人ID。
      * @param operatorName
      *        操作人名称。
-     * @return
+     * @return 成功返回true，否则返回false。
      */
     public boolean disableProcDef(String procDefId, String operatorId, String operatorName);
 
@@ -382,7 +463,7 @@ public interface FfService {
      *        操作人ID。
      * @param operatorName
      *        操作人名称。
-     * @return
+     * @return 成功返回true，否则返回false。
      */
     public boolean enableProcDef(String procDefId, String operatorId, String operatorName);
 
@@ -395,21 +476,28 @@ public interface FfService {
      *        操作人ID。
      * @param operatorName
      *        操作人名称。
-     * @return
+     * @return 成功返回true，否则返回false。
      */
     public boolean deleteProcDef(String procDefId, String operatorId, String operatorName);
 
     /**
      * 调整分支流程定义。
-     * 
+     *
      * @param branchId
+     *        分支节点ID。
      * @param procDef
+     *        流程定义。
      * @param procDefDiagramFile
+     *        流程定义图文件。
      * @param procDefDiagramFileName
+     *        流程定义图文件名称。
      * @param procDefDiagramFileLength
+     *        流程定义图文件大小。
      * @param operatorId
+     *        操作人员ID。
      * @param operatorName
-     * @return
+     *        操作人员名称。
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult adjustBranchProcDef(String branchId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, String operatorId, String operatorName);
@@ -418,18 +506,23 @@ public interface FfService {
      * 删除调整流程定义。
      * 
      * @param adjustProcDefId
+     *        调整流程定义ID。
      * @param updateDate
+     *        更新日期。
      * @param operatorId
+     *        操作人员ID。
      * @param operatorName
-     * @return
+     *        操作人员名称。
+     * @return 成功返回true，否则返回false。
      */
     public boolean deleteAdjustProcDef(String adjustProcDefId, Date updateDate, String operatorId, String operatorName);
 
     /**
-     * 获取节点的流程定义。如有调整，获取调整后的流程定义
+     * 获取节点的流程定义。如有调整，获取调整流程定义。
      * 
      * @param node
-     * @return
+     *        节点。
+     * @return 流程定义。
      */
     public ProcDef getNodeProcDef(Node node);
 
@@ -439,34 +532,45 @@ public interface FfService {
      * @param procId
      *        流程ID。
      * @param currentTaskId
-     *        当前任务ID。当前任务ID不为null时，其所在的分支会注入节点变量，并设置当前为true。
+     *        当前任务ID。当前任务ID不为null时，其所在的分支节点会注入节点变量，并设置其当前为true。
      * @param drawOptional
      *        是否绘制可选节点。
-     * @return
+     * @return 运行期流程定义。
      */
     public RunningProcDef getRunningProcDef(String procId, String currentTaskId, boolean drawOptional);
 
     /**
-     * 获取起始即将运行节点定义列表。
+     * 获取起始运行节点定义列表。
      * 
+     * @param subProcPath
+     *        子流程路径。
      * @param procDef
+     *        流程定义。
      * @param nodeVarMap
+     *        节点变量。
+     * @return 运行期节点定义列表。
      */
     public List<RunningNodeDef> getStartRunningNodeDefList(String subProcPath, ProcDef procDef, Map<String, Object> nodeVarMap);
 
     /**
-     * 获取下个准备运行的运行期节点定义列表。
+     * 获取下一个运行的节点定义列表。
      * 
      * @param taskId
+     *        当前节点ID。
      * @param nodeVarMap
+     *        节点变量。
+     * @return 运行期节点定义列表。
      */
     public List<RunningNodeDef> getNextRunningNodeDefList(String taskId, Map<String, Object> nodeVarMap);
 
     /**
-     * 获取下个准备运行的运行期节点定义列表。
+     * 获取下一个运行的节点定义列表。
      * 
      * @param node
+     *        当前节点。
      * @param nodeVarMap
+     *        节点变量。
+     * @return 运行期节点定义列表。
      */
     public List<RunningNodeDef> getNextRunningNodeDefList(Node node, Map<String, Object> nodeVarMap);
 
@@ -474,89 +578,77 @@ public interface FfService {
      * 按主键查询流程。
      * 
      * @param procId
+     *        流程ID。
      * @return 流程。
      */
     public Proc loadProc(String procId);
 
     /**
-     * 创建流程查询。
-     * 
-     * @return 流程查询。
-     */
-    public ProcDefQuery createProcDefQuery();
-
-    /**
-     * 创建流程查询。
-     * 
-     * @return 流程查询。
-     */
-    public ProcQuery createProcQuery();
-
-    /**
-     * 创建参与的流程查询。
-     * 
-     * @return 参与的流程查询。
-     */
-    public InvolvedProcQuery createInvolvedProcQuery();
-
-    /**
-     * 更新流程业务数据。
+     * 修改流程业务数据。
      * 
      * @param procId
+     *        流程ID。
      * @param bizId
+     *        业务ID。
      * @param bizType
+     *        业务类型。
      * @param bizCode
+     *        业务编码。
      * @param bizName
+     *        业务名称。
      * @param bizDesc
-     * @return
+     *        业务描述。
+     * @return 成功返回true，否则返回false。
      */
     public boolean updateProcBizInfo(String procId, String bizId, String bizType, String bizCode, String bizName, String bizDesc);
 
     /**
-     * 按流程定义ID启动流程。
+     * 按流程定义启动流程。
      * 
      * @param procDef
-     *        流程定义
+     *        流程定义。
      * @param bizId
-     *        业务主键
+     *        业务主键。
      * @param bizType
-     *        业务类型
+     *        业务类型。
+     * @param bizCode
+     *        业务编码。
      * @param bizName
-     *        业务名称
+     *        业务名称。
      * @param bizDesc
-     *        业务备注
+     *        业务备注。
      * @param procStartUser
-     *        流程开始人员
+     *        流程开始人员。
      * @param nodeVarMap
-     *        节点变量，
-     * @param candidate
-     *        候选。
+     *        节点变量。
+     * @param candidateList
+     *        候选列表。
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
     public FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
 
     /**
-     * 按流程定义编码启动流程。
+     * 按流程定义编码启动流程。如有多个版本，按最新版本的流程定义启动。
      * 
      * @param procDefCode
-     *        流程定义编码
+     *        流程定义编码。
      * @param bizId
-     *        业务主键
+     *        业务主键。
      * @param bizType
-     *        业务类型
+     *        业务类型。
      * @param bizCode
-     *        业务编码
+     *        业务编码。
      * @param bizName
-     *        业务名称
+     *        业务名称。
      * @param bizDesc
-     *        业务备注
+     *        业务备注。
      * @param procStartUser
-     *        流程开始人员
+     *        流程开始人员。
      * @param nodeVarMap
-     *        节点变量，
-     * @param candidate
-     *        候选。
+     *        节点变量。
+     * @param candidateList
+     *        候选列表。
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
@@ -566,43 +658,54 @@ public interface FfService {
      * 启动独立子流程。
      * 
      * @param isolateSubProcNodeId
-     *        独立子流程所属节点ID
+     *        独立子流程所挂接的主流程节点ID。
      * @param bizId
-     *        业务主键
+     *        业务主键。
      * @param bizType
-     *        业务类型
+     *        业务类型。
      * @param bizCode
-     *        业务编码
+     *        业务编码。
      * @param bizName
-     *        业务名称
+     *        业务名称。
      * @param bizDesc
-     *        业务备注
+     *        业务备注。
      * @param procStartUser
-     *        流程开始人员
+     *        流程开始人员。
      * @param nodeVarMap
-     *        节点变量，
-     * @return
+     *        节点变量。
+     * @param candidateList
+     *        候选列表。
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
 
     /**
-     * 按流程定义编码启动流程,并直接跳转到指定节点。
+     * 按流程定义启动流程,并直接跳转到指定节点。
      * 
      * @param procDef
+     *        流程定义。
      * @param subProcPath
-     *        子流程路径
+     *        跳转节点的子流程路径。
      * @param nodeCode
-     *        跳转节点编码
+     *        跳转节点的节点编码。
      * @param bizId
+     *        业务ID。
      * @param bizType
+     *        业务类型。
      * @param bizCode
+     *        业务编码。
      * @param bizName
+     *        业务名称。
      * @param bizDesc
+     *        业务备注。
      * @param procStartUser
+     *        流程开始人员。
      * @param nodeVarMap
+     *        节点变量。
      * @param candidateList
-     * @return
+     *        候选列表。
+     * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
     public FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
@@ -611,27 +714,27 @@ public interface FfService {
      * 按流程定义编码启动流程,并直接跳转到指定节点。
      * 
      * @param procDefCode
-     *        流程定义编码
+     *        流程定义编码。
      * @param subProcPath
-     *        子流程路径
+     *        跳转节点的子流程路径。
      * @param nodeCode
-     *        跳转节点编码
+     *        跳转节点的节点编码。
      * @param bizId
-     *        业务主键
+     *        业务ID。
      * @param bizType
-     *        业务类型
+     *        业务类型。
      * @param bizCode
-     *        业务编码
+     *        业务编码。
      * @param bizName
-     *        业务名称
+     *        业务名称。
      * @param bizDesc
-     *        业务备注
+     *        业务备注。
      * @param procStartUser
-     *        流程开始人员
+     *        流程开始人员。
      * @param nodeVarMap
-     *        节点变量，
-     * @param candidate
-     *        候选。
+     *        节点变量。
+     * @param candidateList
+     *        候选列表。
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
@@ -643,7 +746,7 @@ public interface FfService {
      * @param procId
      *        流程ID。
      * @param taskId
-     *        任务ID。仅用来记录该操作所关联任务的日志信息。
+     *        发起该操作的任务ID。仅记录到操作中。可以为null。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -657,7 +760,7 @@ public interface FfService {
      * @param procId
      *        流程ID。
      * @param taskId
-     *        任务ID。仅用来记录该操作所关联任务的日志信息。
+     *        发起该操作的任务ID。仅记录到操作中。可以为null。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -671,7 +774,7 @@ public interface FfService {
      * @param procId
      *        流程ID。
      * @param taskId
-     *        任务ID。仅用来记录该操作所关联任务的日志信息。
+     *        发起该操作的任务ID。仅记录到操作中。可以为null。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -685,7 +788,7 @@ public interface FfService {
      * @param procId
      *        流程ID。
      * @param taskId
-     *        任务ID。仅用来记录该操作所关联任务的日志信息。
+     *        发起该操作的任务ID。仅记录到操作中。可以为null。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -694,7 +797,7 @@ public interface FfService {
     public FfResult terminateProc(String procId, String taskId, String executor);
 
     /**
-     * 删除流程。
+     * 删除流程。包括所有流程数据。
      * 
      * @param procId
      *        流程ID。
@@ -706,7 +809,7 @@ public interface FfService {
     public FfResult deleteProc(String procId, String executor);
 
     /**
-     * 彻底清除流程。包括流程数据和操作数据
+     * 清除流程。包括所有流程数据和操作数据。
      * 
      * @param procId
      *        流程ID。
@@ -717,30 +820,10 @@ public interface FfService {
      * 按主键查询节点。
      * 
      * @param nodeId
+     *        节点ID。
      * @return 节点。
      */
     public Node loadNode(String nodeId);
-
-    /**
-     * 创建节点查询。
-     * 
-     * @return 节点查询。
-     */
-    public NodeQuery createNodeQuery();
-
-    /**
-     * 创建父节点查询。
-     * 
-     * @return 父节点查询。
-     */
-    public ParentNodeQuery createParentNodeQuery();
-
-    /**
-     * 创建子节点查询。
-     * 
-     * @return 子节点查询。
-     */
-    public ChildNodeQuery createChildNodeQuery();
 
     /**
      * 新增节点。
@@ -748,9 +831,11 @@ public interface FfService {
      * @param nodeDef
      *        节点定义。
      * @param branchNode
-     *        分支。
+     *        分支节点。
      * @param previousNodeIds
-     *        前节点。
+     *        前节点IDs。
+     * @param candidateList
+     *        候选列表。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -761,8 +846,10 @@ public interface FfService {
     /**
      * 激活节点。
      * 
-     * @param procId
-     *        流程ID。
+     * @param nodeId
+     *        节点ID。
+     * @param candidateList
+     *        候选列表。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -773,8 +860,10 @@ public interface FfService {
     /**
      * 正常完成节点。
      * 
-     * @param procId
-     *        流程ID。
+     * @param nodeId
+     *        节点ID。
+     * @param candidateList
+     *        所有变化的流程，节点和任务。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -785,8 +874,10 @@ public interface FfService {
     /**
      * 异常完成节点。
      * 
-     * @param procId
-     *        流程ID。
+     * @param nodeId
+     *        节点ID。
+     * @param candidateList
+     *        所有变化的流程，节点和任务。
      * @param executor
      *        执行人。
      * @return 所有变化的流程，节点和任务。
@@ -807,10 +898,11 @@ public interface FfService {
     public FfResult deleteNode(String nodeId, String executor);
 
     /**
-     * 获取节点的子流程路径
+     * 获取节点的子流程路径。
      * 
      * @param node
-     * @return
+     *        节点。
+     * @return 子流程路径。
      */
     public String getSubProcPath(Node node);
 
@@ -818,21 +910,18 @@ public interface FfService {
      * 按主键查询任务。
      * 
      * @param taskId
+     *        任务ID。
      * @return 任务。
      */
     public Task loadTask(String taskId);
 
     /**
-     * 创建任务查询。
-     * 
-     * @return 任务查询。
-     */
-    public TaskQuery createTaskQuery();
-
-    /**
      * 新增任务。
      * 
      * @param task
+     *        任务。
+     * @param executor
+     *        执行人。
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
@@ -842,9 +931,14 @@ public interface FfService {
      * 修改任务办理人。
      * 
      * @param taskId
+     *        任务ID。
      * @param assignee
+     *        办理人。
      * @param assigneeName
-     * @return
+     *        办理人名称。
+     * @param executor
+     *        执行人。
+     * @return 所有变化的任务，节点和任务。
      */
     @FfOperation
     public FfResult updateTaskAssignee(String taskId, String assignee, String assigneeName, String executor);
@@ -904,8 +998,8 @@ public interface FfService {
      *        任务ID。
      * @param branchNodeVar
      *        分支节点变量。
-     * @param candidate
-     *        候选。
+     * @param candidateList
+     *        候选列表。
      * @param executor
      *        执行人。
      * @return 所有变化的任务，节点和任务。
@@ -914,18 +1008,21 @@ public interface FfService {
     public FfResult completeTask(String taskId, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor);
 
     /**
-     * 驳回任务并跳转到指定节点，原任务异常完成。
+     * 完成任务并跳转到指定节点。
      * 
      * @param taskId
-     *        任务ID
+     *        任务ID。
      * @param subProcPath
-     *        子流程路径
+     *        子流程路径。
      * @param nodeCode
-     *        跳转节点编码
+     *        跳转节点的节点编码。
      * @param branchNodeVar
      *        分支节点变量。
      * @param candidateList
-     *        候选列表
+     *        候选列表。
+     * @param executor
+     *        执行人。
+     * @return 所有变化的任务，节点和任务。
      */
     @FfOperation
     public FfResult completeTaskToNode(String taskId, String subProcPath, String nodeCode, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor);
@@ -937,35 +1034,45 @@ public interface FfService {
      *        任务ID。
      * @param executor
      *        执行人。
-     * @return
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult claimTask(String taskId, String executor);
 
     /**
-     * 转发任务
+     * 转发任务。
      * 
      * @param taskId
+     *        任务ID。
      * @param assigneeList
+     *        办理人列表。
      * @param action
+     *        业务行为。
      * @param dueDate
+     *        截止日期。
      * @param claim
+     *        认领。
      * @param forwardable
+     *        可转发。
      * @param priority
+     *        优先级。
      * @param executor
-     * @return
+     *        执行人。
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult forwardTask(String taskId, List<String> assigneeList, String action, Date dueDate, String claim, String forwardable, Integer priority, String executor);
 
     /**
-     * 驳回任务。由当前任务办理人发起， 驳回后，前节点和任务被重新激活。
+     * 驳回任务。驳回后，前节点和任务被重新激活。
      * 
      * @param taskId
-     *        任务ID
+     *        任务ID。
+     * @param candidateList
+     *        候选列表。
      * @param executor
-     *        办理人
-     * @return
+     *        执行人。
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult rejectTask(String taskId, CandidateList candidateList, String executor);
@@ -974,28 +1081,30 @@ public interface FfService {
      * 驳回任务并跳转到指定节点，原任务异常完成。
      * 
      * @param taskId
-     *        任务ID
+     *        任务ID。
      * @param subProcPath
-     *        子流程路径
+     *        子流程路径。
      * @param nodeCode
-     *        跳转节点编码
+     *        跳转节点的节点编码。
      * @param candidateList
-     *        候选列表
+     *        候选列表。
      * @param executor
-     *        办理人
+     *        执行人。
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
     public FfResult rejectTaskToNode(String taskId, String subProcPath, String nodeCode, CandidateList candidateList, String executor);
 
     /**
-     * 在节点上追加候选
+     * 追加候选。
      * 
      * @param nodeId
-     * @param branchNodeVar
+     *        节点ID。
      * @param candidateList
+     *        候选列表
      * @param executor
-     * @return
+     *        执行人。
+     * @return 所有变更的流程、节点和任务。
      */
     @FfOperation
     public FfResult appendCandidate(String nodeId, CandidateList candidateList, String executor);
@@ -1004,22 +1113,17 @@ public interface FfService {
      * 按主键查询节点变量。
      * 
      * @param nodeVarId
+     *        节点变量ID。
      * @return 节点变量。
      */
     public NodeVar loadNodeVar(String nodeVarId);
 
     /**
-     * 创建节点变量查询。
-     * 
-     * @return 节点变量查询。
-     */
-    public NodeVarQuery createNodeVarQuery();
-
-    /**
-     * 部署节点变量。
+     * 新增节点变量。
      * 
      * @param nodeVar
-     * @return
+     *        节点变量。
+     * @return 成功返回true，否则返回false。
      */
     public boolean insertNodeVar(NodeVar nodeVar);
 
@@ -1027,18 +1131,19 @@ public interface FfService {
      * 修改节点变量。
      * 
      * @param nodeVar
-     * @return
+     *        节点变量。
+     * @return 成功返回true，否则返回false。
      */
     public boolean updateNodeVar(NodeVar nodeVar);
 
     /**
-     * 批量更新节点变量.同名覆盖。
+     * 批量修改节点变量.同名覆盖。
      * 
      * @param nodeId
      *        节点ID。
      * @param nodeVarMap
      *        节点变量。
-     * @return 节点变量ID列表。
+     * @return 变更的节点变量ID列表。
      */
     public List<String> updateNodeVar(String nodeId, Map<String, Object> nodeVarMap);
 
@@ -1046,15 +1151,17 @@ public interface FfService {
      * 删除节点变量。
      * 
      * @param nodeVarId
-     * @return
+     *        节点变量ID。
+     * @return 成功返回true，否则返回false。
      */
     public boolean deleteNodeVar(String nodeVarId);
 
     /**
-     * 删除节点变量。
+     * 删除节点下的所有节点变量。
      * 
-     * @param nodeVarId
-     * @return
+     * @param nodeId
+     *        节点ID。
+     * @return 成功返回true，否则返回false。
      */
     public boolean deleteNodeVarByNodeId(String nodeId);
 
@@ -1068,23 +1175,23 @@ public interface FfService {
     public Delegate loadDelegate(String delegateId);
 
     /**
-     * 创建代理查询。
-     * 
-     * @return 任务查询。
-     */
-    public DelegateQuery createDelegateQuery();
-
-    /**
      * 新增代理。
      * 
      * @param delegateId
+     *        代理ID。
      * @param assignee
+     *        办理人。
      * @param assigneeName
+     *        办理人名称。
      * @param delegator
+     *        代理人。
      * @param delegatorName
+     *        代理人名称。
      * @param startDate
+     *        开始日期。
      * @param endDate
-     * @return
+     *        结束日期。
+     * @return 成功返回true，否则返回false。
      */
     public boolean insertDelegate(String delegateId, String assignee, String assigneeName, String delegator, String delegatorName, Date startDate, Date endDate);
 
@@ -1092,13 +1199,20 @@ public interface FfService {
      * 修改代理。
      * 
      * @param delegateId
+     *        代理ID。
      * @param assignee
+     *        办理人。
      * @param assigneeName
+     *        办理人名称。
      * @param delegator
+     *        代理人。
      * @param delegatorName
+     *        代理人名称。
      * @param startDate
+     *        开始日期。
      * @param endDate
-     * @return
+     *        结束日期。
+     * @return 成功返回true，否则返回false。
      */
     public boolean updateDelegate(String delegateId, String assignee, String assigneeName, String delegator, String delegatorName, Date startDate, Date endDate);
 
@@ -1106,7 +1220,8 @@ public interface FfService {
      * 删除代理。
      * 
      * @param delegateId
-     * @return
+     *        代理ID。
+     * @return 成功返回true，否则返回false。
      */
     public boolean deleteDelegate(String delegateId);
 
@@ -1114,8 +1229,10 @@ public interface FfService {
      * 是否为代理人。
      * 
      * @param assignee
+     *        办理人。
      * @param delegator
-     * @return
+     *        代理人。
+     * @return 是返回true，否返回false。
      */
     public boolean isDelegator(String assignee, String delegator);
 
@@ -1123,38 +1240,62 @@ public interface FfService {
      * 按主键查询操作。
      * 
      * @param operationId
+     *        操作ID。
      * @return 操作。
      */
     public Operation loadOperation(String operationId);
 
     /**
-     * 创建操作查询。
+     * 查询流程操作。
      * 
-     * @return 操作查询。
+     * @param operationId
+     *        操作ID。
+     * @return 流程操作列表。
      */
-    public OperationQuery createOperationQuery();
-
     public List<ProcOp> selectProcOp(String operationId);
 
+    /**
+     * 查询节点操作。
+     * 
+     * @param operationId
+     *        操作ID。
+     * @return 节点操作列表。
+     */
     public List<NodeOp> selectNodeOp(String operationId);
 
+    /**
+     * 查询任务操作。
+     * 
+     * @param operationId
+     *        操作ID。
+     * @return 任务操作列表。
+     */
     public List<TaskOp> selectTaskOp(String operationId);
 
+    /**
+     * 查询节点变量操作。
+     * 
+     * @param operationId
+     *        操作ID。
+     * @return 节点变量操作列表。
+     */
     public List<NodeVarOp> selectNodeVarOp(String operationId);
 
     /**
-     * 取消。
+     * 取消操作。
      * 
      * @param operationId
+     *        操作ID。
      * @return 所有变化的任务，节点和任务。
      */
     public FfResult undo(String operationId);
 
     /**
-     * 将逗号分割的办理人字符串转换为FfUser列表
+     * 将逗号分割的办理人字符串转换为FfUser列表。
      * 
      * @param assigneeString
-     * @return
+     *        逗号分割的办理人字符串。
+     * @return FfUser列表。
      */
     public List<FfUser> getAssigneeList(String assigneeString);
 }

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -79,7 +78,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
 
     private OdSqlCriteria buildSqlCriteriaAdjustProcDef(boolean count, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST) {// 组装查询SQL语句
         String sql;
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         if (count) {
             sql = "select count(*) from FFV_ADJUST_PROC_DEF where 1 = 1";
@@ -88,19 +87,19 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
             sql = "select * from FFV_ADJUST_PROC_DEF where 1 = 1";
         }
 
-        if (StringUtils.isNotEmpty(ADJUST_PROC_DEF_ID_)) {
+        if (ADJUST_PROC_DEF_ID_ != null) {
             sql += " and ADJUST_PROC_DEF_ID_ = :ADJUST_PROC_DEF_ID_";
             paramMap.put("ADJUST_PROC_DEF_ID_", ADJUST_PROC_DEF_ID_);
         }
-        if (ADJUST_PROC_DEF_ID_LIST != null && ADJUST_PROC_DEF_ID_LIST.size() > 0) {
+        if (ADJUST_PROC_DEF_ID_LIST != null && !ADJUST_PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and ADJUST_PROC_DEF_ID_ in (:ADJUST_PROC_DEF_ID_LIST)";
             paramMap.put("ADJUST_PROC_DEF_ID_LIST", ADJUST_PROC_DEF_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_DEF_ID_)) {
+        if (PROC_DEF_ID_ != null) {
             sql += " and PROC_DEF_ID_ = :PROC_DEF_ID_";
             paramMap.put("PROC_DEF_ID_", PROC_DEF_ID_);
         }
-        if (PROC_DEF_ID_LIST != null && PROC_DEF_ID_LIST.size() > 0) {
+        if (PROC_DEF_ID_LIST != null && !PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and PROC_DEF_ID_ in (:PROC_DEF_ID_LIST)";
             paramMap.put("PROC_DEF_ID_LIST", PROC_DEF_ID_LIST);
         }
@@ -110,12 +109,12 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
 
     @Override
     public List<Map<String, Object>> selectAdjustProcDefByIdList(List<String> ADJUST_PROC_DEF_ID_LIST) {
-        if (ADJUST_PROC_DEF_ID_LIST == null || ADJUST_PROC_DEF_ID_LIST.size() == 0) {
+        if (ADJUST_PROC_DEF_ID_LIST == null || ADJUST_PROC_DEF_ID_LIST.isEmpty()) {
             return new ArrayList<>();
         }
 
         StringBuilder sql = new StringBuilder(ADJUST_PROC_DEF_ID_LIST.size() * 50 + 200);
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         sql.append("select * from FFV_ADJUST_PROC_DEF where ADJUST_PROC_DEF_ID_ in (:ADJUST_PROC_DEF_ID_LIST)");
         paramMap.put("ADJUST_PROC_DEF_ID_LIST", ADJUST_PROC_DEF_ID_LIST);

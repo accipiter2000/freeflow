@@ -17,7 +17,7 @@ public interface FfNodeService {
     public Map<String, Object> getTaskStatistic(String NODE_ID_);
 
     /**
-     * 获取子节点统计信息。
+     * 获取下级节点统计信息。
      */
     public Map<String, Object> getChildNodeStatistic(String NODE_ID_);
 
@@ -41,7 +41,7 @@ public interface FfNodeService {
             String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_, List<String> PROC_STATUS_LIST, Date FROM_PROC_CREATION_DATE_, Date TO_PROC_CREATION_DATE_, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Boolean emptyParentNode, Boolean emptyPreviousNodes, Boolean emptyLastCompleteNodes, String dataScope);
 
     /**
-     * 通用父对象查询，返回父对象列表。
+     * 通用上级对象查询，返回上级对象列表。
      * 
      * @param recursive
      *        是否递归，默认为false。

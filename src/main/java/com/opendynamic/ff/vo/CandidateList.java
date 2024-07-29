@@ -10,6 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.GsonBuilder;
 
+/**
+ * 候选列表。
+ */
 public class CandidateList extends ArrayList<Candidate> {
     private static final long serialVersionUID = 1L;
 
@@ -60,10 +63,22 @@ public class CandidateList extends ArrayList<Candidate> {
         return true;
     }
 
+    /**
+     * 转化成Json。
+     * 
+     * @return Json字符串。
+     */
     public String toJson() {
         return new GsonBuilder().create().toJson(this);
     }
 
+    /**
+     * 根据节点编码获取候选。
+     * 
+     * @param nodeCode
+     *        节点编码。
+     * @return 候选。
+     */
     public Candidate getCandidate(String nodeCode) {
         int index = -1;
         for (int i = 0; i < this.size(); i++) {
@@ -82,6 +97,15 @@ public class CandidateList extends ArrayList<Candidate> {
         return this.get(index);
     }
 
+    /**
+     * 根据子流程路径和节点编码获取候选。
+     * 
+     * @param subProcPath
+     *        子流程路径。
+     * @param nodeCode
+     *        节点编码。
+     * @return 候选。
+     */
     public Candidate getCandidate(String subProcPath, String nodeCode) {
         for (Candidate candidate : this) {
             if (candidate.getNodeCode().equals(nodeCode) && (StringUtils.isEmpty(subProcPath) && (StringUtils.isEmpty(candidate.getSubProcPath())) || (StringUtils.isNotEmpty(subProcPath) && subProcPath.equals(candidate.getSubProcPath())))) {
@@ -92,6 +116,13 @@ public class CandidateList extends ArrayList<Candidate> {
         return null;
     }
 
+    /**
+     * 根据子流程路径获取其下面的候选列表。
+     * 
+     * @param subProcPath
+     *        子流程路径。
+     * @return 候选列表。
+     */
     public CandidateList getChildCandidate(String subProcPath) {
         CandidateList candidateList = new CandidateList();
         if (subProcPath == null) {

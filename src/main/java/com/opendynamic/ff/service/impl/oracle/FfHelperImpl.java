@@ -1,5 +1,6 @@
 package com.opendynamic.ff.service.impl.oracle;
-import java.util.Arrays;
+
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +17,6 @@ public class FfHelperImpl implements FfHelper {
 
     @Override
     public List<String> getAllUserIdList(String userId) {
-        return Arrays.asList(userId);
+        return Collections.singletonList(userId);
     }
 }

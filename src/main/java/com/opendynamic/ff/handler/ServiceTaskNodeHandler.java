@@ -47,7 +47,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         Proc proc = ffService.loadProc(branchNode.getProcId());
@@ -77,7 +77,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         expression.getValue(simpleContext);
 
         String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
-        if (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) {// JUEL解析
+        if (waitingForCompleteNode != null && waitingForCompleteNode.contains("${")) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
             waitingForCompleteNode = (String) expression.getValue(simpleContext);
         }
@@ -95,7 +95,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -138,7 +138,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         NodeDef nodeDef = procDef.getNodeDef((node.getNodeCode()));// 获取当前节点所属节点定义
         List<? extends NodeDef> nextNodeDefList = nodeDef.getNextNodeDefList(nodeVarMap);// 查找下一个节点定义
         Node parentNode = ffService.loadNode(node.getParentNodeId());
-        if (nextNodeDefList.size() > 0) {// 有后续节点定义，新增后续节点。
+        if (!nextNodeDefList.isEmpty()) {// 有后续节点定义，新增后续节点。
             for (NodeDef nextNodeDef : nextNodeDefList) {
                 ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, parentNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, executor));
             }
@@ -159,22 +159,22 @@ public class ServiceTaskNodeHandler implements NodeHandler {
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), candidateList, FfService.OPERATION_COMPLETE, executor));
             }
             else {// 非完成返回节点，递归完成上级节点。
-                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), candidateList, triggerOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), candidateList, initialOperation, executor));
             }
 
         return ffResult;
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();// 返回值
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
-        // 有并发子节点不能驳回
+        // 有并发下级节点不能驳回
         if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_SUSPEND, FfService.NODE_STATUS_COMPLETE)).count() > 1) {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }

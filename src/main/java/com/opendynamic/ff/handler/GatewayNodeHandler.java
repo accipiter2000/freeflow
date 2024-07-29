@@ -46,10 +46,10 @@ public class GatewayNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
-        Node gatewayNode = ffService.createChildNodeQuery().setNodeId(branchNode.getNodeId()).setNodeCode(nodeDef.getNodeCode()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE)).queryForObject();
+        Node gatewayNode = ffService.createChildNodeQuery().setNodeId(branchNode.getNodeId()).setNodeCode(nodeDef.getNodeCode()).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObject();
         if (gatewayNode == null) {// 新增节点
             String gatewayNodeId = OdUtils.getUuid();
             ffNodeService.insertNode(gatewayNodeId, branchNode.getNodeId(), branchNode.getProcId(), null, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_GATEWAY, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
@@ -79,7 +79,7 @@ public class GatewayNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -137,26 +137,26 @@ public class GatewayNodeHandler implements NodeHandler {
         ffResult.addCompleteNode(node);
 
         List<? extends NodeDef> nextNodeDefList = nodeDef.getNextNodeDefList(nodeVarMap);// 查找下一个节点定义
-        if (nextNodeDefList.size() > 0) {// 有后续节点定义，新增后续节点。
+        if (!nextNodeDefList.isEmpty()) {// 有后续节点定义，新增后续节点。
             for (NodeDef nextNodeDef : nextNodeDefList) {
                 ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, ffService.loadNode(node.getParentNodeId()), node.getNodeId(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
             }
         }
         else {// 无后续节点定义。递归完成上级节点。
             Node parentNode = ffService.loadNode(node.getParentNodeId());
-            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, triggerOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
         }
 
         return ffResult;
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (!node.getNodeStatus().equals(FfService.NODE_STATUS_ACTIVE)) {
@@ -169,7 +169,7 @@ public class GatewayNodeHandler implements NodeHandler {
                 ffNodeService.updateNodePreviousNodeIds(node.getNodeId(), null);
                 List<Node> previousNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(previousNodeIds.split(","))).queryForObjectList();
                 for (Node _previousNode : previousNodeList) {
-                    ffResult.addAll(ffService.getNodeHandler(_previousNode.getNodeType()).activateNode(_previousNode, null, candidateList, triggerOperation, executor));
+                    ffResult.addAll(ffService.getNodeHandler(_previousNode.getNodeType()).activateNode(_previousNode, null, candidateList, initialOperation, executor));
                 }
             }
         }

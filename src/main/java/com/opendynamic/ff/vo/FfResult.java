@@ -4,35 +4,38 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FF结果。内含所有变更的流程、节点和任务。
+ */
 public class FfResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String operationId;
+    private String operationId;// 操作ID。
 
-    private List<Proc> createProcList;
-    private List<Proc> suspendProcList;
-    private List<Proc> activateProcList;
-    private List<Proc> completeProcList;
-    private List<Proc> terminateProcList;
-    private List<Proc> deleteProcList;
+    private List<Proc> createProcList;// 新增流程列表。
+    private List<Proc> suspendProcList;// 挂起流程列表。
+    private List<Proc> activateProcList;// 激活流程列表。
+    private List<Proc> completeProcList;// 正常完成流程列表。
+    private List<Proc> terminateProcList;// 异常完成流程列表。
+    private List<Proc> deleteProcList;// 删除流程列表。
 
-    private List<Node> createNodeList;
-    private List<Node> suspendNodeList;
-    private List<Node> activateNodeList;
-    private List<Node> completeNodeList;
-    private List<Node> terminateNodeList;
-    private List<Node> deleteNodeList;
+    private List<Node> createNodeList;// 新增节点列表。
+    private List<Node> suspendNodeList;// 挂起节点列表。
+    private List<Node> activateNodeList;// 激活节点列表。
+    private List<Node> completeNodeList;// 正常完成节点列表。
+    private List<Node> terminateNodeList;// 异常完成节点列表。
+    private List<Node> deleteNodeList;// 删除节点列表。
 
-    private List<Task> createTaskList;
-    private List<Task> suspendTaskList;
-    private List<Task> activateTaskList;
-    private List<Task> completeTaskList;
-    private List<Task> terminateTaskList;
-    private List<Task> deleteTaskList;
-    private List<Task> forwardingTaskList;
-    private List<Task> forwardingProcessingCompletedTaskList;
+    private List<Task> createTaskList;// 新增任务列表。
+    private List<Task> suspendTaskList;// 挂起任务列表。
+    private List<Task> activateTaskList;// 激活任务列表。
+    private List<Task> completeTaskList;// 正常完成任务列表。
+    private List<Task> terminateTaskList;// 异常完成任务列表。
+    private List<Task> deleteTaskList;// 删除任务列表。
+    private List<Task> forwardingTaskList;// 转发任务列表。
+    private List<Task> forwardingProcessingCompletedTaskList;// 完成转发任务列表。
 
-    private List<Object> sequenceList;
+    private List<Object> sequenceList;// 顺序列表。
 
     public FfResult() {
         this.createProcList = new ArrayList<>();
@@ -65,6 +68,7 @@ public class FfResult implements Serializable {
      * 设置操作ID。
      * 
      * @param operationId
+     *        操作ID。
      */
     public void setOperationId(String operationId) {
         this.operationId = operationId;
@@ -73,7 +77,7 @@ public class FfResult implements Serializable {
     /**
      * 获取操作ID。
      * 
-     * @return
+     * @return 操作ID。
      */
     public String getOperationId() {
         return operationId;
@@ -82,7 +86,7 @@ public class FfResult implements Serializable {
     /**
      * 获取新增流程列表。
      * 
-     * @return
+     * @return 新增流程列表。
      */
     public List<Proc> getCreateProcList() {
         return createProcList;
@@ -91,7 +95,7 @@ public class FfResult implements Serializable {
     /**
      * 获取挂起流程列表。
      * 
-     * @return
+     * @return 挂起流程列表。
      */
     public List<Proc> getSuspendProcList() {
         return suspendProcList;
@@ -100,7 +104,7 @@ public class FfResult implements Serializable {
     /**
      * 获取激活流程列表。
      * 
-     * @return
+     * @return 激活流程列表。
      */
     public List<Proc> getActivateProcList() {
         return activateProcList;
@@ -109,7 +113,7 @@ public class FfResult implements Serializable {
     /**
      * 获取正常完成流程列表。
      * 
-     * @return
+     * @return 正常完成流程列表。
      */
     public List<Proc> getCompleteProcList() {
         return completeProcList;
@@ -118,7 +122,7 @@ public class FfResult implements Serializable {
     /**
      * 获取异常完成流程列表。
      * 
-     * @return
+     * @return 异常完成流程列表。
      */
     public List<Proc> getTerminateProcList() {
         return terminateProcList;
@@ -127,7 +131,7 @@ public class FfResult implements Serializable {
     /**
      * 获取删除流程列表。
      * 
-     * @return
+     * @return 删除流程列表。
      */
     public List<Proc> getDeleteProcList() {
         return deleteProcList;
@@ -136,7 +140,7 @@ public class FfResult implements Serializable {
     /**
      * 获取新增节点列表。
      * 
-     * @return
+     * @return 新增节点列表。
      */
     public List<Node> getCreateNodeList() {
         return createNodeList;
@@ -145,7 +149,7 @@ public class FfResult implements Serializable {
     /**
      * 获取挂起节点列表。
      * 
-     * @return
+     * @return 挂起节点列表。
      */
     public List<Node> getSuspendNodeList() {
         return suspendNodeList;
@@ -154,7 +158,7 @@ public class FfResult implements Serializable {
     /**
      * 获取激活节点列表。
      * 
-     * @return
+     * @return 激活节点列表。
      */
     public List<Node> getActivateNodeList() {
         return activateNodeList;
@@ -163,7 +167,7 @@ public class FfResult implements Serializable {
     /**
      * 获取正常完成节点列表。
      * 
-     * @return
+     * @return 正常完成节点列表。
      */
     public List<Node> getCompleteNodeList() {
         return completeNodeList;
@@ -172,7 +176,7 @@ public class FfResult implements Serializable {
     /**
      * 获取异常完成节点列表。
      * 
-     * @return
+     * @return 异常完成节点列表。
      */
     public List<Node> getTerminateNodeList() {
         return terminateNodeList;
@@ -181,7 +185,7 @@ public class FfResult implements Serializable {
     /**
      * 获取删除节点列表。
      * 
-     * @return
+     * @return 删除节点列表。
      */
     public List<Node> getDeleteNodeList() {
         return deleteNodeList;
@@ -190,7 +194,7 @@ public class FfResult implements Serializable {
     /**
      * 获取新增任务列表。
      * 
-     * @return
+     * @return 新增任务列表。
      */
     public List<Task> getCreateTaskList() {
         return createTaskList;
@@ -199,7 +203,7 @@ public class FfResult implements Serializable {
     /**
      * 获取挂起任务列表。
      * 
-     * @return
+     * @return 挂起任务列表。
      */
     public List<Task> getSuspendTaskList() {
         return suspendTaskList;
@@ -208,7 +212,7 @@ public class FfResult implements Serializable {
     /**
      * 获取激活任务列表。
      * 
-     * @return
+     * @return 激活任务列表。
      */
     public List<Task> getActivateTaskList() {
         return activateTaskList;
@@ -217,7 +221,7 @@ public class FfResult implements Serializable {
     /**
      * 获取正常完成任务列表。
      * 
-     * @return
+     * @return 正常完成任务列表。
      */
     public List<Task> getCompleteTaskList() {
         return completeTaskList;
@@ -226,7 +230,7 @@ public class FfResult implements Serializable {
     /**
      * 获取异常完成任务列表。
      * 
-     * @return
+     * @return 异常完成任务列表。
      */
     public List<Task> getTerminateTaskList() {
         return terminateTaskList;
@@ -235,7 +239,7 @@ public class FfResult implements Serializable {
     /**
      * 获取删除任务列表。
      * 
-     * @return
+     * @return 删除任务列表。
      */
     public List<Task> getDeleteTaskList() {
         return deleteTaskList;
@@ -244,7 +248,7 @@ public class FfResult implements Serializable {
     /**
      * 获取新增转发任务列表。
      * 
-     * @return
+     * @return 新增转发任务列表。
      */
     public List<Task> getForwardingTaskList() {
         return forwardingTaskList;
@@ -253,26 +257,27 @@ public class FfResult implements Serializable {
     /**
      * 获取完成转发任务列表。
      * 
-     * @return
+     * @return 完成转发任务列表。
      */
     public List<Task> getForwardingProcessingCompletedTaskList() {
         return forwardingProcessingCompletedTaskList;
     }
 
     /**
-     * 获取顺序LIST
+     * 获取顺序List。
      * 
-     * @return
+     * @return 顺序List。
      */
     public List<Object> getSequenceList() {
         return sequenceList;
     }
 
     /**
-     * 获取顺序
+     * 获取顺序。
      * 
      * @param object
-     * @return
+     *        对象。
+     * @return 顺序。
      */
     public int getSequence(Object object) {
         return sequenceList.indexOf(object);
@@ -282,7 +287,8 @@ public class FfResult implements Serializable {
      * 添加新增流程。
      * 
      * @param proc
-     * @return
+     *        新增流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCreateProc(Proc proc) {
         sequenceList.add(proc);
@@ -293,7 +299,8 @@ public class FfResult implements Serializable {
      * 添加挂起流程。
      * 
      * @param proc
-     * @return
+     *        挂起流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addSuspendProc(Proc proc) {
         sequenceList.add(proc);
@@ -304,7 +311,8 @@ public class FfResult implements Serializable {
      * 添加激活流程。
      * 
      * @param proc
-     * @return
+     *        激活流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addActivateProc(Proc proc) {
         sequenceList.add(proc);
@@ -315,7 +323,8 @@ public class FfResult implements Serializable {
      * 添加正常完成流程。
      * 
      * @param proc
-     * @return
+     *        正常完成流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCompleteProc(Proc proc) {
         sequenceList.add(proc);
@@ -323,10 +332,11 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添异常完成流程。
+     * 添加异常完成流程。
      * 
      * @param proc
-     * @return
+     *        异常完成流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addTerminateProc(Proc proc) {
         sequenceList.add(proc);
@@ -337,7 +347,8 @@ public class FfResult implements Serializable {
      * 添加删除流程。
      * 
      * @param proc
-     * @return
+     *        删除流程。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addDeleteProc(Proc proc) {
         sequenceList.add(proc);
@@ -348,7 +359,8 @@ public class FfResult implements Serializable {
      * 添加新增节点。
      * 
      * @param node
-     * @return
+     *        新增节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCreateNode(Node node) {
         sequenceList.add(node);
@@ -359,7 +371,8 @@ public class FfResult implements Serializable {
      * 添加挂起节点。
      * 
      * @param node
-     * @return
+     *        挂起节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addSuspendNode(Node node) {
         sequenceList.add(node);
@@ -370,7 +383,8 @@ public class FfResult implements Serializable {
      * 添加激活节点。
      * 
      * @param node
-     * @return
+     *        激活节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addActivateNode(Node node) {
         sequenceList.add(node);
@@ -381,7 +395,8 @@ public class FfResult implements Serializable {
      * 添加正常完成节点。
      * 
      * @param node
-     * @return
+     *        正常完成节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCompleteNode(Node node) {
         sequenceList.add(node);
@@ -392,7 +407,8 @@ public class FfResult implements Serializable {
      * 添加异常完成节点。
      * 
      * @param node
-     * @return
+     *        异常完成节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addTerminateNode(Node node) {
         sequenceList.add(node);
@@ -403,7 +419,8 @@ public class FfResult implements Serializable {
      * 添加删除节点。
      * 
      * @param node
-     * @return
+     *        删除节点。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addDeleteNode(Node node) {
         sequenceList.add(node);
@@ -414,7 +431,8 @@ public class FfResult implements Serializable {
      * 添加新增任务。
      * 
      * @param task
-     * @return
+     *        新增任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCreateTask(Task task) {
         sequenceList.add(task);
@@ -425,7 +443,8 @@ public class FfResult implements Serializable {
      * 添加挂起任务。
      * 
      * @param task
-     * @return
+     *        挂起任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addSuspendTask(Task task) {
         sequenceList.add(task);
@@ -436,7 +455,8 @@ public class FfResult implements Serializable {
      * 添加激活任务。
      * 
      * @param task
-     * @return
+     *        激活任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addActivateTask(Task task) {
         sequenceList.add(task);
@@ -447,7 +467,8 @@ public class FfResult implements Serializable {
      * 添加正常完成任务。
      * 
      * @param task
-     * @return
+     *        正常完成任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addCompleteTask(Task task) {
         sequenceList.add(task);
@@ -458,7 +479,8 @@ public class FfResult implements Serializable {
      * 添加异常完成任务。
      * 
      * @param task
-     * @return
+     *        异常完成任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addTerminateTask(Task task) {
         sequenceList.add(task);
@@ -469,7 +491,8 @@ public class FfResult implements Serializable {
      * 添加删除任务。
      * 
      * @param task
-     * @return
+     *        删除任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addDeleteTask(Task task) {
         sequenceList.add(task);
@@ -477,10 +500,11 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添加新增转发任务。
+     * 添加转发任务。
      * 
      * @param task
-     * @return
+     *        转发任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addForwardingTask(Task task) {
         sequenceList.add(task);
@@ -491,7 +515,8 @@ public class FfResult implements Serializable {
      * 添加完成转发任务。
      * 
      * @param task
-     * @return
+     *        完成转发任务。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addForwardingProcessingCompletedTask(Task task) {
         sequenceList.add(task);
@@ -502,7 +527,8 @@ public class FfResult implements Serializable {
      * 添加新增流程列表。
      * 
      * @param procList
-     * @return
+     *        新增流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCreateProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -513,7 +539,8 @@ public class FfResult implements Serializable {
      * 添加挂起流程列表。
      * 
      * @param procList
-     * @return
+     *        挂起流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllSuspendProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -524,7 +551,8 @@ public class FfResult implements Serializable {
      * 添加激活流程列表。
      * 
      * @param procList
-     * @return
+     *        激活流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllActivateProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -535,7 +563,8 @@ public class FfResult implements Serializable {
      * 添加正常完成流程列表。
      * 
      * @param procList
-     * @return
+     *        正常完成流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCompleteProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -546,7 +575,8 @@ public class FfResult implements Serializable {
      * 添加异常完成流程列表。
      * 
      * @param procList
-     * @return
+     *        异常完成流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllTerminateProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -557,7 +587,8 @@ public class FfResult implements Serializable {
      * 添加删除流程列表。
      * 
      * @param procList
-     * @return
+     *        删除流程列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllDeleteProc(List<Proc> procList) {
         sequenceList.addAll(procList);
@@ -568,7 +599,8 @@ public class FfResult implements Serializable {
      * 添加新增节点列表。
      * 
      * @param nodeList
-     * @return
+     *        新增节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCreateNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -579,7 +611,8 @@ public class FfResult implements Serializable {
      * 添加挂起节点列表。
      * 
      * @param nodeList
-     * @return
+     *        挂起节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllSuspendNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -590,7 +623,8 @@ public class FfResult implements Serializable {
      * 添加激活节点列表。
      * 
      * @param nodeList
-     * @return
+     *        激活节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllActivateNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -601,7 +635,8 @@ public class FfResult implements Serializable {
      * 添加正常完成节点列表。
      * 
      * @param nodeList
-     * @return
+     *        正常完成节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCompleteNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -612,7 +647,8 @@ public class FfResult implements Serializable {
      * 添加异常完成节点列表。
      * 
      * @param nodeList
-     * @return
+     *        异常完成节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllTerminateNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -623,7 +659,8 @@ public class FfResult implements Serializable {
      * 添加删除节点列表。
      * 
      * @param nodeList
-     * @return
+     *        删除节点列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllDeleteNode(List<Node> nodeList) {
         sequenceList.addAll(nodeList);
@@ -634,7 +671,8 @@ public class FfResult implements Serializable {
      * 添加新增任务列表。
      * 
      * @param taskList
-     * @return
+     *        新增任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCreateTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -645,7 +683,8 @@ public class FfResult implements Serializable {
      * 添加挂起任务列表。
      * 
      * @param taskList
-     * @return
+     *        挂起任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllSuspendTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -656,7 +695,8 @@ public class FfResult implements Serializable {
      * 添加激活任务列表。
      * 
      * @param taskList
-     * @return
+     *        激活任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllActivateTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -667,7 +707,8 @@ public class FfResult implements Serializable {
      * 添加正常完成任务列表。
      * 
      * @param taskList
-     * @return
+     *        正常完成任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllCompleteTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -678,7 +719,8 @@ public class FfResult implements Serializable {
      * 添加异常完成任务列表。
      * 
      * @param taskList
-     * @return
+     *        异常完成任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllTerminateTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -689,7 +731,8 @@ public class FfResult implements Serializable {
      * 添加删除任务列表。
      * 
      * @param taskList
-     * @return
+     *        删除任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllDeleteTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -700,7 +743,8 @@ public class FfResult implements Serializable {
      * 添加新增转发任务列表。
      * 
      * @param taskList
-     * @return
+     *        新增转发任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllForwardingTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -711,7 +755,8 @@ public class FfResult implements Serializable {
      * 添加完成转发任务列表。
      * 
      * @param taskList
-     * @return
+     *        完成转发任务列表。
+     * @return 成功返回true，否则返回false。
      */
     public boolean addAllForwardingProcessingCompletedTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
@@ -722,7 +767,8 @@ public class FfResult implements Serializable {
      * 合并另一个FfResult。
      * 
      * @param result
-     * @return
+     *        另一个FfResult。
+     * @return 合兵后的FfResult。
      */
     public boolean addAll(FfResult result) {
         addAllCreateProc(result.getCreateProcList());
@@ -754,50 +800,47 @@ public class FfResult implements Serializable {
         return true;
     }
 
-    /**
-     * override。
-     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(2000);
 
         result.append("operationId: ").append(operationId).append("\r\n");
-        if (createProcList.size() > 0) {
+        if (!createProcList.isEmpty()) {
             result.append("createProcList: ");
             for (Proc proc : createProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
         }
-        if (suspendProcList.size() > 0) {
+        if (!suspendProcList.isEmpty()) {
             result.append("suspendProcList: ");
             for (Proc proc : suspendProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
         }
-        if (activateProcList.size() > 0) {
+        if (!activateProcList.isEmpty()) {
             result.append("activateProcList: ");
             for (Proc proc : activateProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
         }
-        if (completeProcList.size() > 0) {
+        if (!completeProcList.isEmpty()) {
             result.append("completeProcList: ");
             for (Proc proc : completeProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
         }
-        if (terminateProcList.size() > 0) {
+        if (!terminateProcList.isEmpty()) {
             result.append("terminateProcList: ");
             for (Proc proc : terminateProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
         }
-        if (deleteProcList.size() > 0) {
+        if (!deleteProcList.isEmpty()) {
             result.append("deleteProcList: ");
             for (Proc proc : deleteProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
@@ -805,42 +848,42 @@ public class FfResult implements Serializable {
             result.append("\r\n");
         }
 
-        if (createNodeList.size() > 0) {
+        if (!createNodeList.isEmpty()) {
             result.append("createNodeList: ");
             for (Node node : createNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
             }
             result.append("\r\n");
         }
-        if (suspendNodeList.size() > 0) {
+        if (!suspendNodeList.isEmpty()) {
             result.append("suspendNodeList: ");
             for (Node node : suspendNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
             }
             result.append("\r\n");
         }
-        if (activateNodeList.size() > 0) {
+        if (!activateNodeList.isEmpty()) {
             result.append("activateNodeList: ");
             for (Node node : activateNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
             }
             result.append("\r\n");
         }
-        if (completeNodeList.size() > 0) {
+        if (!completeNodeList.isEmpty()) {
             result.append("completeNodeList: ");
             for (Node node : completeNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
             }
             result.append("\r\n");
         }
-        if (terminateNodeList.size() > 0) {
+        if (!terminateNodeList.isEmpty()) {
             result.append("terminateNodeList: ");
             for (Node node : terminateNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
             }
             result.append("\r\n");
         }
-        if (deleteNodeList.size() > 0) {
+        if (!deleteNodeList.isEmpty()) {
             result.append("deleteNodeList: ");
             for (Node node : deleteNodeList) {
                 result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
@@ -848,56 +891,56 @@ public class FfResult implements Serializable {
             result.append("\r\n");
         }
 
-        if (createTaskList.size() > 0) {
+        if (!createTaskList.isEmpty()) {
             result.append("createTaskList: ");
             for (Task task : createTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (suspendTaskList.size() > 0) {
+        if (!suspendTaskList.isEmpty()) {
             result.append("suspendTaskList: ");
             for (Task task : suspendTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (activateTaskList.size() > 0) {
+        if (!activateTaskList.isEmpty()) {
             result.append("activateTaskList: ");
             for (Task task : activateTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (completeTaskList.size() > 0) {
+        if (!completeTaskList.isEmpty()) {
             result.append("completeTaskList: ");
             for (Task task : completeTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (terminateTaskList.size() > 0) {
+        if (!terminateTaskList.isEmpty()) {
             result.append("terminateTaskList: ");
             for (Task task : terminateTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (deleteTaskList.size() > 0) {
+        if (!deleteTaskList.isEmpty()) {
             result.append("deleteTaskList: ");
             for (Task task : deleteTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (forwardingTaskList.size() > 0) {
+        if (!forwardingTaskList.isEmpty()) {
             result.append("forwardingTaskList: ");
             for (Task task : forwardingTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");
         }
-        if (forwardingProcessingCompletedTaskList.size() > 0) {
+        if (!forwardingProcessingCompletedTaskList.isEmpty()) {
             result.append("forwardingProcessingCompletedTaskList: ");
             for (Task task : forwardingProcessingCompletedTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");

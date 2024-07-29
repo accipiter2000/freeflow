@@ -36,6 +36,9 @@ import com.opendynamic.ff.vo.Task;
 import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
+/**
+ * 操作Aspect。
+ */
 @Service
 @Aspect
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -51,13 +54,13 @@ public class FfOperationAspect {
 
     @Around("@annotation(com.opendynamic.ff.FfOperation)")
     public Object wrapper(ProceedingJoinPoint point) {
-        FfResult ffResult = null;
+        FfResult ffResult;
 
         Object[] arguments = point.getArgs();
         String procId = null;
         String nodeId = null;
         String taskId = null;
-        boolean operationRequiresNew = (ffOperationService.getCurrentThreadOperation() == null) ? true : false;
+        boolean operationRequiresNew = ffOperationService.getCurrentThreadOperation() == null;
         if (operationRequiresNew) {
             MethodSignature signature = (MethodSignature) point.getSignature();
             Method method = signature.getMethod();
@@ -116,7 +119,7 @@ public class FfOperationAspect {
         if (operationRequiresNew) {
             String operationId = ffOperationService.getCurrentThreadOperation().getOperationId();
             ffResult.setOperationId(operationId);
-            if (procId == null && nodeId == null && taskId == null && ffResult.getCreateProcList().size() > 0) {
+            if (procId == null && nodeId == null && taskId == null && !ffResult.getCreateProcList().isEmpty()) {
                 procId = ffResult.getCreateProcList().get(0).getProcId();
                 String sql = "update FF_OPERATION set PROC_ID_ = ? where OPERATION_ID_ = ?";
                 ffJdbcTemplate.update(sql, procId, operationId);
@@ -146,49 +149,49 @@ public class FfOperationAspect {
 
             // 计算受影响的operationId
             Set<String> operationIdSet = new HashSet<>();
-            Map<String, Object> paramMap = new HashMap<String, Object>();
+            Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("PROC_ID_LIST", procIdSet);
             paramMap.put("NODE_ID_LIST", nodeIdSet);
             paramMap.put("TASK_ID_LIST", taskIdSet);
             paramMap.put("NODE_VAR_ID_LIST", nodeVarIdSet);
             paramMap.put("OPERATION_ID_", operationId);
-            if (procIdSet.size() > 0) {
+            if (!procIdSet.isEmpty()) {
                 sql = "select * from FF_PROC_OP where PROC_ID_ in (:PROC_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 addOperationId(sql, paramMap, operationIdSet);
             }
-            if (nodeIdSet.size() > 0) {
+            if (!nodeIdSet.isEmpty()) {
                 sql = "select * from FF_NODE_OP where NODE_ID_ in (:NODE_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 addOperationId(sql, paramMap, operationIdSet);
             }
-            if (taskIdSet.size() > 0) {
+            if (!taskIdSet.isEmpty()) {
                 sql = "select * from FF_TASK_OP where TASK_ID_ in (:TASK_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 addOperationId(sql, paramMap, operationIdSet);
             }
-            if (nodeVarIdSet.size() > 0) {
+            if (!nodeVarIdSet.isEmpty()) {
                 sql = "select * from FF_NODE_VAR_OP where NODE_VAR_ID_ in (:NODE_VAR_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 addOperationId(sql, paramMap, operationIdSet);
             }
 
             // 修改受影响的以往操作状态为不可取消
             NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-            if (procIdSet.size() > 0) {
+            if (!procIdSet.isEmpty()) {
                 sql = "update FF_PROC_OP set OPERATION_STATUS_ = 0 where PROC_ID_ in (:PROC_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 namedParameterJdbcTemplate.update(sql, paramMap);
             }
-            if (nodeIdSet.size() > 0) {
+            if (!nodeIdSet.isEmpty()) {
                 sql = "update FF_NODE_OP set OPERATION_STATUS_ = 0 where NODE_ID_ in (:NODE_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 namedParameterJdbcTemplate.update(sql, paramMap);
             }
-            if (taskIdSet.size() > 0) {
+            if (!taskIdSet.isEmpty()) {
                 sql = "update FF_TASK_OP set OPERATION_STATUS_ = 0 where TASK_ID_ in (:TASK_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 namedParameterJdbcTemplate.update(sql, paramMap);
             }
-            if (nodeVarIdSet.size() > 0) {
+            if (!nodeVarIdSet.isEmpty()) {
                 sql = "update FF_NODE_VAR_OP set OPERATION_STATUS_ = 0 where NODE_VAR_ID_ in (:NODE_VAR_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 namedParameterJdbcTemplate.update(sql, paramMap);
             }
 
-            if (operationIdSet.size() > 0) {
+            if (!operationIdSet.isEmpty()) {
                 // 修改operation的状态为不可取消
                 sql = "update FF_OPERATION set OPERATION_STATUS_ = 0 where OPERATION_ID_ in (:OPERATION_ID_LIST) and OPERATION_STATUS_ = 1";
                 paramMap.clear();
@@ -222,7 +225,7 @@ public class FfOperationAspect {
             if (data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT)) {// 本次的新增操作。
                 continue;
             }
-            if (!data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT) && insertIdList.contains(data.get(key))) {// 本次的更新操作，但更新的是本次新增的记录
+            if (!data.get("OPERATION_TYPE_").equals(FfService.OPERATION_TYPE_INSERT) && insertIdList.contains((String) data.get(key))) {// 本次的更新操作，但更新的是本次新增的记录
                 continue;
             }
 
@@ -251,7 +254,7 @@ public class FfOperationAspect {
                 nodeIdList.add((String) data.get("NODE_ID_"));
             }
 
-            if (nodeIdList.size() > 0) {
+            if (!nodeIdList.isEmpty()) {
                 String sql = "select * from FF_NODE_OP where NODE_ID_ in (:NODE_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("NODE_ID_LIST", nodeIdList);
@@ -275,7 +278,7 @@ public class FfOperationAspect {
                 }
             }
 
-            if (previousNodeIdList.size() > 0) {
+            if (!previousNodeIdList.isEmpty()) {
                 String sql = "select * from FF_NODE_OP where NODE_ID_ in (:NODE_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("NODE_ID_LIST", previousNodeIdList);

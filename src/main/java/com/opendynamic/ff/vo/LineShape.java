@@ -13,11 +13,14 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opendynamic.OdUtils;
 
+/**
+ * 连线形状。
+ */
 public class LineShape extends Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonIgnore
-    protected transient List<Point> pointList;
+    protected transient List<Point> pointList;// 折点列表。
 
     @Override
     public void init(Object owner) {
@@ -41,8 +44,8 @@ public class LineShape extends Shape implements Serializable {
         int targetNodeWidth = targetNodeDef.getShape().getWidth();
         int targetNodeHeight = targetNodeDef.getShape().getHeight();
 
-        String startDirection = null;
-        String endDirection = null;
+        String startDirection;
+        String endDirection;
         Point startPoint = null;
         Point startStubPoint = null;
         Point m1Point = null;
@@ -78,7 +81,7 @@ public class LineShape extends Shape implements Serializable {
         }
         else {// 折线
             startDirection = getLinePath().substring(0, 1);
-            endDirection = getLinePath().substring(getLinePath().length() - 1, getLinePath().length());
+            endDirection = getLinePath().substring(getLinePath().length() - 1);
 
             if (startDirection.equals("N")) {// 计算起点，终点和各自的延长点
                 startPoint = new Point(sourceNodeLeft + sourceNodeWidth / 2, sourceNodeTop);
@@ -232,17 +235,15 @@ public class LineShape extends Shape implements Serializable {
     }
 
     private String reverseDirection(String direction) {// 反方向
-        if (direction.equals("N")) {
-            return "S";
-        }
-        if (direction.equals("E")) {
-            return "W";
-        }
-        if (direction.equals("S")) {
-            return "N";
-        }
-        if (direction.equals("W")) {
-            return "E";
+        switch (direction) {
+            case "N":
+                return "S";
+            case "E":
+                return "W";
+            case "S":
+                return "N";
+            case "W":
+                return "E";
         }
 
         return null;
@@ -348,10 +349,10 @@ public class LineShape extends Shape implements Serializable {
     private void drawArrowLine(int sx, int sy, int ex, int ey, Graphics2D g2d) {
         double H = 10; // 箭头高度
         double L = 4; // 底边的一半
-        int x3 = 0;
-        int y3 = 0;
-        int x4 = 0;
-        int y4 = 0;
+        int x3;
+        int y3;
+        int x4;
+        int y4;
         double awrad = Math.atan(L / H); // 箭头角度
         double arraow_len = Math.sqrt(L * L + H * H); // 箭头的长度
         double[] arrXY_1 = rotateVec(ex - sx, ey - sy, awrad, true, arraow_len);
@@ -361,14 +362,10 @@ public class LineShape extends Shape implements Serializable {
         double x_4 = ex - arrXY_2[0]; // (x4,y4)是第二端点
         double y_4 = ey - arrXY_2[1];
 
-        Double X3 = new Double(x_3);
-        x3 = X3.intValue();
-        Double Y3 = new Double(y_3);
-        y3 = Y3.intValue();
-        Double X4 = new Double(x_4);
-        x4 = X4.intValue();
-        Double Y4 = new Double(y_4);
-        y4 = Y4.intValue();
+        x3 = (int) x_3;
+        y3 = (int) y_3;
+        x4 = (int) x_4;
+        y4 = (int) y_4;
         g2d.drawLine(sx, sy, ex, ey); // 画线
 
         GeneralPath triangle = new GeneralPath();
@@ -381,7 +378,7 @@ public class LineShape extends Shape implements Serializable {
     }
 
     private double[] rotateVec(int px, int py, double ang, boolean isChLen, double newLen) {
-        double mathstr[] = new double[2];
+        double[] mathstr = new double[2];
         // 矢量旋转函数，参数含义分别是x分量、y分量、旋转角、是否改变长度、新长度
         double vx = px * Math.cos(ang) - py * Math.sin(ang);
         double vy = px * Math.sin(ang) + py * Math.cos(ang);

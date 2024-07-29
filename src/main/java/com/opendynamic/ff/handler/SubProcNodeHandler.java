@@ -49,7 +49,7 @@ public class SubProcNodeHandler implements NodeHandler {
 
     @SuppressWarnings("unchecked")
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         Proc proc = ffService.loadProc(branchNode.getProcId());
@@ -74,7 +74,7 @@ public class SubProcNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        ValueExpression expression = null;
+        ValueExpression expression;
         // JUEL解析
         // 计算子流程
         List<ProcDef> assignSubProcDefList;
@@ -101,8 +101,8 @@ public class SubProcNodeHandler implements NodeHandler {
                 assignSubProcDefList = new ArrayList<>();
                 if (StringUtils.isNotEmpty((String) object)) {
                     String[] assignSubProcDefs = ((String) object).split(",");
-                    for (int i = 0; i < assignSubProcDefs.length; i++) {
-                        assignSubProcDefList.add(ffService.loadProcDefByCode(assignSubProcDefs[i]));
+                    for (String ssignSubProcDef : assignSubProcDefs) {
+                        assignSubProcDefList.add(ffService.loadProcDefByCode(ssignSubProcDef));
                     }
                 }
             }
@@ -125,17 +125,17 @@ public class SubProcNodeHandler implements NodeHandler {
 
             List<? extends NodeDef> startNodeDefList = procDef.getStartNodeDefList();
             for (NodeDef startNodeDef : startNodeDefList) {
-                ffResult.addAll(ffService.getNodeHandler(startNodeDef.getNodeType()).insertNodeByNodeDef(startNodeDef, subProcBranchNode, previousNodeIds, candidateList, triggerOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(startNodeDef.getNodeType()).insertNodeByNodeDef(startNodeDef, subProcBranchNode, previousNodeIds, candidateList, initialOperation, executor));
             }
         }
 
         String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String inform = nodeDef.getInform();
-        if (waitingForCompleteNode != null && waitingForCompleteNode.indexOf("${") != -1) {// JUEL解析
+        if (waitingForCompleteNode != null && waitingForCompleteNode.contains("${")) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
             waitingForCompleteNode = (String) expression.getValue(simpleContext);
         }
-        if (inform != null && inform.indexOf("${") != -1) {// JUEL解析
+        if (inform != null && inform.contains("${")) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
@@ -184,7 +184,7 @@ public class SubProcNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        ValueExpression expression = null;
+        ValueExpression expression;
 
         // 为每个子流程新增分支
         for (ProcDef assignSubProcDef : assignSubProcDefList) {
@@ -211,7 +211,7 @@ public class SubProcNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -263,7 +263,7 @@ public class SubProcNodeHandler implements NodeHandler {
         }
 
         // 完成节点
-        // 合并子节点的候选
+        // 合并下级节点的候选
         CandidateList fullCandidateList = new CandidateList();
         fullCandidateList.addAll(candidateList);
         for (Node childNode : ffService.createChildNodeQuery().setNodeId(node.getNodeId()).queryForObjectList()) {
@@ -285,7 +285,7 @@ public class SubProcNodeHandler implements NodeHandler {
         NodeDef nodeDef = procDef.getNodeDef((node.getNodeCode()));// 获取当前节点所属节点定义
         List<? extends NodeDef> nextNodeDefList = nodeDef.getNextNodeDefList(nodeVarMap);// 查找下一个节点定义
         Node parentNode = ffService.loadNode(node.getParentNodeId());
-        if (nextNodeDefList.size() > 0) {// 有后续节点定义，新增后续节点。
+        if (!nextNodeDefList.isEmpty()) {// 有后续节点定义，新增后续节点。
             for (NodeDef nextNodeDef : nextNodeDefList) {
                 ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, parentNode, node.getNodeId(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
             }
@@ -306,21 +306,21 @@ public class SubProcNodeHandler implements NodeHandler {
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
             }
             else {// 非完成返回节点，递归完成上级节点。
-                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, triggerOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
             }
 
         return ffResult;
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_TERMINATE) || node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {
             return ffResult;
         }
 
-        // 有并发子节点不能驳回
+        // 有并发下级节点不能驳回
         if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_SUSPEND, FfService.NODE_STATUS_COMPLETE)).count() > 1) {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }
@@ -344,17 +344,17 @@ public class SubProcNodeHandler implements NodeHandler {
             }
         }
         else {// 递归驳回上级节点
-            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).rejectNode(parentNode, candidateList, triggerOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).rejectNode(parentNode, candidateList, initialOperation, executor));
         }
 
         return ffResult;
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
-        if (FfService.OPERATION_ACTIVATE.equals(triggerOperation) && StringUtils.isNotEmpty(previousNodeIds)) {// 去除最后完成节点ID
+        if (FfService.OPERATION_ACTIVATE.equals(initialOperation) && StringUtils.isNotEmpty(previousNodeIds)) {// 去除最后完成节点ID
             List<String> lastCompleteNodeIdList = new ArrayList<>();
             if (StringUtils.isNotEmpty(node.getLastCompleteNodeIds())) {
                 lastCompleteNodeIdList.addAll(Arrays.asList(node.getLastCompleteNodeIds().split(",")));
@@ -368,9 +368,9 @@ public class SubProcNodeHandler implements NodeHandler {
             node.setNodeStatus(FfService.NODE_STATUS_ACTIVE);
             ffResult.addActivateNode(node);
 
-            if (FfService.OPERATION_ACTIVATE.equals(triggerOperation)) {// 上行激活
+            if (FfService.OPERATION_ACTIVATE.equals(initialOperation)) {// 上行激活
                 Node parentNode = ffService.loadNode(node.getParentNodeId());// 递归激活上级节点
-                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).activateNode(parentNode, node.getNodeId(), candidateList, triggerOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).activateNode(parentNode, node.getNodeId(), candidateList, initialOperation, executor));
             }
             else {// 下行激活
                 String lastCompleteNodeIds = node.getLastCompleteNodeIds();
@@ -378,7 +378,7 @@ public class SubProcNodeHandler implements NodeHandler {
                     ffNodeService.updateNodeLastCompleteNodeIds(node.getNodeId(), null);
                     List<Node> lastCompleteNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(lastCompleteNodeIds.split(","))).queryForObjectList();
                     for (Node lastCompleteNode : lastCompleteNodeList) {
-                        ffResult.addAll(ffService.getNodeHandler(lastCompleteNode.getNodeType()).activateNode(lastCompleteNode, null, candidateList, triggerOperation, executor));
+                        ffResult.addAll(ffService.getNodeHandler(lastCompleteNode.getNodeType()).activateNode(lastCompleteNode, null, candidateList, initialOperation, executor));
                     }
                 }
             }

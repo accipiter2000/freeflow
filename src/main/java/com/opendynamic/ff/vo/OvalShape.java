@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 import com.opendynamic.OdUtils;
 
+/**
+ * 椭圆形状。
+ */
 public class OvalShape extends Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 

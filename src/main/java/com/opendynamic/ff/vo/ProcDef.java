@@ -13,52 +13,56 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
+/**
+ * 流程定义。
+ */
 public class ProcDef implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected String procDefId; // 流程定义ID
-    protected String procDefCode; // 流程定义编码
-    protected String procDefName; // 流程定义名称
-    protected String procDefCat; // 流程定义分类
+    protected String procDefId; // 流程定义ID。
+    protected String procDefCode; // 流程定义编码。
+    protected String procDefName; // 流程定义名称。
+    protected String procDefCat; // 流程定义分类。
     @JsonIgnore
-    protected transient String procDefModel; // 流程定义模型
+    protected transient String procDefModel; // 流程定义模型。
     @JsonIgnore
-    protected transient byte[] procDefDiagramFile; // 流程定义图文件
-    protected String procDefDiagramFileName; // 流程定义图文件名称
-    protected int procDefDiagramFileLength; // 流程定义图文件长度
-    protected int procDefDiagramWidth; // 流程定义图宽度
-    protected int procDefDiagramHeight; // 流程定义图高度
-    protected String memo; // 备注
-    protected String extAttr1; // 扩展属性1
-    protected String extAttr2; // 扩展属性2
-    protected String extAttr3; // 扩展属性3
-    protected String extAttr4; // 扩展属性4
-    protected String extAttr5; // 扩展属性5
-    protected String extAttr6; // 扩展属性6
-    protected String extAttr7; // 扩展属性7
-    protected String extAttr8; // 扩展属性8
-    protected int version; // 版本
-    protected String procDefStatus; // 流程定义状态
-    protected Date creationDate; // 创建日期
-    protected Date updateDate; // 更新日期
-    protected String operatorId; // 操作人员ID
-    protected String operatorName; // 操作人员名称
+    protected transient byte[] procDefDiagramFile; // 流程定义图文件。
+    protected String procDefDiagramFileName; // 流程定义图文件名称。
+    protected int procDefDiagramFileLength; // 流程定义图文件长度。
+    protected int procDefDiagramWidth; // 流程定义图宽度。
+    protected int procDefDiagramHeight; // 流程定义图高度。
+    protected String memo; // 备注。
+    protected String extAttr1; // 扩展属性1。
+    protected String extAttr2; // 扩展属性2。
+    protected String extAttr3; // 扩展属性3。
+    protected String extAttr4; // 扩展属性4。
+    protected String extAttr5; // 扩展属性5。
+    protected String extAttr6; // 扩展属性6。
+    protected String extAttr7; // 扩展属性7。
+    protected String extAttr8; // 扩展属性8。
+    protected int version; // 版本。
+    protected String procDefStatus; // 流程定义状态。
+    protected Date creationDate; // 创建日期。
+    protected Date updateDate; // 更新日期。
+    protected String operatorId; // 操作人员ID。
+    protected String operatorName; // 操作人员名称。
 
     @JsonIgnore
-    protected transient Map<String, NodeDef> nodeDefMap;// 节点定义map，方便通过节点编码查询
+    protected transient Map<String, NodeDef> nodeDefMap;// 节点定义map。键为节点编码。
 
-    protected List<NodeDef> nodeDefList;// 节点定列表
-    protected List<FlowDef> flowDefList;// 流转定义列表
-    protected List<NoteDef> noteDefList;// 注释定义列表
-    protected List<ProcVarDef> procVarDefList;// 流程变量定义列表
+    protected List<NodeDef> nodeDefList;// 节点定义列表。
+    protected List<FlowDef> flowDefList;// 流转定义列表。
+    protected List<NoteDef> noteDefList;// 注释定义列表。
+    protected List<ProcVarDef> procVarDefList;// 流程变量定义列表。
 
     @JsonIgnore
-    protected transient List<NodeDef> startNodeDefList;// 起始节点定义列表
+    protected transient List<NodeDef> startNodeDefList;// 起始节点定义列表。
 
     /**
-     * 通过数据库记录构造。
+     * 依据数据库数据构造。
      * 
      * @param data
+     *        数据库数据。
      */
     public ProcDef(Map<String, Object> data) {
         if (data == null) {
@@ -156,7 +160,7 @@ public class ProcDef implements Serializable {
         // 初始化起始节点定义列表
         startNodeDefList = new ArrayList<>();
         for (NodeDef nodeDef : nodeDefList) {
-            if (nodeDef.getParentNodeCode() == null && nodeDef.getIncomingFlowDefList().size() == 0) {
+            if (nodeDef.getParentNodeCode() == null && nodeDef.getIncomingFlowDefList().isEmpty()) {
                 startNodeDefList.add(nodeDef);
             }
         }
@@ -201,111 +205,237 @@ public class ProcDef implements Serializable {
         }
     }
 
+    /**
+     * 获取流程定义ID。
+     * 
+     * @return 流程定义ID。
+     */
     public String getProcDefId() {
         return procDefId;
     }
 
+    /**
+     * 获取流程定义编码。
+     * 
+     * @return 流程定义编码。
+     */
     public String getProcDefCode() {
         return procDefCode;
     }
 
+    /**
+     * 获取流程定义名称。
+     * 
+     * @return 流程定义名称。
+     */
     public String getProcDefName() {
         return procDefName;
     }
 
+    /**
+     * 获取流程定义分类。
+     * 
+     * @return 流程定义分类。
+     */
     public String getProcDefCat() {
         return procDefCat;
     }
 
+    /**
+     * 获取流程定义模型。
+     * 
+     * @return 流程定义模型。
+     */
     public String getProcDefModel() {
         return procDefModel;
     }
 
+    /**
+     * 获取流程定义图文件。
+     * 
+     * @return 流程定义图文件。
+     */
     public byte[] getProcDefDiagramFile() {
         return procDefDiagramFile;
     }
 
+    /**
+     * 获取流程定义图文件名称。
+     * 
+     * @return 流程定义图文件名称。
+     */
     public String getProcDefDiagramFileName() {
         return procDefDiagramFileName;
     }
 
+    /**
+     * 获取流程定义图文件长度。
+     * 
+     * @return 流程定义图文件长度。
+     */
     public int getProcDefDiagramFileLength() {
         return procDefDiagramFileLength;
     }
 
+    /**
+     * 获取流程定义图宽度。
+     * 
+     * @return 流程定义图宽度。
+     */
     public int getProcDefDiagramWidth() {
         return procDefDiagramWidth;
     }
 
+    /**
+     * 获取流程定义图高度。
+     * 
+     * @return 流程定义图高度。
+     */
     public int getProcDefDiagramHeight() {
         return procDefDiagramHeight;
     }
 
+    /**
+     * 获取备注。
+     * 
+     * @return 备注。
+     */
     public String getMemo() {
         return memo;
     }
 
+    /**
+     * 获取扩展属性1。
+     * 
+     * @return 扩展属性1。
+     */
     public String getExtAttr1() {
         return extAttr1;
     }
 
+    /**
+     * 获取扩展属性2。
+     * 
+     * @return 扩展属性2。
+     */
     public String getExtAttr2() {
         return extAttr2;
     }
 
+    /**
+     * 获取扩展属性3。
+     * 
+     * @return 扩展属性3。
+     */
     public String getExtAttr3() {
         return extAttr3;
     }
 
+    /**
+     * 获取扩展属性4。
+     * 
+     * @return 扩展属性4。
+     */
     public String getExtAttr4() {
         return extAttr4;
     }
 
+    /**
+     * 获取扩展属性5。
+     * 
+     * @return 扩展属性5。
+     */
     public String getExtAttr5() {
         return extAttr5;
     }
 
+    /**
+     * 获取扩展属性6。
+     * 
+     * @return 扩展属性6。
+     */
     public String getExtAttr6() {
         return extAttr6;
     }
 
+    /**
+     * 获取扩展属性7。
+     * 
+     * @return 扩展属性7。
+     */
     public String getExtAttr7() {
         return extAttr7;
     }
 
+    /**
+     * 获取扩展属性8。
+     * 
+     * @return 扩展属性8。
+     */
     public String getExtAttr8() {
         return extAttr8;
     }
 
+    /**
+     * 获取版本。
+     * 
+     * @return 版本。
+     */
     public int getVersion() {
         return version;
     }
 
+    /**
+     * 获取流程定义状态。
+     * 
+     * @return 流程定义状态。
+     */
     public String getProcDefStatus() {
         return procDefStatus;
     }
 
+    /**
+     * 获取创建日期。
+     * 
+     * @return 创建日期。
+     */
     public Date getCreationDate() {
         return creationDate;
     }
 
+    /**
+     * 获取更新日期。
+     * 
+     * @return 更新日期。
+     */
     public Date getUpdateDate() {
         return updateDate;
     }
 
+    /**
+     * 获取操作人员ID。
+     * 
+     * @return 操作人员ID。
+     */
     public String getOperatorId() {
         return operatorId;
     }
 
+    /**
+     * 获取操作人员名称。
+     * 
+     * @return 操作人员名称。
+     */
     public String getOperatorName() {
         return operatorName;
     }
 
     /**
-     * 获取节点定义。
+     * 根据节点编码获取节点定义。
      * 
      * @param nodeCode
-     * @return
+     *        节点编码。
+     * @return 节点定义。
      */
     public NodeDef getNodeDef(String nodeCode) {
         return nodeDefMap.get(nodeCode);
@@ -314,67 +444,52 @@ public class ProcDef implements Serializable {
     /**
      * 获取所有节点定义列表。
      * 
-     * @return
+     * @return 所有节点定义列表。
      */
     public List<? extends NodeDef> getNodeDefList() {
-        List<NodeDef> nodeDefList = new ArrayList<>();
-        nodeDefList.addAll(this.nodeDefList);
-
-        return nodeDefList;
+        return new ArrayList<>(this.nodeDefList);
     }
 
     /**
      * 获取起始节点定义列表。
      * 
-     * @return
+     * @return 起始节点定义列表。
      */
     public List<? extends NodeDef> getStartNodeDefList() {
-        List<NodeDef> startNodeDefList = new ArrayList<>();
-        startNodeDefList.addAll(this.startNodeDefList);
-
-        return startNodeDefList;
+        return new ArrayList<>(this.startNodeDefList);
     }
 
     /**
      * 获取所有流转定义列表。
      * 
-     * @return
+     * @return 所有流转定义列表。
      */
     public List<? extends FlowDef> getFlowDefList() {
-        List<FlowDef> flowDefList = new ArrayList<>();
-        flowDefList.addAll(this.flowDefList);
-
-        return flowDefList;
+        return new ArrayList<>(this.flowDefList);
     }
 
     /**
      * 获取所有注释定义列表。
      * 
-     * @return
+     * @return 所有注释定义列表。
      */
     public List<? extends NoteDef> getNoteDefList() {
-        List<NoteDef> noteDefList = new ArrayList<>();
-        noteDefList.addAll(this.noteDefList);
-
-        return noteDefList;
+        return new ArrayList<>(this.noteDefList);
     }
 
     /**
      * 获取所有流程变量定义列表。
      * 
-     * @return
+     * @return 所有流程变量定义列表。
      */
     public List<? extends ProcVarDef> getProcVarDefList() {
-        List<ProcVarDef> procVarDefList = new ArrayList<>();
-        procVarDefList.addAll(this.procVarDefList);
-
-        return procVarDefList;
+        return new ArrayList<>(this.procVarDefList);
     }
 
     /**
-     * 获取所有流程变量定义MAP。
+     * 获取所有流程变量定义map。
      * 
-     * @return
+     * @return 所有流程变量定义map。键为流程变量名称，值为流程变量值。
      */
     public Map<String, Object> getProcVarDefMap() {
         Map<String, Object> procVarDefMap = new HashMap<>();

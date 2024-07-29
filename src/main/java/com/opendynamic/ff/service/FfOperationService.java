@@ -88,14 +88,21 @@ public interface FfOperationService {
 
     /**
      * 界定操作的开始。创建线程变量ThreadOperation，用于界定此次操作的边界。
-     * 
+     *
      * @param operationType
+     *        操作类型。
      * @param procId
+     *        流程ID。
      * @param nodeId
+     *        节点ID。
      * @param taskId
+     *        任务ID。
      * @param memo
+     *        备注。
      * @param operator
+     *        操作人ID。
      * @param operatorName
+     *        操作人名称。
      */
     public void init(String operationType, String procId, String nodeId, String taskId, String memo, String operator, String operatorName);
 
@@ -107,7 +114,7 @@ public interface FfOperationService {
     /**
      * 获取当前线程的ThreadOperation。
      * 
-     * @return
+     * @return 前线程的ThreadOperation。
      */
     public ThreadOperation getCurrentThreadOperation();
 
@@ -115,7 +122,8 @@ public interface FfOperationService {
      * 取消操作。
      * 
      * @param operationId
-     * @return
+     *        操作ID
+     * @return 所有变更的流程、节点和任务。
      */
     public FfResult undo(String operationId);
 }

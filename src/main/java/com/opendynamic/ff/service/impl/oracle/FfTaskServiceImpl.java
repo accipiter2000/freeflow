@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -81,7 +80,7 @@ public class FfTaskServiceImpl implements FfTaskService {
             List<String> ISOLATE_SUB_PROC_DEF_CODE_LIST, String ISOLATE_SUB_PROC_STATUS_, List<String> ISOLATE_SUB_PROC_STATUS_LIST, String NODE_STATUS_, List<String> NODE_STATUS_LIST, Date FROM_NODE_CREATION_DATE_, Date TO_NODE_CREATION_DATE_, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST, String BIZ_NAME_, List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST,
             String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_, List<String> PROC_STATUS_LIST, Date FROM_PROC_CREATION_DATE_, Date TO_PROC_CREATION_DATE_, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST, Boolean emptyParentNode, Boolean emptyPreviousNodes, Boolean emptyLastCompleteNodes, String dataScope) {// 组装查询SQL语句
         String sql;
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         String view = "FFV_TASK_P";
         if (FfService.DATA_SCOPE_PROC_DEF.equals(dataScope)) {
@@ -100,51 +99,51 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql = "select * from " + view + " where 1 = 1";
         }
 
-        if (StringUtils.isNotEmpty(TASK_ID_)) {
+        if (TASK_ID_ != null) {
             sql += " and TASK_ID_ = :TASK_ID_";
             paramMap.put("TASK_ID_", TASK_ID_);
         }
-        if (TASK_ID_LIST != null && TASK_ID_LIST.size() > 0) {
+        if (TASK_ID_LIST != null && !TASK_ID_LIST.isEmpty()) {
             sql += " and TASK_ID_ in (:TASK_ID_LIST)";
             paramMap.put("TASK_ID_LIST", TASK_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(PREVIOUS_TASK_ID_)) {
+        if (PREVIOUS_TASK_ID_ != null) {
             sql += " and PREVIOUS_TASK_ID_ = :PREVIOUS_TASK_ID_";
             paramMap.put("PREVIOUS_TASK_ID_", PREVIOUS_TASK_ID_);
         }
-        if (PREVIOUS_TASK_ID_LIST != null && PREVIOUS_TASK_ID_LIST.size() > 0) {
+        if (PREVIOUS_TASK_ID_LIST != null && !PREVIOUS_TASK_ID_LIST.isEmpty()) {
             sql += " and PREVIOUS_TASK_ID_ in (:PREVIOUS_TASK_ID_LIST)";
             paramMap.put("PREVIOUS_TASK_ID_LIST", PREVIOUS_TASK_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(TASK_TYPE_)) {
+        if (TASK_TYPE_ != null) {
             sql += " and TASK_TYPE_ = :TASK_TYPE_";
             paramMap.put("TASK_TYPE_", TASK_TYPE_);
         }
-        if (TASK_TYPE_LIST != null && TASK_TYPE_LIST.size() > 0) {
+        if (TASK_TYPE_LIST != null && !TASK_TYPE_LIST.isEmpty()) {
             sql += " and TASK_TYPE_ in (:TASK_TYPE_LIST)";
             paramMap.put("TASK_TYPE_LIST", TASK_TYPE_LIST);
         }
-        if (StringUtils.isNotEmpty(ASSIGNEE_)) {
+        if (ASSIGNEE_ != null) {
             sql += " and ASSIGNEE_ = :ASSIGNEE_";
             paramMap.put("ASSIGNEE_", ASSIGNEE_);
         }
-        if (ASSIGNEE_LIST != null && ASSIGNEE_LIST.size() > 0) {
+        if (ASSIGNEE_LIST != null && !ASSIGNEE_LIST.isEmpty()) {
             sql += " and ASSIGNEE_ in (:ASSIGNEE_LIST)";
             paramMap.put("ASSIGNEE_LIST", ASSIGNEE_LIST);
         }
-        if (StringUtils.isNotEmpty(ASSIGNEE_NAME_)) {
+        if (ASSIGNEE_NAME_ != null) {
             sql += " and ASSIGNEE_NAME_ like '%' || :ASSIGNEE_NAME_ || '%'";
             paramMap.put("ASSIGNEE_NAME_", ASSIGNEE_NAME_);
         }
-        if (ASSIGNEE_NAME_LIST != null && ASSIGNEE_NAME_LIST.size() > 0) {
+        if (ASSIGNEE_NAME_LIST != null && !ASSIGNEE_NAME_LIST.isEmpty()) {
             sql += " and ASSIGNEE_NAME_ in (:ASSIGNEE_NAME_LIST)";
             paramMap.put("ASSIGNEE_NAME_LIST", ASSIGNEE_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(ACTION_)) {
+        if (ACTION_ != null) {
             sql += " and ACTION_ like '%' || :ACTION_ || '%'";
             paramMap.put("ACTION_", ACTION_);
         }
-        if (ACTION_LIST != null && ACTION_LIST.size() > 0) {
+        if (ACTION_LIST != null && !ACTION_LIST.isEmpty()) {
             sql += " and ACTION_ in (:ACTION_LIST)";
             paramMap.put("ACTION_LIST", ACTION_LIST);
         }
@@ -156,19 +155,19 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and DUE_DATE_ <= :TO_DUE_DATE_";
             paramMap.put("TO_DUE_DATE_", TO_DUE_DATE_);
         }
-        if (StringUtils.isNotEmpty(CLAIM_)) {
+        if (CLAIM_ != null) {
             sql += " and CLAIM_ = :CLAIM_";
             paramMap.put("CLAIM_", CLAIM_);
         }
-        if (CLAIM_LIST != null && CLAIM_LIST.size() > 0) {
+        if (CLAIM_LIST != null && !CLAIM_LIST.isEmpty()) {
             sql += " and CLAIM_ in (:CLAIM_LIST)";
             paramMap.put("CLAIM_LIST", CLAIM_LIST);
         }
-        if (StringUtils.isNotEmpty(FORWARDABLE_)) {
+        if (FORWARDABLE_ != null) {
             sql += " and FORWARDABLE_ = :FORWARDABLE_";
             paramMap.put("FORWARDABLE_", FORWARDABLE_);
         }
-        if (FORWARDABLE_LIST != null && FORWARDABLE_LIST.size() > 0) {
+        if (FORWARDABLE_LIST != null && !FORWARDABLE_LIST.isEmpty()) {
             sql += " and FORWARDABLE_ in (:FORWARDABLE_LIST)";
             paramMap.put("FORWARDABLE_LIST", FORWARDABLE_LIST);
         }
@@ -176,31 +175,31 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and PRIORITY_ = :PRIORITY_";
             paramMap.put("PRIORITY_", PRIORITY_);
         }
-        if (PRIORITY_LIST != null && PRIORITY_LIST.size() > 0) {
+        if (PRIORITY_LIST != null && !PRIORITY_LIST.isEmpty()) {
             sql += " and PRIORITY_ in (:PRIORITY_LIST)";
             paramMap.put("PRIORITY_LIST", PRIORITY_LIST);
         }
-        if (StringUtils.isNotEmpty(FORWARD_STATUS_)) {
+        if (FORWARD_STATUS_ != null) {
             sql += " and FORWARD_STATUS_ = :FORWARD_STATUS_";
             paramMap.put("FORWARD_STATUS_", FORWARD_STATUS_);
         }
-        if (FORWARD_STATUS_LIST != null && FORWARD_STATUS_LIST.size() > 0) {
+        if (FORWARD_STATUS_LIST != null && !FORWARD_STATUS_LIST.isEmpty()) {
             sql += " and FORWARD_STATUS_ in (:FORWARD_STATUS_LIST)";
             paramMap.put("FORWARD_STATUS_LIST", FORWARD_STATUS_LIST);
         }
-        if (StringUtils.isNotEmpty(TASK_END_USER_)) {
+        if (TASK_END_USER_ != null) {
             sql += " and TASK_END_USER_ = :TASK_END_USER_";
             paramMap.put("TASK_END_USER_", TASK_END_USER_);
         }
-        if (TASK_END_USER_LIST != null && TASK_END_USER_LIST.size() > 0) {
+        if (TASK_END_USER_LIST != null && !TASK_END_USER_LIST.isEmpty()) {
             sql += " and TASK_END_USER_ in (:TASK_END_USER_LIST)";
             paramMap.put("TASK_END_USER_LIST", TASK_END_USER_LIST);
         }
-        if (StringUtils.isNotEmpty(TASK_END_USER_NAME_)) {
+        if (TASK_END_USER_NAME_ != null) {
             sql += " and TASK_END_USER_NAME_ like '%' || :TASK_END_USER_NAME_ || '%'";
             paramMap.put("TASK_END_USER_NAME_", TASK_END_USER_NAME_);
         }
-        if (TASK_END_USER_NAME_LIST != null && TASK_END_USER_NAME_LIST.size() > 0) {
+        if (TASK_END_USER_NAME_LIST != null && !TASK_END_USER_NAME_LIST.isEmpty()) {
             sql += " and TASK_END_USER_NAME_ in (:TASK_END_USER_NAME_LIST)";
             paramMap.put("TASK_END_USER_NAME_LIST", TASK_END_USER_NAME_LIST);
         }
@@ -212,11 +211,11 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and TASK_END_DATE_ <= :TO_TASK_END_DATE_";
             paramMap.put("TO_TASK_END_DATE_", TO_TASK_END_DATE_);
         }
-        if (StringUtils.isNotEmpty(TASK_STATUS_)) {
+        if (TASK_STATUS_ != null) {
             sql += " and TASK_STATUS_ = :TASK_STATUS_";
             paramMap.put("TASK_STATUS_", TASK_STATUS_);
         }
-        if (TASK_STATUS_LIST != null && TASK_STATUS_LIST.size() > 0) {
+        if (TASK_STATUS_LIST != null && !TASK_STATUS_LIST.isEmpty()) {
             sql += " and TASK_STATUS_ in (:TASK_STATUS_LIST)";
             paramMap.put("TASK_STATUS_LIST", TASK_STATUS_LIST);
         }
@@ -229,91 +228,91 @@ public class FfTaskServiceImpl implements FfTaskService {
             paramMap.put("TO_CREATION_DATE_", TO_CREATION_DATE_);
         }
 
-        if (StringUtils.isNotEmpty(NODE_ID_)) {
+        if (NODE_ID_ != null) {
             sql += " and NODE_ID_ = :NODE_ID_";
             paramMap.put("NODE_ID_", NODE_ID_);
         }
-        if (NODE_ID_LIST != null && NODE_ID_LIST.size() > 0) {
+        if (NODE_ID_LIST != null && !NODE_ID_LIST.isEmpty()) {
             sql += " and NODE_ID_ in (:NODE_ID_LIST)";
             paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(PARENT_NODE_ID_)) {
+        if (PARENT_NODE_ID_ != null) {
             sql += " and PARENT_NODE_ID_ = :PARENT_NODE_ID_";
             paramMap.put("PARENT_NODE_ID_", PARENT_NODE_ID_);
         }
-        if (PARENT_NODE_ID_LIST != null && PARENT_NODE_ID_LIST.size() > 0) {
+        if (PARENT_NODE_ID_LIST != null && !PARENT_NODE_ID_LIST.isEmpty()) {
             sql += " and PARENT_NODE_ID_ in (:PARENT_NODE_ID_LIST)";
             paramMap.put("PARENT_NODE_ID_LIST", PARENT_NODE_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(PREVIOUS_NODE_IDS_)) {
+        if (PREVIOUS_NODE_IDS_ != null) {
             sql += " and PREVIOUS_NODE_IDS_ like '%' || :PREVIOUS_NODE_IDS_ || '%'";
             paramMap.put("PREVIOUS_NODE_IDS_", PREVIOUS_NODE_IDS_);
         }
-        if (StringUtils.isNotEmpty(LAST_COMPLETE_NODE_IDS_)) {
+        if (LAST_COMPLETE_NODE_IDS_ != null) {
             sql += " and LAST_COMPLETE_NODE_IDS_ like '%' || :LAST_COMPLETE_NODE_IDS_ || '%'";
             paramMap.put("LAST_COMPLETE_NODE_IDS_", LAST_COMPLETE_NODE_IDS_);
         }
-        if (StringUtils.isNotEmpty(SUB_PROC_DEF_ID_)) {
+        if (SUB_PROC_DEF_ID_ != null) {
             sql += " and SUB_PROC_DEF_ID_ = :SUB_PROC_DEF_ID_";
             paramMap.put("SUB_PROC_DEF_ID_", SUB_PROC_DEF_ID_);
         }
-        if (SUB_PROC_DEF_ID_LIST != null && SUB_PROC_DEF_ID_LIST.size() > 0) {
+        if (SUB_PROC_DEF_ID_LIST != null && !SUB_PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and SUB_PROC_DEF_ID_ in (:SUB_PROC_DEF_ID_LIST)";
             paramMap.put("SUB_PROC_DEF_ID_LIST", SUB_PROC_DEF_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(ADJUST_SUB_PROC_DEF_ID_)) {
+        if (ADJUST_SUB_PROC_DEF_ID_ != null) {
             sql += " and ADJUST_SUB_PROC_DEF_ID_ = :ADJUST_SUB_PROC_DEF_ID_";
             paramMap.put("ADJUST_SUB_PROC_DEF_ID_", ADJUST_SUB_PROC_DEF_ID_);
         }
-        if (ADJUST_SUB_PROC_DEF_ID_LIST != null && ADJUST_SUB_PROC_DEF_ID_LIST.size() > 0) {
+        if (ADJUST_SUB_PROC_DEF_ID_LIST != null && !ADJUST_SUB_PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and ADJUST_SUB_PROC_DEF_ID_ in (:ADJUST_SUB_PROC_DEF_ID_LIST)";
             paramMap.put("ADJUST_SUB_PROC_DEF_ID_LIST", ADJUST_SUB_PROC_DEF_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_TYPE_)) {
+        if (NODE_TYPE_ != null) {
             sql += " and NODE_TYPE_ = :NODE_TYPE_";
             paramMap.put("NODE_TYPE_", NODE_TYPE_);
         }
-        if (NODE_TYPE_LIST != null && NODE_TYPE_LIST.size() > 0) {
+        if (NODE_TYPE_LIST != null && !NODE_TYPE_LIST.isEmpty()) {
             sql += " and NODE_TYPE_ in (:NODE_TYPE_LIST)";
             paramMap.put("NODE_TYPE_LIST", NODE_TYPE_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_CODE_)) {
+        if (NODE_CODE_ != null) {
             sql += " and NODE_CODE_ = :NODE_CODE_";
             paramMap.put("NODE_CODE_", NODE_CODE_);
         }
-        if (NODE_CODE_LIST != null && NODE_CODE_LIST.size() > 0) {
+        if (NODE_CODE_LIST != null && !NODE_CODE_LIST.isEmpty()) {
             sql += " and NODE_CODE_ in (:NODE_CODE_LIST)";
             paramMap.put("NODE_CODE_LIST", NODE_CODE_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_NAME_)) {
+        if (NODE_NAME_ != null) {
             sql += " and NODE_NAME_ like '%' || :NODE_NAME_ || '%'";
             paramMap.put("NODE_NAME_", NODE_NAME_);
         }
-        if (NODE_NAME_LIST != null && NODE_NAME_LIST.size() > 0) {
+        if (NODE_NAME_LIST != null && !NODE_NAME_LIST.isEmpty()) {
             sql += " and NODE_NAME_ in (:NODE_NAME_LIST)";
             paramMap.put("NODE_NAME_LIST", NODE_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(PARENT_NODE_CODE_)) {
+        if (PARENT_NODE_CODE_ != null) {
             sql += " and PARENT_NODE_CODE_ = :PARENT_NODE_CODE_";
             paramMap.put("PARENT_NODE_CODE_", PARENT_NODE_CODE_);
         }
-        if (PARENT_NODE_CODE_LIST != null && PARENT_NODE_CODE_LIST.size() > 0) {
+        if (PARENT_NODE_CODE_LIST != null && !PARENT_NODE_CODE_LIST.isEmpty()) {
             sql += " and PARENT_NODE_CODE_ in (:PARENT_NODE_CODE_LIST)";
             paramMap.put("PARENT_NODE_CODE_LIST", PARENT_NODE_CODE_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_END_USER_)) {
+        if (NODE_END_USER_ != null) {
             sql += " and NODE_END_USER_ = :NODE_END_USER_";
             paramMap.put("NODE_END_USER_", NODE_END_USER_);
         }
-        if (NODE_END_USER_LIST != null && NODE_END_USER_LIST.size() > 0) {
+        if (NODE_END_USER_LIST != null && !NODE_END_USER_LIST.isEmpty()) {
             sql += " and NODE_END_USER_ in (:NODE_END_USER_LIST)";
             paramMap.put("NODE_END_USER_LIST", NODE_END_USER_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_END_USER_NAME_)) {
+        if (NODE_END_USER_NAME_ != null) {
             sql += " and NODE_END_USER_NAME_ like '%' || :NODE_END_USER_NAME_ || '%'";
             paramMap.put("NODE_END_USER_NAME_", NODE_END_USER_NAME_);
         }
-        if (NODE_END_USER_NAME_LIST != null && NODE_END_USER_NAME_LIST.size() > 0) {
+        if (NODE_END_USER_NAME_LIST != null && !NODE_END_USER_NAME_LIST.isEmpty()) {
             sql += " and NODE_END_USER_NAME_ in (:NODE_END_USER_NAME_LIST)";
             paramMap.put("NODE_END_USER_NAME_LIST", NODE_END_USER_NAME_LIST);
         }
@@ -325,27 +324,27 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and NODE_END_DATE_ <= :TO_NODE_END_DATE_";
             paramMap.put("TO_NODE_END_DATE_", TO_NODE_END_DATE_);
         }
-        if (StringUtils.isNotEmpty(ISOLATE_SUB_PROC_DEF_CODE_)) {
+        if (ISOLATE_SUB_PROC_DEF_CODE_ != null) {
             sql += " and ISOLATE_SUB_PROC_DEF_CODE_ = :ISOLATE_SUB_PROC_DEF_CODE_";
             paramMap.put("ISOLATE_SUB_PROC_DEF_CODE_", ISOLATE_SUB_PROC_DEF_CODE_);
         }
-        if (ISOLATE_SUB_PROC_DEF_CODE_LIST != null && ISOLATE_SUB_PROC_DEF_CODE_LIST.size() > 0) {
+        if (ISOLATE_SUB_PROC_DEF_CODE_LIST != null && !ISOLATE_SUB_PROC_DEF_CODE_LIST.isEmpty()) {
             sql += " and ISOLATE_SUB_PROC_DEF_CODE_ in (:ISOLATE_SUB_PROC_DEF_CODE_LIST)";
             paramMap.put("ISOLATE_SUB_PROC_DEF_CODE_LIST", ISOLATE_SUB_PROC_DEF_CODE_LIST);
         }
-        if (StringUtils.isNotEmpty(ISOLATE_SUB_PROC_STATUS_)) {
+        if (ISOLATE_SUB_PROC_STATUS_ != null) {
             sql += " and ISOLATE_SUB_PROC_STATUS_ = :ISOLATE_SUB_PROC_STATUS_";
             paramMap.put("ISOLATE_SUB_PROC_STATUS_", ISOLATE_SUB_PROC_STATUS_);
         }
-        if (ISOLATE_SUB_PROC_STATUS_LIST != null && ISOLATE_SUB_PROC_STATUS_LIST.size() > 0) {
+        if (ISOLATE_SUB_PROC_STATUS_LIST != null && !ISOLATE_SUB_PROC_STATUS_LIST.isEmpty()) {
             sql += " and ISOLATE_SUB_PROC_STATUS_ in (:ISOLATE_SUB_PROC_STATUS_LIST)";
             paramMap.put("ISOLATE_SUB_PROC_STATUS_LIST", ISOLATE_SUB_PROC_STATUS_LIST);
         }
-        if (StringUtils.isNotEmpty(NODE_STATUS_)) {
+        if (NODE_STATUS_ != null) {
             sql += " and NODE_STATUS_ = :NODE_STATUS_";
             paramMap.put("NODE_STATUS_", NODE_STATUS_);
         }
-        if (NODE_STATUS_LIST != null && NODE_STATUS_LIST.size() > 0) {
+        if (NODE_STATUS_LIST != null && !NODE_STATUS_LIST.isEmpty()) {
             sql += " and NODE_STATUS_ in (:NODE_STATUS_LIST)";
             paramMap.put("NODE_STATUS_LIST", NODE_STATUS_LIST);
         }
@@ -358,99 +357,99 @@ public class FfTaskServiceImpl implements FfTaskService {
             paramMap.put("TO_NODE_CREATION_DATE_", TO_NODE_CREATION_DATE_);
         }
 
-        if (StringUtils.isNotEmpty(PROC_ID_)) {
+        if (PROC_ID_ != null) {
             sql += " and PROC_ID_ = :PROC_ID_";
             paramMap.put("PROC_ID_", PROC_ID_);
         }
-        if (PROC_ID_LIST != null && PROC_ID_LIST.size() > 0) {
+        if (PROC_ID_LIST != null && !PROC_ID_LIST.isEmpty()) {
             sql += " and PROC_ID_ in (:PROC_ID_LIST)";
             paramMap.put("PROC_ID_LIST", PROC_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(ADJUST_PROC_DEF_ID_)) {
+        if (ADJUST_PROC_DEF_ID_ != null) {
             sql += " and ADJUST_PROC_DEF_ID_ = :ADJUST_PROC_DEF_ID_";
             paramMap.put("ADJUST_PROC_DEF_ID_", ADJUST_PROC_DEF_ID_);
         }
-        if (ADJUST_PROC_DEF_ID_LIST != null && ADJUST_PROC_DEF_ID_LIST.size() > 0) {
+        if (ADJUST_PROC_DEF_ID_LIST != null && !ADJUST_PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and ADJUST_PROC_DEF_ID_ in (:ADJUST_PROC_DEF_ID_LIST)";
             paramMap.put("ADJUST_PROC_DEF_ID_LIST", ADJUST_PROC_DEF_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(ISOLATE_SUB_PROC_NODE_ID_)) {
+        if (ISOLATE_SUB_PROC_NODE_ID_ != null) {
             sql += " and ISOLATE_SUB_PROC_NODE_ID_ = :ISOLATE_SUB_PROC_NODE_ID_";
             paramMap.put("ISOLATE_SUB_PROC_NODE_ID_", ISOLATE_SUB_PROC_NODE_ID_);
         }
-        if (ISOLATE_SUB_PROC_NODE_ID_LIST != null && ISOLATE_SUB_PROC_NODE_ID_LIST.size() > 0) {
+        if (ISOLATE_SUB_PROC_NODE_ID_LIST != null && !ISOLATE_SUB_PROC_NODE_ID_LIST.isEmpty()) {
             sql += " and ISOLATE_SUB_PROC_NODE_ID_ in (:ISOLATE_SUB_PROC_NODE_ID_LIST)";
             paramMap.put("ISOLATE_SUB_PROC_NODE_ID_LIST", ISOLATE_SUB_PROC_NODE_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(BIZ_ID_)) {
+        if (BIZ_ID_ != null) {
             sql += " and BIZ_ID_ = :BIZ_ID_";
             paramMap.put("BIZ_ID_", BIZ_ID_);
         }
-        if (BIZ_ID_LIST != null && BIZ_ID_LIST.size() > 0) {
+        if (BIZ_ID_LIST != null && !BIZ_ID_LIST.isEmpty()) {
             sql += " and BIZ_ID_ in (:BIZ_ID_LIST)";
             paramMap.put("BIZ_ID_LIST", BIZ_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(BIZ_TYPE_)) {
+        if (BIZ_TYPE_ != null) {
             sql += " and BIZ_TYPE_ = :BIZ_TYPE_";
             paramMap.put("BIZ_TYPE_", BIZ_TYPE_);
         }
-        if (BIZ_TYPE_LIST != null && BIZ_TYPE_LIST.size() > 0) {
+        if (BIZ_TYPE_LIST != null && !BIZ_TYPE_LIST.isEmpty()) {
             sql += " and BIZ_TYPE_ in (:BIZ_TYPE_LIST)";
             paramMap.put("BIZ_TYPE_LIST", BIZ_TYPE_LIST);
         }
-        if (StringUtils.isNotEmpty(BIZ_CODE_)) {
+        if (BIZ_CODE_ != null) {
             sql += " and BIZ_CODE_ = :BIZ_CODE_";
             paramMap.put("BIZ_CODE_", BIZ_CODE_);
         }
-        if (BIZ_CODE_LIST != null && BIZ_CODE_LIST.size() > 0) {
+        if (BIZ_CODE_LIST != null && !BIZ_CODE_LIST.isEmpty()) {
             sql += " and BIZ_CODE_ in (:BIZ_CODE_LIST)";
             paramMap.put("BIZ_CODE_LIST", BIZ_CODE_LIST);
         }
-        if (StringUtils.isNotEmpty(BIZ_NAME_)) {
+        if (BIZ_NAME_ != null) {
             sql += " and BIZ_NAME_ like '%' || :BIZ_NAME_ || '%'";
             paramMap.put("BIZ_NAME_", BIZ_NAME_);
         }
-        if (BIZ_NAME_LIST != null && BIZ_NAME_LIST.size() > 0) {
+        if (BIZ_NAME_LIST != null && !BIZ_NAME_LIST.isEmpty()) {
             sql += " and BIZ_NAME_ in (:BIZ_NAME_LIST)";
             paramMap.put("BIZ_NAME_LIST", BIZ_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(BIZ_DESC_)) {
+        if (BIZ_DESC_ != null) {
             sql += " and BIZ_DESC_ like '%' || :BIZ_DESC_ || '%'";
             paramMap.put("BIZ_DESC_", BIZ_DESC_);
         }
-        if (BIZ_DESC_LIST != null && BIZ_DESC_LIST.size() > 0) {
+        if (BIZ_DESC_LIST != null && !BIZ_DESC_LIST.isEmpty()) {
             sql += " and BIZ_DESC_ in (:BIZ_DESC_LIST)";
             paramMap.put("BIZ_DESC_LIST", BIZ_DESC_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_START_USER_)) {
+        if (PROC_START_USER_ != null) {
             sql += " and PROC_START_USER_ = :PROC_START_USER_";
             paramMap.put("PROC_START_USER_", PROC_START_USER_);
         }
-        if (PROC_START_USER_LIST != null && PROC_START_USER_LIST.size() > 0) {
+        if (PROC_START_USER_LIST != null && !PROC_START_USER_LIST.isEmpty()) {
             sql += " and PROC_START_USER_ in (:PROC_START_USER_LIST)";
             paramMap.put("PROC_START_USER_LIST", PROC_START_USER_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_START_USER_NAME_)) {
+        if (PROC_START_USER_NAME_ != null) {
             sql += " and PROC_START_USER_NAME_ like '%' || :PROC_START_USER_NAME_ || '%'";
             paramMap.put("PROC_START_USER_NAME_", PROC_START_USER_NAME_);
         }
-        if (PROC_START_USER_NAME_LIST != null && PROC_START_USER_NAME_LIST.size() > 0) {
+        if (PROC_START_USER_NAME_LIST != null && !PROC_START_USER_NAME_LIST.isEmpty()) {
             sql += " and PROC_START_USER_NAME_ in (:PROC_START_USER_NAME_LIST)";
             paramMap.put("PROC_START_USER_NAME_LIST", PROC_START_USER_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_END_USER_)) {
+        if (PROC_END_USER_ != null) {
             sql += " and PROC_END_USER_ = :PROC_END_USER_";
             paramMap.put("PROC_END_USER_", PROC_END_USER_);
         }
-        if (PROC_END_USER_LIST != null && PROC_END_USER_LIST.size() > 0) {
+        if (PROC_END_USER_LIST != null && !PROC_END_USER_LIST.isEmpty()) {
             sql += " and PROC_END_USER_ in (:PROC_END_USER_LIST)";
             paramMap.put("PROC_END_USER_LIST", PROC_END_USER_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_END_USER_NAME_)) {
+        if (PROC_END_USER_NAME_ != null) {
             sql += " and PROC_END_USER_NAME_ like '%' || :PROC_END_USER_NAME_ || '%'";
             paramMap.put("PROC_END_USER_NAME_", PROC_END_USER_NAME_);
         }
-        if (PROC_END_USER_NAME_LIST != null && PROC_END_USER_NAME_LIST.size() > 0) {
+        if (PROC_END_USER_NAME_LIST != null && !PROC_END_USER_NAME_LIST.isEmpty()) {
             sql += " and PROC_END_USER_NAME_ in (:PROC_END_USER_NAME_LIST)";
             paramMap.put("PROC_END_USER_NAME_LIST", PROC_END_USER_NAME_LIST);
         }
@@ -462,11 +461,11 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and PROC_END_DATE_ <= :TO_PROC_END_DATE_";
             paramMap.put("TO_PROC_END_DATE_", TO_PROC_END_DATE_);
         }
-        if (StringUtils.isNotEmpty(PROC_STATUS_)) {
+        if (PROC_STATUS_ != null) {
             sql += " and PROC_STATUS_ = :PROC_STATUS_";
             paramMap.put("PROC_STATUS_", PROC_STATUS_);
         }
-        if (PROC_STATUS_LIST != null && PROC_STATUS_LIST.size() > 0) {
+        if (PROC_STATUS_LIST != null && !PROC_STATUS_LIST.isEmpty()) {
             sql += " and PROC_STATUS_ in (:PROC_STATUS_LIST)";
             paramMap.put("PROC_STATUS_LIST", PROC_STATUS_LIST);
         }
@@ -479,35 +478,35 @@ public class FfTaskServiceImpl implements FfTaskService {
             paramMap.put("TO_PROC_CREATION_DATE_", TO_PROC_CREATION_DATE_);
         }
 
-        if (StringUtils.isNotEmpty(PROC_DEF_ID_)) {
+        if (PROC_DEF_ID_ != null) {
             sql += " and PROC_DEF_ID_ = :PROC_DEF_ID_";
             paramMap.put("PROC_DEF_ID_", PROC_DEF_ID_);
         }
-        if (PROC_DEF_ID_LIST != null && PROC_DEF_ID_LIST.size() > 0) {
+        if (PROC_DEF_ID_LIST != null && !PROC_DEF_ID_LIST.isEmpty()) {
             sql += " and PROC_DEF_ID_ in (:PROC_DEF_ID_LIST)";
             paramMap.put("PROC_DEF_ID_LIST", PROC_DEF_ID_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_DEF_CODE_)) {
+        if (PROC_DEF_CODE_ != null) {
             sql += " and PROC_DEF_CODE_ = :PROC_DEF_CODE_";
             paramMap.put("PROC_DEF_CODE_", PROC_DEF_CODE_);
         }
-        if (PROC_DEF_CODE_LIST != null && PROC_DEF_CODE_LIST.size() > 0) {
+        if (PROC_DEF_CODE_LIST != null && !PROC_DEF_CODE_LIST.isEmpty()) {
             sql += " and PROC_DEF_CODE_ in (:PROC_DEF_CODE_LIST)";
             paramMap.put("PROC_DEF_CODE_LIST", PROC_DEF_CODE_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_DEF_NAME_)) {
+        if (PROC_DEF_NAME_ != null) {
             sql += " and PROC_DEF_NAME_ like '%' || :PROC_DEF_NAME_ || '%'";
             paramMap.put("PROC_DEF_NAME_", PROC_DEF_NAME_);
         }
-        if (PROC_DEF_NAME_LIST != null && PROC_DEF_NAME_LIST.size() > 0) {
+        if (PROC_DEF_NAME_LIST != null && !PROC_DEF_NAME_LIST.isEmpty()) {
             sql += " and PROC_DEF_NAME_ in (:PROC_DEF_NAME_LIST)";
             paramMap.put("PROC_DEF_NAME_LIST", PROC_DEF_NAME_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_DEF_CAT_)) {
+        if (PROC_DEF_CAT_ != null) {
             sql += " and PROC_DEF_CAT_ like :PROC_DEF_CAT_ || '%'";
             paramMap.put("PROC_DEF_CAT_", PROC_DEF_CAT_);
         }
-        if (PROC_DEF_CAT_LIST != null && PROC_DEF_CAT_LIST.size() > 0) {
+        if (PROC_DEF_CAT_LIST != null && !PROC_DEF_CAT_LIST.isEmpty()) {
             sql += " and PROC_DEF_CAT_ in (:PROC_DEF_CAT_LIST)";
             paramMap.put("PROC_DEF_CAT_LIST", PROC_DEF_CAT_LIST);
         }
@@ -515,15 +514,15 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql += " and VERSION_ = :VERSION_";
             paramMap.put("VERSION_", VERSION_);
         }
-        if (VERSION_LIST != null && VERSION_LIST.size() > 0) {
+        if (VERSION_LIST != null && !VERSION_LIST.isEmpty()) {
             sql += " and VERSION_ in (:VERSION_LIST)";
             paramMap.put("VERSION_LIST", VERSION_LIST);
         }
-        if (StringUtils.isNotEmpty(PROC_DEF_STATUS_)) {
+        if (PROC_DEF_STATUS_ != null) {
             sql += " and PROC_DEF_STATUS_ = :PROC_DEF_STATUS_";
             paramMap.put("PROC_DEF_STATUS_", PROC_DEF_STATUS_);
         }
-        if (PROC_DEF_STATUS_LIST != null && PROC_DEF_STATUS_LIST.size() > 0) {
+        if (PROC_DEF_STATUS_LIST != null && !PROC_DEF_STATUS_LIST.isEmpty()) {
             sql += " and PROC_DEF_STATUS_ in (:PROC_DEF_STATUS_LIST)";
             paramMap.put("PROC_DEF_STATUS_LIST", PROC_DEF_STATUS_LIST);
         }
@@ -547,12 +546,12 @@ public class FfTaskServiceImpl implements FfTaskService {
 
     @Override
     public List<Map<String, Object>> selectTaskByIdList(List<String> TASK_ID_LIST) {
-        if (TASK_ID_LIST == null || TASK_ID_LIST.size() == 0) {
+        if (TASK_ID_LIST == null || TASK_ID_LIST.isEmpty()) {
             return new ArrayList<>();
         }
 
         StringBuilder sql = new StringBuilder(TASK_ID_LIST.size() * 50 + 200);
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
 
         sql.append("select * from FFV_TASK where TASK_ID_ in (:TASK_ID_LIST)");
         paramMap.put("TASK_ID_LIST", TASK_ID_LIST);

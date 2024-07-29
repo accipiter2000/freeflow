@@ -11,15 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 public interface FfHelper {
     /**
      * 获取用户名称。
+     * 
+     * @param userId
+     *        用户ID。
+     * @return 用户名称。
      */
     public String getUserName(String userId);
 
     /**
-     * 获取该用户的所有id。
+     * 获取该用户的所有ID。在工作流任务分配中，通常分配到岗位人员ID，而非人员ID。一个用户可以有多个岗位，因此有多个岗位人员ID。
      * 
      * @param userId
-     *        在RBAC中，同一个用户可以拥有多个岗位，此时的userId通常为岗位人员ID，
-     * @return 在RBAC中，返回该用户的所有岗位人员ID。
+     *        用户ID。
+     * @return 该用户的所有用户ID（岗位人员ID）。
      */
     public List<String> getAllUserIdList(String userId);
 }

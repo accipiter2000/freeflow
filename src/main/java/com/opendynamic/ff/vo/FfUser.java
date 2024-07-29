@@ -2,24 +2,27 @@ package com.opendynamic.ff.vo;
 
 import java.io.Serializable;
 
+/**
+ * FF用户。
+ */
 public class FfUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected String id;
-    protected String userId;
-    protected String userCode;
-    protected String userName;
-    protected String roleId;
-    protected String roleCode;
-    protected String roleName;
-    protected String orgId;
-    protected String orgCode;
-    protected String orgName;
+    protected String id;// ID。
+    protected String userId;// 用户ID。
+    protected String userCode;// 用户编码。
+    protected String userName;// 用户名称。
+    protected String roleId;// 角色ID。
+    protected String roleCode;// 角色编码。
+    protected String roleName;// 角色名称。
+    protected String orgId;// 机构ID。
+    protected String orgCode;// 机构编码。
+    protected String orgName;// 机构名称。
 
     /**
      * 获取ID。
      * 
-     * @return
+     * @return ID。
      */
     public String getId() {
         return id;
@@ -29,6 +32,7 @@ public class FfUser implements Serializable {
      * 设置ID。
      * 
      * @param id
+     *        ID。
      */
     public void setId(String id) {
         this.id = id;
@@ -37,7 +41,7 @@ public class FfUser implements Serializable {
     /**
      * 获取用户ID。
      * 
-     * @return
+     * @return 用户ID。
      */
     public String getUserId() {
         return userId;
@@ -47,6 +51,7 @@ public class FfUser implements Serializable {
      * 设置用户ID。
      * 
      * @param userId
+     *        用户ID。
      */
     public void setUserId(String userId) {
         this.userId = userId;
@@ -55,7 +60,7 @@ public class FfUser implements Serializable {
     /**
      * 获取用户编码。
      * 
-     * @return
+     * @return 用户编码。
      */
     public String getUserCode() {
         return userCode;
@@ -65,6 +70,7 @@ public class FfUser implements Serializable {
      * 设置用户编码。
      * 
      * @param userCode
+     *        用户编码。
      */
     public void setUserCode(String userCode) {
         this.userCode = userCode;
@@ -73,7 +79,7 @@ public class FfUser implements Serializable {
     /**
      * 获取用户名称。
      * 
-     * @return
+     * @return 用户名称。
      */
     public String getUserName() {
         return userName;
@@ -83,6 +89,7 @@ public class FfUser implements Serializable {
      * 设置用户名称。
      * 
      * @param userName
+     *        用户名称。
      */
     public void setUserName(String userName) {
         this.userName = userName;
@@ -91,7 +98,7 @@ public class FfUser implements Serializable {
     /**
      * 获取角色ID。
      * 
-     * @return
+     * @return 角色ID。
      */
     public String getRoleId() {
         return roleId;
@@ -101,6 +108,7 @@ public class FfUser implements Serializable {
      * 设置角色ID。
      * 
      * @param roleId
+     *        角色ID。
      */
     public void setRoleId(String roleId) {
         this.roleId = roleId;
@@ -109,7 +117,7 @@ public class FfUser implements Serializable {
     /**
      * 获取角色编码。
      * 
-     * @return
+     * @return 角色编码。
      */
     public String getRoleCode() {
         return roleCode;
@@ -119,6 +127,7 @@ public class FfUser implements Serializable {
      * 设置角色编码。
      * 
      * @param roleCode
+     *        角色编码。
      */
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
@@ -127,7 +136,7 @@ public class FfUser implements Serializable {
     /**
      * 获取角色名称。
      * 
-     * @return
+     * @return 角色名称。
      */
     public String getRoleName() {
         return roleName;
@@ -137,6 +146,7 @@ public class FfUser implements Serializable {
      * 设置角色名称。
      * 
      * @param roleName
+     *        角色名称。
      */
     public void setRoleName(String roleName) {
         this.roleName = roleName;
@@ -145,7 +155,7 @@ public class FfUser implements Serializable {
     /**
      * 获取机构ID。
      * 
-     * @return
+     * @return 机构ID。
      */
     public String getOrgId() {
         return orgId;
@@ -155,6 +165,7 @@ public class FfUser implements Serializable {
      * 设置机构ID。
      * 
      * @param orgId
+     *        机构ID。
      */
     public void setOrgId(String orgId) {
         this.orgId = orgId;
@@ -163,7 +174,7 @@ public class FfUser implements Serializable {
     /**
      * 获取机构编码。
      * 
-     * @return
+     * @return 机构编码。
      */
     public String getOrgCode() {
         return orgCode;
@@ -173,6 +184,7 @@ public class FfUser implements Serializable {
      * 设置机构编码。
      * 
      * @param orgCode
+     *        机构编码。
      */
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
@@ -181,7 +193,7 @@ public class FfUser implements Serializable {
     /**
      * 获取机构名称。
      * 
-     * @return
+     * @return 机构名称。
      */
     public String getOrgName() {
         return orgName;
@@ -191,6 +203,7 @@ public class FfUser implements Serializable {
      * 设置机构名称。
      * 
      * @param orgName
+     *        机构名称。
      */
     public void setOrgName(String orgName) {
         this.orgName = orgName;

@@ -40,7 +40,7 @@ public class BranchNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         return new FfResult();
     }
 
@@ -50,7 +50,7 @@ public class BranchNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -69,7 +69,7 @@ public class BranchNodeHandler implements NodeHandler {
         node.setLastCompleteNodeIds(StringUtils.join(lastCompleteNodeIdList, ","));
 
         // 完成判断
-        if (ffService.createChildNodeQuery().setNodeId(node.getNodeId()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE)).count() > 0) {
+        if (ffService.createChildNodeQuery().setNodeId(node.getNodeId()).setNodeStatus(FfService.NODE_STATUS_ACTIVE).count() > 0) {
             return ffResult;
         }
 
@@ -95,7 +95,7 @@ public class BranchNodeHandler implements NodeHandler {
         // 如有上级节点，递归完成上级节点，返回新增的后续节点。
         if (node.getParentNodeId() != null) {
             Node parentNode = ffService.loadNode(node.getParentNodeId());
-            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, triggerOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
         }
         else {// 如没有上级节点，完成流程。
             ffProcService.updateProcStatus(node.getProcId(), executor, ffHelper.getUserName(executor), new Date(), FfService.PROC_STATUS_COMPLETE);
@@ -104,7 +104,7 @@ public class BranchNodeHandler implements NodeHandler {
 
             if (StringUtils.isNotEmpty(proc.getIsolateSubProcNodeId())) {// 如果为独立子流程，继续完成独立子流程所属节点
                 Node isolateSubProcNode = ffService.loadNode(proc.getIsolateSubProcNodeId());
-                ffResult.addAll(ffService.getNodeHandler(isolateSubProcNode.getNodeType()).completeNode(isolateSubProcNode, node.getNodeId(), fullCandidateList, triggerOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(isolateSubProcNode.getNodeType()).completeNode(isolateSubProcNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
                 ffNodeService.updateIsolateSubProcStatus(isolateSubProcNode.getNodeId(), FfService.PROC_STATUS_COMPLETE);
             }
         }
@@ -113,14 +113,14 @@ public class BranchNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_TERMINATE) || node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {
             return ffResult;
         }
 
-        // 有并发子节点不能驳回
+        // 有并发下级节点不能驳回
         if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_SUSPEND, FfService.NODE_STATUS_COMPLETE)).count() > 1) {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }
@@ -157,17 +157,17 @@ public class BranchNodeHandler implements NodeHandler {
             }
         }
         else {// 递归驳回上级节点
-            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).rejectNode(parentNode, candidateList, triggerOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).rejectNode(parentNode, candidateList, initialOperation, executor));
         }
 
         return ffResult;
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String triggerOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
         FfResult ffResult = new FfResult();// 返回值
 
-        if (FfService.OPERATION_ACTIVATE.equals(triggerOperation) && StringUtils.isNotEmpty(previousNodeIds)) {// 去除最后完成节点ID
+        if (FfService.OPERATION_ACTIVATE.equals(initialOperation) && StringUtils.isNotEmpty(previousNodeIds)) {// 去除最后完成节点ID
             List<String> lastCompleteNodeIdList = new ArrayList<>();
             if (StringUtils.isNotEmpty(node.getLastCompleteNodeIds())) {
                 lastCompleteNodeIdList.addAll(Arrays.asList(node.getLastCompleteNodeIds().split(",")));
@@ -181,10 +181,10 @@ public class BranchNodeHandler implements NodeHandler {
             node.setNodeStatus(FfService.NODE_STATUS_ACTIVE);
             ffResult.addActivateNode(node);
 
-            if (FfService.OPERATION_ACTIVATE.equals(triggerOperation)) {// 上行激活
+            if (FfService.OPERATION_ACTIVATE.equals(initialOperation)) {// 上行激活
                 if (node.getParentNodeId() != null) {
                     Node parentNode = ffService.loadNode(node.getParentNodeId());// 递归激活上级节点
-                    ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).activateNode(parentNode, node.getNodeId(), candidateList, triggerOperation, executor));
+                    ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).activateNode(parentNode, node.getNodeId(), candidateList, initialOperation, executor));
                 }
                 else {// 激活流程
                     if (!ffService.loadProc(node.getProcId()).getProcStatus().equals(FfService.PROC_STATUS_ACTIVE)) {
@@ -199,7 +199,7 @@ public class BranchNodeHandler implements NodeHandler {
                     ffNodeService.updateNodeLastCompleteNodeIds(node.getNodeId(), null);
                     List<Node> lastCompleteNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(lastCompleteNodeIds.split(","))).queryForObjectList();
                     for (Node lastCompleteNode : lastCompleteNodeList) {
-                        ffResult.addAll(ffService.getNodeHandler(lastCompleteNode.getNodeType()).activateNode(lastCompleteNode, null, candidateList, triggerOperation, executor));
+                        ffResult.addAll(ffService.getNodeHandler(lastCompleteNode.getNodeType()).activateNode(lastCompleteNode, null, candidateList, initialOperation, executor));
                     }
                 }
             }

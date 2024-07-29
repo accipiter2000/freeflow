@@ -9,210 +9,430 @@ import org.springframework.stereotype.Service;
 
 import com.opendynamic.ff.vo.ProcDef;
 
+/**
+ * 流程定义查询类。
+ */
 @Service
 public class ProcDefQuery {
     private List<ProcDef> procDefList;
 
-    private String procDefId;
-    private List<String> procDefIdList;
-    private String procDefCode;
-    private List<String> procDefCodeList;
-    private String procDefName;
-    private List<String> procDefNameList;
-    private String procDefCat;
-    private List<String> procDefCatList;
-    private String extAttr1;
-    private List<String> extAttr1List;
-    private String extAttr2;
-    private List<String> extAttr2List;
-    private String extAttr3;
-    private List<String> extAttr3List;
-    private String extAttr4;
-    private List<String> extAttr4List;
-    private String extAttr5;
-    private List<String> extAttr5List;
-    private String extAttr6;
-    private List<String> extAttr6List;
-    private String extAttr7;
-    private List<String> extAttr7List;
-    private String extAttr8;
-    private List<String> extAttr8List;
-    private Integer version;
-    private List<Integer> versionList;
-    private String procDefStatus;
-    private List<String> procDefStatusList;
-    private boolean allVersion;
-    private Integer page;
-    private Integer limit;
+    private String procDefId; // 流程定义ID。
+    private List<String> procDefIdList; // 流程定义ID列表。
+    private String procDefCode;// 流程定义编码。
+    private List<String> procDefCodeList;// 流程定义编码列表。
+    private String procDefName;// 流程定义名称。
+    private List<String> procDefNameList;// 流程定义名称列表。
+    private String procDefCat; // 流程定义分类。
+    private List<String> procDefCatList; // 流程定义分类列表。
+    private String extAttr1; // 扩展属性1。
+    private List<String> extAttr1List; // 扩展属性1列表。
+    private String extAttr2; // 扩展属性2。
+    private List<String> extAttr2List; // 扩展属性2列表。
+    private String extAttr3; // 扩展属性3。
+    private List<String> extAttr3List; // 扩展属性3列表。
+    private String extAttr4; // 扩展属性4。
+    private List<String> extAttr4List; // 扩展属性4列表。
+    private String extAttr5; // 扩展属性5。
+    private List<String> extAttr5List; // 扩展属性5列表。
+    private String extAttr6; // 扩展属性6。
+    private List<String> extAttr6List; // 扩展属性6列表。
+    private String extAttr7; // 扩展属性7。
+    private List<String> extAttr7List; // 扩展属性7列表。
+    private String extAttr8; // 扩展属性8。
+    private List<String> extAttr8List; // 扩展属性8列表。
+    private Integer version;// 版本。
+    private List<Integer> versionList;// 版本列表。
+    private String procDefStatus; // 流程定义状态。
+    private List<String> procDefStatusList; // 流程定义状态列表。
+    private boolean allVersion;// 获取所有版本，而非最新版本。默认为否。
+    private Integer page;// 页。默认为1。
+    private Integer limit;// 每页数据数量。默认为-1(全部)。
 
     public ProcDefQuery() {
         super();
     }
 
-    public ProcDefQuery setProcDefList(List<ProcDef> procDefList) {
+    public ProcDefQuery(List<ProcDef> procDefList) {
+        super();
         this.procDefList = procDefList;
-        return this;
     }
 
+    /**
+     * 设置流程定义ID。
+     * 
+     * @param procDefId
+     *        流程定义ID。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefId(String procDefId) {
         this.procDefId = procDefId;
         return this;
     }
 
+    /**
+     * 设置流程定义ID列表。
+     * 
+     * @param procDefIdList
+     *        流程定义ID列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefIdList(List<String> procDefIdList) {
         this.procDefIdList = procDefIdList;
         return this;
     }
 
+    /**
+     * 设置流程定义编码。
+     * 
+     * @param procDefCode
+     *        流程定义编码。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefCode(String procDefCode) {
         this.procDefCode = procDefCode;
         return this;
     }
 
+    /**
+     * 设置流程定义编码列表。
+     * 
+     * @param procDefCodeList
+     *        流程定义编码列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefCodeList(List<String> procDefCodeList) {
         this.procDefCodeList = procDefCodeList;
         return this;
     }
 
+    /**
+     * 设置流程定义名称。
+     * 
+     * @param procDefName
+     *        流程定义名称。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefName(String procDefName) {
         this.procDefName = procDefName;
         return this;
     }
 
+    /**
+     * 设置流程定义名称列表。
+     * 
+     * @param procDefNameList
+     *        流程定义名称列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefNameList(List<String> procDefNameList) {
         this.procDefNameList = procDefNameList;
         return this;
     }
 
+    /**
+     * 设置流程定义分类。
+     * 
+     * @param procDefCat
+     *        流程定义分类。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefCat(String procDefCat) {
         this.procDefCat = procDefCat;
         return this;
     }
 
+    /**
+     * 设置流程定义分类列表。
+     * 
+     * @param procDefCatList
+     *        流程定义分类列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefCatList(List<String> procDefCatList) {
         this.procDefCatList = procDefCatList;
         return this;
     }
 
+    /**
+     * 设置扩展属性1。
+     * 
+     * @param extAttr1
+     *        扩展属性1。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr1(String extAttr1) {
         this.extAttr1 = extAttr1;
         return this;
     }
 
+    /**
+     * 设置扩展属性1列表。
+     * 
+     * @param extAttr1List
+     *        扩展属性1列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr1List(List<String> extAttr1List) {
         this.extAttr1List = extAttr1List;
         return this;
     }
 
+    /**
+     * 设置扩展属性2。
+     * 
+     * @param extAttr2
+     *        扩展属性2。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr2(String extAttr2) {
         this.extAttr2 = extAttr2;
         return this;
     }
 
+    /**
+     * 设置扩展属性2列表。
+     * 
+     * @param extAttr2List
+     *        扩展属性2列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr2List(List<String> extAttr2List) {
         this.extAttr2List = extAttr2List;
         return this;
     }
 
+    /**
+     * 设置扩展属性3。
+     * 
+     * @param extAttr3
+     *        扩展属性3。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr3(String extAttr3) {
         this.extAttr3 = extAttr3;
         return this;
     }
 
+    /**
+     * 设置扩展属性3列表。
+     * 
+     * @param extAttr3List
+     *        扩展属性3列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr3List(List<String> extAttr3List) {
         this.extAttr3List = extAttr3List;
         return this;
     }
 
+    /**
+     * 设置扩展属性4。
+     * 
+     * @param extAttr4
+     *        扩展属性4。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr4(String extAttr4) {
         this.extAttr4 = extAttr4;
         return this;
     }
 
+    /**
+     * 设置扩展属性4列表。
+     * 
+     * @param extAttr4List
+     *        扩展属性4列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr4List(List<String> extAttr4List) {
         this.extAttr4List = extAttr4List;
         return this;
     }
 
+    /**
+     * 设置扩展属性5。
+     * 
+     * @param extAttr5
+     *        扩展属性5。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr5(String extAttr5) {
         this.extAttr5 = extAttr5;
         return this;
     }
 
+    /**
+     * 设置扩展属性5列表。
+     * 
+     * @param extAttr5List
+     *        扩展属性5列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr5List(List<String> extAttr5List) {
         this.extAttr5List = extAttr5List;
         return this;
     }
 
+    /**
+     * 设置扩展属性6。
+     * 
+     * @param extAttr6
+     *        扩展属性6。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr6(String extAttr6) {
         this.extAttr6 = extAttr6;
         return this;
     }
 
+    /**
+     * 设置扩展属性6列表。
+     * 
+     * @param extAttr6List
+     *        扩展属性6列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr6List(List<String> extAttr6List) {
         this.extAttr6List = extAttr6List;
         return this;
     }
 
+    /**
+     * 设置扩展属性7。
+     * 
+     * @param extAttr7
+     *        扩展属性7。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr7(String extAttr7) {
         this.extAttr7 = extAttr7;
         return this;
     }
 
+    /**
+     * 设置扩展属性7列表。
+     * 
+     * @param extAttr7List
+     *        扩展属性7列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr7List(List<String> extAttr7List) {
         this.extAttr7List = extAttr7List;
         return this;
     }
 
+    /**
+     * 设置扩展属性8。
+     * 
+     * @param extAttr8
+     *        扩展属性8。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr8(String extAttr8) {
         this.extAttr8 = extAttr8;
         return this;
     }
 
+    /**
+     * 设置扩展属性8列表。
+     * 
+     * @param extAttr8List
+     *        扩展属性8列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setExtAttr8List(List<String> extAttr8List) {
         this.extAttr8List = extAttr8List;
         return this;
     }
 
+    /**
+     * 设置版本。
+     * 
+     * @param version
+     *        版本。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setVersion(Integer version) {
         this.version = version;
         return this;
     }
 
+    /**
+     * 设置版本列表。
+     * 
+     * @param versionList
+     *        版本列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setVersionList(List<Integer> versionList) {
         this.versionList = versionList;
         return this;
     }
 
+    /**
+     * 设置流程定义状态。
+     * 
+     * @param procDefStatus
+     *        流程定义状态。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefStatus(String procDefStatus) {
         this.procDefStatus = procDefStatus;
         return this;
     }
 
+    /**
+     * 设置流程定义状态列表。
+     * 
+     * @param procDefStatusList
+     *        流程定义状态列表。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setProcDefStatusList(List<String> procDefStatusList) {
         this.procDefStatusList = procDefStatusList;
         return this;
     }
 
+    /**
+     * 设置获取所有版本，而非最新版本。默认为否。
+     * 
+     * @param allVersion
+     *        获取所有版本，而非最新版本。默认为否。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setAllVersion(boolean allVersion) {
         this.allVersion = allVersion;
         return this;
     }
 
+    /**
+     * 设置页。默认为1。
+     * 
+     * @param page
+     *        页。默认为1。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setPage(Integer page) {
         this.page = page;
         return this;
     }
 
+    /**
+     * 设置每页数据数量。默认为-1(全部)。
+     * 
+     * @param limit
+     *        每页数据数量。默认为-1(全部)。
+     * @return 当前查询实例，支持链式调用。
+     */
     public ProcDefQuery setLimit(Integer limit) {
         this.limit = limit;
         return this;
     }
 
     /**
-     * 查询对象列表。对象格式为实体Bean。
+     * 查询对象列表。数据格式为实体Bean。
      * 
-     * @return
+     * @return Bean类型数据列表。
      */
     public List<ProcDef> queryForObjectList() {
         List<ProcDef> subProcDefList = selectProcDef();
@@ -230,9 +450,9 @@ public class ProcDefQuery {
     }
 
     /**
-     * 查询单个对象。对象格式为实体Bean。
+     * 查询单个对象。数据格式为实体Bean。
      * 
-     * @return
+     * @return 单个Bean类型数据。
      */
     public ProcDef queryForObject() {
         List<ProcDef> subProcDefList = queryForObjectList();
@@ -247,7 +467,7 @@ public class ProcDefQuery {
     /**
      * 查询总数。
      * 
-     * @return
+     * @return 总数。
      */
     public int count() {
         return selectProcDef().size();
@@ -258,8 +478,7 @@ public class ProcDefQuery {
             throw new RuntimeException("errors.procDefListNotSet");
         }
 
-        List<ProcDef> subProcDefList = new ArrayList<>();
-        subProcDefList.addAll(procDefList);
+        List<ProcDef> subProcDefList = new ArrayList<>(procDefList);
 
         ProcDef procDef;
         if (StringUtils.isNotEmpty(procDefId)) {
@@ -375,7 +594,7 @@ public class ProcDefQuery {
             }
         }
 
-        if (procDefIdList != null && procDefIdList.size() > 0) {
+        if (procDefIdList != null && !procDefIdList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!procDefIdList.contains(procDef.getProcDefId())) {
@@ -383,7 +602,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (procDefCodeList != null && procDefCodeList.size() > 0) {
+        if (procDefCodeList != null && !procDefCodeList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!procDefCodeList.contains(procDef.getProcDefCode())) {
@@ -391,7 +610,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (procDefNameList != null && procDefNameList.size() > 0) {
+        if (procDefNameList != null && !procDefNameList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!procDefNameList.contains(procDef.getProcDefName())) {
@@ -399,7 +618,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (procDefCatList != null && procDefCatList.size() > 0) {
+        if (procDefCatList != null && !procDefCatList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!procDefCatList.contains(procDef.getProcDefCat())) {
@@ -407,7 +626,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr1List != null && extAttr1List.size() > 0) {
+        if (extAttr1List != null && !extAttr1List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr1List.contains(procDef.getExtAttr1())) {
@@ -415,7 +634,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr2List != null && extAttr2List.size() > 0) {
+        if (extAttr2List != null && !extAttr2List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr2List.contains(procDef.getExtAttr2())) {
@@ -423,7 +642,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr3List != null && extAttr3List.size() > 0) {
+        if (extAttr3List != null && !extAttr3List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr3List.contains(procDef.getExtAttr3())) {
@@ -431,7 +650,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr4List != null && extAttr4List.size() > 0) {
+        if (extAttr4List != null && !extAttr4List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr4List.contains(procDef.getExtAttr4())) {
@@ -439,7 +658,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr5List != null && extAttr5List.size() > 0) {
+        if (extAttr5List != null && !extAttr5List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr5List.contains(procDef.getExtAttr5())) {
@@ -447,7 +666,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr6List != null && extAttr6List.size() > 0) {
+        if (extAttr6List != null && !extAttr6List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr6List.contains(procDef.getExtAttr6())) {
@@ -455,7 +674,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr7List != null && extAttr7List.size() > 0) {
+        if (extAttr7List != null && !extAttr7List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr7List.contains(procDef.getExtAttr7())) {
@@ -463,7 +682,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (extAttr8List != null && extAttr8List.size() > 0) {
+        if (extAttr8List != null && !extAttr8List.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!extAttr8List.contains(procDef.getExtAttr8())) {
@@ -471,7 +690,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (versionList != null && versionList.size() > 0) {
+        if (versionList != null && !versionList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!versionList.contains(procDef.getVersion())) {
@@ -479,7 +698,7 @@ public class ProcDefQuery {
                 }
             }
         }
-        if (procDefStatusList != null && procDefStatusList.size() > 0) {
+        if (procDefStatusList != null && !procDefStatusList.isEmpty()) {
             for (int i = subProcDefList.size() - 1; i >= 0; i--) {
                 procDef = subProcDefList.get(i);
                 if (!procDefStatusList.contains(procDef.getProcDefStatus())) {
@@ -496,7 +715,6 @@ public class ProcDefQuery {
                 procDefCode = subProcDefList.get(i).getProcDefCode();
                 if (procDefCodeList.contains(procDefCode)) {
                     subProcDefList.remove(i);
-                    continue;
                 }
                 else {
                     procDefCodeList.add(procDefCode);

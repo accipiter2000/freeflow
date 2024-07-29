@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 import com.opendynamic.OdUtils;
 
+/**
+ * 长方形形状。
+ */
 public class RectangleShape extends Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 
