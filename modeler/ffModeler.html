@@ -34,6 +34,14 @@ input {
 		procDefDiagramWidth : null, // 流程定义图宽度
 		procDefDiagramHeight : null, // 流程定义图高度
 		memo : null, // 备注
+		extAttr1 : null, // 扩展属性1
+		extAttr2 : null, // 扩展属性2
+		extAttr3 : null, // 扩展属性3
+		extAttr4 : null, // 扩展属性4
+		extAttr5 : null, // 扩展属性5
+		extAttr6 : null, // 扩展属性6
+		extAttr7 : null, // 扩展属性7
+		extAttr8 : null, // 扩展属性8
 		nodeDefList : new Array(),// 节点定列表
 		noteDefList : new Array(),// 注释定义列表
 		flowDefList : new Array(),// 流转定义列表
@@ -240,6 +248,7 @@ input {
 		completeExpression : '${COMPLETE/TOTAL>=1}',// 完成表达式
 		completeReturn : '0',// 完成后返回前一个节点
 		exclusive : '0',// 排他
+		waitingForCompleteNode : '0',// 等待完成节点
 		autoCompleteSameAssignee : '0',// 自动完成相同办理人任务
 		autoCompleteEmptyAssignee : '0',// 自动完成没有办理人节点
 		inform : '0',// 通知
@@ -391,7 +400,7 @@ input {
 		noteDefId : null,// 注释ID
 		noteCode : null,//注释编码
 		noteName : null,// 注释名称
-		dynamic : '0',// 是否为动态。如为动态，则在获取动态流程图时才绘制注释内容。
+		dynamic : '0',// 是否为动态。如为动态，则在获取运行期流程图时才绘制注释内容。
 		shape : null,
 		selected : false,
 		updateLayout : function() {
@@ -909,7 +918,7 @@ input {
 		fontFamily : 'Microsoft YaHei',// 字体
 		fontWeight : 'normal',// 字体粗细
 		fontSize : '13px',// 字体大小
-		borderStyle : 'solid',// 边框类型
+		borderStyle : 'solid',// 边框样式
 		borderWidth : 1,// 边框宽度
 		borderRadius : 10,// 边框圆角
 		borderColor : '#000000',// 边框颜色
@@ -1786,6 +1795,38 @@ input {
 							<td align="right">备注:</td>
 							<td><input name="memo" type="text" /></td>
 						</tr>
+						<tr>
+							<td align="right">扩展属性1:</td>
+							<td><input name="extAttr1" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性2:</td>
+							<td><input name="extAttr2" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性3:</td>
+							<td><input name="extAttr3" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性4:</td>
+							<td><input name="extAttr4" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性5:</td>
+							<td><input name="extAttr5" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性6:</td>
+							<td><input name="extAttr6" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性7:</td>
+							<td><input name="extAttr7" type="text" /></td>
+						</tr>
+						<tr>
+							<td align="right">扩展属性8:</td>
+							<td><input name="extAttr8" type="text" /></td>
+						</tr>
 					</table>
 				</div>
 				<div id="nodeDefAttrDiv" style="display: none; height: 100%; overflow: scroll;">
@@ -1839,6 +1880,13 @@ input {
 						<tr>
 							<td align="right">排他:</td>
 							<td><select name="exclusive">
+									<option value="0">0</option>
+									<option value="1">1</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td align="right">等待完成节点:</td>
+							<td><select name="waitingForCompleteNode">
 									<option value="0">0</option>
 									<option value="1">1</option>
 							</select></td>
@@ -1915,7 +1963,7 @@ input {
 							<td><input name="height" type="text" /></td>
 						</tr>
 						<tr>
-							<td align="right">边框类型:</td>
+							<td align="right">边框样式:</td>
 							<td><input name="borderStyle" type="text" /></td>
 						</tr>
 						<tr>
@@ -2018,7 +2066,7 @@ input {
 							<td><input name="height" type="text" /></td>
 						</tr>
 						<tr>
-							<td align="right">边框类型:</td>
+							<td align="right">边框样式:</td>
 							<td><input name="borderStyle" type="text" /></td>
 						</tr>
 						<tr>

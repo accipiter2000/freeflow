@@ -111,7 +111,7 @@ public class FfOperationAspect {
         }
         catch (Throwable e) {
             ffOperationService.finalize();// 清理threadLocal
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         // 后期处理。
