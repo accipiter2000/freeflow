@@ -3,6 +3,7 @@ package com.opendynamic.ff.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.FlowDef;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 
 import de.odysseus.el.ExpressionFactoryImpl;
@@ -46,40 +48,40 @@ public class GatewayNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
-        Node gatewayNode = ffService.createChildNodeQuery().setNodeId(branchNode.getNodeId()).setNodeCode(nodeDef.getNodeCode()).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObject();
-        if (gatewayNode == null) {// 新增节点
-            String gatewayNodeId = OdUtils.getUuid();
-            ffNodeService.insertNode(gatewayNodeId, branchNode.getNodeId(), branchNode.getProcId(), null, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_GATEWAY, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
-            gatewayNode = ffService.loadNode(gatewayNodeId);
-            ffResult.addCreateNode(gatewayNode);
+        Node node = ffService.createChildNodeQuery().setNodeId(branchNode.getNodeId()).setNodeCode(nodeDef.getNodeCode()).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObject();
+        if (node == null) {// 新增节点
+            String nodeId = OdUtils.getUuid();
+            ffNodeService.insertNode(nodeId, branchNode.getNodeId(), branchNode.getProcId(), null, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_GATEWAY, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            node = ffService.loadNode(nodeId);
+            ffResult.addCreateNode(node);
         }
 
         // 更新前节点IDs
         List<String> previousNodeIdList = new ArrayList<>();
-        if (StringUtils.isNotEmpty(gatewayNode.getPreviousNodeIds())) {
-            previousNodeIdList.addAll(Arrays.asList(gatewayNode.getPreviousNodeIds().split(",")));
+        if (StringUtils.isNotEmpty(node.getPreviousNodeIds())) {
+            previousNodeIdList.addAll(Arrays.asList(node.getPreviousNodeIds().split(",")));
         }
         if (StringUtils.isNotEmpty(previousNodeIds)) {
             previousNodeIdList.addAll(Arrays.asList(previousNodeIds.split(",")));
         }
-        ffNodeService.updateNodePreviousNodeIds(gatewayNode.getNodeId(), StringUtils.join(previousNodeIdList, ","));
+        ffNodeService.updateNodePreviousNodeIds(node.getNodeId(), StringUtils.join(previousNodeIdList, ","));
 
-        gatewayNode.setPreviousNodeIds(StringUtils.join(previousNodeIdList, ","));
-        ffResult.addAll(completeNode(gatewayNode, null, candidateList, FfService.OPERATION_INSERT, executor));
+        node.setPreviousNodeIds(StringUtils.join(previousNodeIdList, ","));
+        ffResult.addAll(completeNode(node, null, candidateList, operationContext));
 
         return ffResult;
     }
 
     @Override
-    public FfResult appendCandidate(Node node, CandidateList candidateList, String executor) {
+    public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
         return new FfResult();
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -96,12 +98,26 @@ public class GatewayNodeHandler implements NodeHandler {
             COMPLETE = node.getPreviousNodeIds().split(",").length;
         }
         // 设置JUEL解析环境
-        Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        if (operationContext.getCurrentProc() == null || !operationContext.getCurrentProc().getProcId().equals(node.getProcId())) {
+            operationContext.setCurrentProc(ffService.loadProc(node.getProcId()));
+        }
+        if (operationContext.getCurrentBranchNode() == null || !operationContext.getCurrentBranchNode().getNodeId().equals(node.getParentNodeId())) {
+            operationContext.setCurrentBranchNode(ffService.loadNode(node.getParentNodeId()));
+        }
+        if (operationContext.getCurrentNode() == null || !operationContext.getCurrentNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNode(node);
+        }
+        if (operationContext.getCurrentNodeVarMapNode() == null || !operationContext.getCurrentNodeVarMapNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNodeVarMapNode(node);
+            operationContext.setCurrentNodeVarMap(ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap());// 获取节点变量
+        }
+        HashMap<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.putAll(ffService.getInternalServiceMap());
         nodeVarMap.putAll(ffService.getExternalServiceMap());
-        nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
-        nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
-        nodeVarMap.put("node", node);
+        nodeVarMap.put("proc", operationContext.getCurrentProc());
+        nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
+        nodeVarMap.put("node", operationContext.getCurrentNode());
+        nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.put("TOTAL", TOTAL);
         nodeVarMap.put("COMPLETE", COMPLETE);
         if (!nodeVarMap.get("TOTAL").equals(0)) {
@@ -126,10 +142,10 @@ public class GatewayNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(previousNode.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(executor);
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), executor, nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(executor);
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(operationContext.getExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
@@ -139,24 +155,24 @@ public class GatewayNodeHandler implements NodeHandler {
         List<? extends NodeDef> nextNodeDefList = nodeDef.getNextNodeDefList(nodeVarMap);// 查找下一个节点定义
         if (!nextNodeDefList.isEmpty()) {// 有后续节点定义，新增后续节点。
             for (NodeDef nextNodeDef : nextNodeDefList) {
-                ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, ffService.loadNode(node.getParentNodeId()), node.getNodeId(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
+                ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, ffService.loadNode(node.getParentNodeId()), node.getNodeId(), fullCandidateList, operationContext));
             }
         }
         else {// 无后续节点定义。递归完成上级节点。
             Node parentNode = ffService.loadNode(node.getParentNodeId());
-            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
+            ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, operationContext));
         }
 
         return ffResult;
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
         return new FfResult();
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (!node.getNodeStatus().equals(FfService.NODE_STATUS_ACTIVE)) {
@@ -169,7 +185,7 @@ public class GatewayNodeHandler implements NodeHandler {
                 ffNodeService.updateNodePreviousNodeIds(node.getNodeId(), null);
                 List<Node> previousNodeList = ffService.createNodeQuery().setNodeIdList(Arrays.asList(previousNodeIds.split(","))).queryForObjectList();
                 for (Node _previousNode : previousNodeList) {
-                    ffResult.addAll(ffService.getNodeHandler(_previousNode.getNodeType()).activateNode(_previousNode, null, candidateList, initialOperation, executor));
+                    ffResult.addAll(ffService.getNodeHandler(_previousNode.getNodeType()).activateNode(_previousNode, null, candidateList, operationContext));
                 }
             }
         }

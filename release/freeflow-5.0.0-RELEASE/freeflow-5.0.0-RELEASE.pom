@@ -6,7 +6,7 @@
 
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>4.1.0-RELEASE</version>
+    <version>5.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>freeflow</name>
@@ -44,7 +44,7 @@
 
     <dependencies>
         <!-- 服务器开发需要的jar包 -->
-        <dependency>
+         <dependency>
             <groupId>org.neo4j.driver</groupId>
             <artifactId>neo4j-java-driver</artifactId>
             <version>4.4.14</version>

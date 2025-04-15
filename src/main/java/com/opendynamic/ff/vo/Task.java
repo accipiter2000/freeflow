@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 任务。
@@ -1366,5 +1367,22 @@ public class Task implements Serializable {
      */
     public void setProcDefStatus(String procDefStatus) {
         this.procDefStatus = procDefStatus;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Task) {
+            Task task = (Task) obj;
+            if (task != null && task.getTaskId() != null && task.getTaskId().equals(taskId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(taskId);
     }
 }

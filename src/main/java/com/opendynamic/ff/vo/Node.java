@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 节点。
@@ -1177,5 +1178,22 @@ public class Node implements Serializable {
      */
     public void setSubProcDefCode(String subProcDefCode) {
         this.subProcDefCode = subProcDefCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Node) {
+            Node node = (Node) obj;
+            if (node != null && node.getNodeId() != null && node.getNodeId().equals(nodeId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodeId);
     }
 }

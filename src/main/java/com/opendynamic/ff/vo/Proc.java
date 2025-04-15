@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 流程。
@@ -463,5 +464,22 @@ public class Proc implements Serializable {
      */
     public void setProcDefStatus(String procDefStatus) {
         this.procDefStatus = procDefStatus;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Proc) {
+            Proc proc = (Proc) obj;
+            if (proc != null && proc.getProcId() != null && proc.getProcId().equals(procId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(procId);
     }
 }

@@ -410,6 +410,7 @@ alter table FF_OPERATION
   add constraint FF_FF_OPERATION primary key (OPERATION_ID_);
 create index IX_FF_OPERATION_OPERATOR on FF_OPERATION (OPERATOR_);
 create index IX_FF_OPERATION_PROC on FF_OPERATION (PROC_ID_);
+create index IX_FF_OPERATION_NODE on FF_OPERATION (NODE_ID_);
 
 prompt
 prompt Creating table FF_NODE_OP
@@ -546,6 +547,9 @@ alter table FF_NODE_OP
 alter table FF_NODE_OP
   add constraint FK_FF_NODE_OP_OPERATION foreign key (OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
+create index IX_FF_NODE_OP_OPERATION on FF_NODE_OP (OPERATION_ID_);
+create index IX_FF_NODE_OP_PROC on FF_NODE_OP (PROC_ID_);
+create index IX_FF_NODE_OP_NODE on FF_NODE_OP (NODE_ID_);
 
 prompt
 prompt Creating table FF_NODE_VAR
@@ -637,6 +641,7 @@ alter table FF_NODE_VAR_OP
 alter table FF_NODE_VAR_OP
   add constraint FK_FF_NODE_VAR_OP_OPERATION foreign key (OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
+create index IX_FF_NODE_VAR_OP_OPERATION on FF_NODE_VAR_OP (OPERATION_ID_);
 
 prompt
 prompt Creating table FF_OPERATION_FOLLOW_UP
@@ -750,6 +755,8 @@ alter table FF_PROC_OP
 alter table FF_PROC_OP
   add constraint FK_FF_PROC_OP_OPERATION foreign key (OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
+create index IX_FF_PROC_OP_OPERATION on FF_PROC_OP (OPERATION_ID_);
+create index IX_FF_PROC_OP_PROC on FF_PROC_OP (PROC_ID_);
 
 prompt
 prompt Creating table FF_TASK
@@ -911,6 +918,8 @@ alter table FF_TASK_OP
 alter table FF_TASK_OP
   add constraint FK_FF_TASK_OP_OPERATION foreign key (OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
+create index IX_FF_TASK_OP_OPERATION on FF_TASK_OP (OPERATION_ID_);
+create index IX_FF_TASK_OP_TASK on FF_TASK_OP (TASK_ID_);
 
 prompt
 prompt Creating view FFV_ADJUST_PROC_DEF

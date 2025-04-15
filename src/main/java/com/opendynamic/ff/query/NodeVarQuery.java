@@ -27,6 +27,8 @@ public class NodeVarQuery {
     private List<String> varTypeList; // 变量类型列表。
     private String varName; // 变量名称。
     private List<String> varNameList; // 变量名称列表。
+    private String procId; // 流程ID。
+    private List<String> procIdList; // 流程ID列表。
     private Boolean recursive;// 是否递归，默认为false。
     private Integer page;// 页。默认为1。
     private Integer limit;// 每页数据数量。默认为-1(全部)。
@@ -133,6 +135,30 @@ public class NodeVarQuery {
     }
 
     /**
+     * 设置流程ID。
+     * 
+     * @param procId
+     *        流程ID。
+     * @return 当前查询实例，支持链式调用。
+     */
+    public NodeVarQuery setProcId(String procId) {
+        this.procId = procId;
+        return this;
+    }
+
+    /**
+     * 设置流程ID列表。
+     * 
+     * @param procIdList
+     *        流程ID列表。
+     * @return 当前查询实例，支持链式调用。
+     */
+    public NodeVarQuery setProcIdList(List<String> procIdList) {
+        this.procIdList = procIdList;
+        return this;
+    }
+
+    /**
      * 设置是否递归，默认为false。
      * 
      * @param recursive
@@ -174,7 +200,7 @@ public class NodeVarQuery {
      * @return Map类型数据列表。
      */
     public List<Map<String, Object>> queryForMapList() {
-        return ffNodeVarService.selectNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, recursive, page, limit);
+        return ffNodeVarService.selectNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, procId, procIdList, recursive, page, limit);
     }
 
     /**
@@ -236,6 +262,6 @@ public class NodeVarQuery {
      * @return 总数。
      */
     public int count() {
-        return ffNodeVarService.countNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, recursive);
+        return ffNodeVarService.countNodeVar(nodeVarId, nodeVarIdList, nodeId, nodeIdList, varType, varTypeList, varName, varNameList, procId, procIdList, recursive);
     }
 }

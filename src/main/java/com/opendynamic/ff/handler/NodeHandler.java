@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
 
@@ -36,7 +37,7 @@ public interface NodeHandler {
      *        执行人。
      * @return 所有变更的流程、节点和任务。
      */
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor);
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, OperationContext operationContext);
 
     /**
      * 为节点追加候选。根据候选内容新增节点的办理人或办理子流程。
@@ -49,7 +50,7 @@ public interface NodeHandler {
      *        执行人。
      * @return 所有变更的流程、节点和任务。
      */
-    public FfResult appendCandidate(Node node, CandidateList candidateList, String executor);
+    public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext);
 
     /**
      * 完成节点。
@@ -66,7 +67,7 @@ public interface NodeHandler {
      *        执行人。
      * @return 所有变更的流程、节点和任务。
      */
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor);
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext);
 
     /**
      * 驳回节点。
@@ -81,7 +82,7 @@ public interface NodeHandler {
      *        执行人。
      * @return 所有变更的流程、节点和任务。
      */
-    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor);
+    public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext);
 
     /**
      * 激活节点。
@@ -98,5 +99,5 @@ public interface NodeHandler {
      *        执行人。
      * @return 所有变更的流程、节点和任务。
      */
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor);
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext);
 }

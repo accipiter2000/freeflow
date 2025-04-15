@@ -130,6 +130,9 @@ create table FF_NODE_OP
 );
 
 alter table FF_NODE_OP comment '节点操作';
+create index IX_FF_NODE_OP_OPERATION on FF_NODE_OP (OPERATION_ID_);
+create index IX_FF_NODE_OP_PROC on FF_NODE_OP (PROC_ID_);
+create index IX_FF_NODE_OP_NODE on FF_NODE_OP (NODE_ID_);
 
 /*==============================================================*/
 /* Table: FF_NODE_VAR                                           */
@@ -178,6 +181,7 @@ create table FF_NODE_VAR_OP
 );
 
 alter table FF_NODE_VAR_OP comment '节点变量操作';
+create index IX_FF_NODE_VAR_OP_OPERATION on FF_NODE_VAR_OP (OPERATION_ID_);
 
 /*==============================================================*/
 /* Table: FF_OPERATION                                          */
@@ -214,6 +218,7 @@ create index IX_FF_OPERATION_PROC on FF_OPERATION
 (
    PROC_ID_
 );
+create index IX_FF_OPERATION_NODE on FF_OPERATION (NODE_ID_);
 
 /*==============================================================*/
 /* Table: FF_OPERATION_FOLLOW_UP                                */
@@ -322,6 +327,8 @@ create table FF_PROC_OP
 );
 
 alter table FF_PROC_OP comment '流程操作';
+create index IX_FF_PROC_OP_OPERATION on FF_PROC_OP (OPERATION_ID_);
+create index IX_FF_PROC_OP_PROC on FF_PROC_OP (PROC_ID_);
 
 /*==============================================================*/
 /* Table: FF_TASK                                               */
@@ -350,6 +357,7 @@ create table FF_TASK
 );
 
 alter table FF_TASK comment '任务';
+
 
 /*==============================================================*/
 /* Table: FF_TASK_OP                                            */
@@ -384,6 +392,8 @@ create table FF_TASK_OP
 );
 
 alter table FF_TASK_OP comment '任务操作';
+create index IX_FF_TASK_OP_OPERATION on FF_TASK_OP (OPERATION_ID_);
+create index IX_FF_TASK_OP_TASK on FF_TASK_OP (TASK_ID_);
 
 alter table FF_ADJUST_PROC_DEF add constraint FK_FF_ADJUST_PROC_DEF_PROC_DEF foreign key (PROC_DEF_ID_)
       references FF_PROC_DEF (PROC_DEF_ID_) on update restrict;

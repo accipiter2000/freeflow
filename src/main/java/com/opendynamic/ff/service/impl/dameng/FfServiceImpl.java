@@ -76,6 +76,7 @@ import com.opendynamic.ff.vo.NodeVar;
 import com.opendynamic.ff.vo.NodeVarOp;
 import com.opendynamic.ff.vo.NoteDef;
 import com.opendynamic.ff.vo.Operation;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.OvalShape;
 import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.ProcDef;
@@ -824,7 +825,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
         String procId = OdUtils.getUuid();
         ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
-        ffResult.addCreateProc(createProcQuery().setProcId(procId).queryForObject());
+        Proc proc = createProcQuery().setProcId(procId).queryForObject();
+        ffResult.addCreateProc(proc);
         ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         Node branchNode = createNodeQuery().setNodeId(procId).queryForObject();
         ffResult.addCreateNode(branchNode);
@@ -838,8 +840,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         updateNodeVar(procId, nodeVarMap);// 更新节点变量
 
         List<? extends NodeDef> startNodeDefList = procDef.getStartNodeDefList();
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_INSERT).setInitialNodeVarMap(nodeVarMap).setExecutor(procStartUser).setCurrentProc(proc).setCurrentBranchNode(branchNode).setCurrentNodeVarMapNode(branchNode).setCurrentNodeVarMap(nodeVarMap);
         for (NodeDef startNodeDef : startNodeDefList) {
-            ffResult.addAll(getNodeHandler(startNodeDef.getNodeType()).insertNodeByNodeDef(startNodeDef, branchNode, null, candidateList, FfService.OPERATION_INSERT, procStartUser));
+            ffResult.addAll(getNodeHandler(startNodeDef.getNodeType()).insertNodeByNodeDef(startNodeDef, branchNode, null, candidateList, operationContext));
         }
 
         return ffResult;
@@ -871,7 +874,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
         String procId = OdUtils.getUuid();
         ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
-        ffResult.addCreateProc(createProcQuery().setProcId(procId).queryForObject());
+        Proc proc = createProcQuery().setProcId(procId).queryForObject();
+        ffResult.addCreateProc(proc);
         ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         Node branchNode = createNodeQuery().setNodeId(procId).queryForObject();
         ffResult.addCreateNode(branchNode);
@@ -912,7 +916,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         branchNode = createNodeList.get(createNodeList.size() - 1);
 
         NodeDef nodeDef = subProcDef.getNodeDef(nodeCode);
-        ffResult.addAll(getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, null, candidateList, FfService.OPERATION_INSERT, procStartUser));
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_INSERT).setInitialNodeVarMap(nodeVarMap).setExecutor(procStartUser).setCurrentProc(proc).setCurrentBranchNode(branchNode).setCurrentNodeVarMapNode(branchNode).setCurrentNodeVarMap(nodeVarMap);
+        ;
+        ffResult.addAll(getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, null, candidateList, operationContext));
 
         return ffResult;
     }
@@ -1287,7 +1293,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             candidateList = new CandidateList();
         }
 
-        return getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, previousNodeIds, candidateList, FfService.OPERATION_INSERT, executor);
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_INSERT).setExecutor(executor);
+        return getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, previousNodeIds, candidateList, operationContext);
     }
 
     @Override
@@ -1298,7 +1305,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         }
 
         Node node = loadNode(nodeId);
-        return getNodeHandler(node.getNodeType()).activateNode(node, null, candidateList, FfService.OPERATION_ACTIVATE, executor);
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_ACTIVATE).setInitialNode(node).setExecutor(executor);
+        return getNodeHandler(node.getNodeType()).activateNode(node, null, candidateList, operationContext);
     }
 
     @Override
@@ -1322,7 +1330,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             ffResult.addCompleteTask(task);
         }
 
-        ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, FfService.OPERATION_COMPLETE, executor));
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_COMPLETE).setInitialNode(node).setExecutor(executor);
+        ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, operationContext));
 
         return ffResult;
     }
@@ -1348,7 +1357,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             ffResult.addTerminateTask(task);
         }
 
-        ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, FfService.OPERATION_TERMINATE, executor));
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_TERMINATE).setInitialNode(node).setExecutor(executor);
+        ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, operationContext));
 
         List<Node> completeNodeList = ffResult.getCompleteNodeList();
         for (Node completeNode : completeNodeList) {
@@ -1574,7 +1584,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             }
 
             if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
-                ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, FfService.OPERATION_COMPLETE, executor));
+                OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_COMPLETE).setInitialTask(task).setInitialNodeVarMap(branchNodeVar).setExecutor(executor);
+                ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, operationContext));
             }
 
             return ffResult;
@@ -1661,7 +1672,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
             ffResult.addCompleteNode(node);
 
-            ffResult.addAll(jumpToNode(node, subProcPath, nodeCode, candidateList, false, executor));
+            OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_COMPLETE).setInitialTask(task).setInitialNodeVarMap(branchNodeVar).setExecutor(executor);
+            ffResult.addAll(jumpToNode(node, subProcPath, nodeCode, candidateList, operationContext));
 
             return ffResult;
         }
@@ -1673,7 +1685,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     /**
      * 任意跳转到其它节点。
      */
-    private FfResult jumpToNode(Node currentNode, String subProcPath, String nodeCode, CandidateList candidateList, boolean terminate, String executor) {
+    private FfResult jumpToNode(Node currentNode, String subProcPath, String nodeCode, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();
 
         List<Node> parentNodeList = createParentNodeQuery().setNodeId(currentNode.getNodeId()).setRecursive(true).setIncludeSelf(false).queryForObjectList();
@@ -1701,7 +1713,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                             continue;
                         }
                         else {
-                            ffResult.addAll(completeNode(parentNodeList, index, terminate, executor));
+                            ffResult.addAll(completeNode(parentNodeList, index, operationContext));
                             reserve = false;
                         }
                     }
@@ -1736,7 +1748,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                     continue;
                 }
                 else {
-                    ffResult.addAll(completeNode(parentNodeList, index, terminate, executor));
+                    ffResult.addAll(completeNode(parentNodeList, index, operationContext));
                     reserve = false;
                 }
             }
@@ -1751,26 +1763,26 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         }
 
         nodeDef = subProcDef.getNodeDef(nodeCode);
-        ffResult.addAll(getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, null, candidateList, FfService.OPERATION_INSERT, executor));
+        ffResult.addAll(getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, null, candidateList, operationContext));
 
         return ffResult;
     }
 
-    private FfResult completeNode(List<Node> parentNodeList, int index, boolean terminate, String executor) {
+    private FfResult completeNode(List<Node> parentNodeList, int index, OperationContext operationContext) {
         FfResult ffResult = new FfResult();
 
         String nodeStatus = FfService.NODE_STATUS_COMPLETE;
-        if (terminate) {
+        if (FfService.OPERATION_REJECT.equals(operationContext.getInitialOperation())) {
             nodeStatus = FfService.NODE_STATUS_TERMINATE;
         }
 
         Node node;
         for (int i = index; i >= 0; i--) {
             node = parentNodeList.get(i);
-            String nodeEndUserName = ffHelper.getUserName(executor);
+            String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
             Date nodeEndDate = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, nodeEndUserName, nodeEndDate, nodeStatus);// 完成节点
-            node.setNodeEndUser(executor);
+            ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, nodeStatus);// 完成节点
+            node.setNodeEndUser(operationContext.getExecutor());
             node.setNodeEndUserName(nodeEndUserName);
             node.setNodeEndDate(nodeEndDate);
             node.setNodeStatus(nodeStatus);
@@ -1945,7 +1957,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 }
             }
 
-            ffResult.addAll(getNodeHandler(node.getNodeType()).rejectNode(node, candidateList, FfService.OPERATION_REJECT, executor));// 驳回节点
+            OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_REJECT).setInitialTask(task).setExecutor(executor);
+            ffResult.addAll(getNodeHandler(node.getNodeType()).rejectNode(node, candidateList, operationContext));// 驳回节点
 
             return ffResult;
         }
@@ -2022,7 +2035,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
             ffResult.addTerminateNode(node);
 
-            ffResult.addAll(jumpToNode(node, subProcPath, nodeCode, candidateList, true, executor));
+            OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_REJECT).setInitialTask(task).setExecutor(executor);
+            ffResult.addAll(jumpToNode(node, subProcPath, nodeCode, candidateList, operationContext));
 
             return ffResult;
         }
@@ -2045,7 +2059,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             return ffResult;
         }
 
-        ffResult.addAll(getNodeHandler(node.getNodeType()).appendCandidate(node, candidateList, executor));
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_INSERT).setInitialNode(node).setExecutor(executor);
+        ffResult.addAll(getNodeHandler(node.getNodeType()).appendCandidate(node, candidateList, operationContext));
 
         return ffResult;
     }

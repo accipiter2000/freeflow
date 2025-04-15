@@ -3,6 +3,7 @@ package com.opendynamic.ff.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
-import com.opendynamic.ff.vo.Proc;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
 
@@ -49,25 +50,38 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
 
     @SuppressWarnings("unchecked")
     @Override
-    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
-        Proc proc = ffService.loadProc(branchNode.getProcId());
-        Node isolateSubProcNode;
+        Node node;
 
         // 新增子流程节点
-        String subProcNodeId = OdUtils.getUuid();
-        ffNodeService.insertNode(subProcNodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_ISOLATE_SUB_PROC, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
-        isolateSubProcNode = ffService.loadNode(subProcNodeId);
-        ffResult.addCreateNode(isolateSubProcNode);
+        String nodeId = OdUtils.getUuid();
+        ffNodeService.insertNode(nodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_ISOLATE_SUB_PROC, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+        node = ffService.loadNode(nodeId);
+        ffResult.addCreateNode(node);
 
         // 设置JUEL解析环境
-        Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        if (operationContext.getCurrentProc() == null || !operationContext.getCurrentProc().getProcId().equals(node.getProcId())) {
+            operationContext.setCurrentProc(ffService.loadProc(node.getProcId()));
+        }
+        if (operationContext.getCurrentBranchNode() == null || !operationContext.getCurrentBranchNode().getNodeId().equals(branchNode.getNodeId())) {
+            operationContext.setCurrentBranchNode(branchNode);
+        }
+        if (operationContext.getCurrentNode() == null || !operationContext.getCurrentNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNode(node);
+        }
+        if (operationContext.getCurrentNodeVarMapNode() == null || !operationContext.getCurrentNodeVarMapNode().getNodeId().equals(branchNode.getNodeId())) {
+            operationContext.setCurrentNodeVarMapNode(branchNode);
+            operationContext.setCurrentNodeVarMap(ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap());// 获取节点变量
+        }
+        HashMap<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.putAll(ffService.getInternalServiceMap());
         nodeVarMap.putAll(ffService.getExternalServiceMap());
-        nodeVarMap.put("proc", proc);
-        nodeVarMap.put("branch", branchNode);
-        nodeVarMap.put("node", isolateSubProcNode);
+        nodeVarMap.put("proc", operationContext.getCurrentProc());
+        nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
+        nodeVarMap.put("node", operationContext.getCurrentNode());
+        nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
@@ -119,7 +133,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
             String subProcBranchNodeId = OdUtils.getUuid();
             ProcDef procDef = ffService.loadProcDefByCode(assignSubProcDef.getProcDefCode());// 获取子流程定义对应的流程定义
             CandidateList childCandidateList = candidateList.getChildCandidate(subProcPath + assignSubProcDef.getProcDefCode());
-            ffNodeService.insertNode(subProcBranchNodeId, isolateSubProcNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, assignSubProcDef.getProcDefCode(), childCandidateList.toJson(), FfService.PROC_STATUS_NOT_START, FfService.NODE_STATUS_ACTIVE, new Date());
+            ffNodeService.insertNode(subProcBranchNodeId, node.getNodeId(), branchNode.getProcId(), previousNodeIds, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, assignSubProcDef.getProcDefName(), null, null, FfService.DEFAULT_COMPLETE_EXPRESSION_, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, assignSubProcDef.getProcDefCode(), childCandidateList.toJson(), FfService.PROC_STATUS_NOT_START, FfService.NODE_STATUS_ACTIVE, new Date());
             Node subProcBranchNode = ffService.loadNode(subProcBranchNodeId);
             ffResult.addCreateNode(subProcBranchNode);
 
@@ -145,7 +159,9 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
             // 自动完成通知节点
             if (FfService.BOOLEAN_TRUE.equals(inform)) {
-                ffResult.addAll(completeNode(isolateSubProcNode, previousNodeIds, candidateList, FfService.OPERATION_COMPLETE, FfService.USER_FF_SYSTEM));
+                OperationContext systemExecutorOperationContext = (OperationContext) OdUtils.deepClone(operationContext);
+                systemExecutorOperationContext.setExecutor(FfService.USER_FF_SYSTEM);
+                ffResult.addAll(completeNode(node, previousNodeIds, candidateList, systemExecutorOperationContext));
             }
         }
 
@@ -153,19 +169,32 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult appendCandidate(Node node, CandidateList candidateList, String executor) {
+    public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
         Node branchNode = ffService.loadNode(node.getParentNodeId());
-        Proc proc = ffService.loadProc(branchNode.getProcId());
 
         // 设置JUEL解析环境
-        Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        if (operationContext.getCurrentProc() == null || !operationContext.getCurrentProc().getProcId().equals(node.getProcId())) {
+            operationContext.setCurrentProc(ffService.loadProc(node.getProcId()));
+        }
+        if (operationContext.getCurrentBranchNode() == null || !operationContext.getCurrentBranchNode().getNodeId().equals(branchNode.getNodeId())) {
+            operationContext.setCurrentBranchNode(branchNode);
+        }
+        if (operationContext.getCurrentNode() == null || !operationContext.getCurrentNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNode(node);
+        }
+        if (operationContext.getCurrentNodeVarMapNode() == null || !operationContext.getCurrentNodeVarMapNode().getNodeId().equals(branchNode.getNodeId())) {
+            operationContext.setCurrentNodeVarMapNode(branchNode);
+            operationContext.setCurrentNodeVarMap(ffService.createNodeVarQuery().setNodeId(branchNode.getNodeId()).setRecursive(true).queryForMap());// 获取节点变量
+        }
+        HashMap<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.putAll(ffService.getInternalServiceMap());
         nodeVarMap.putAll(ffService.getExternalServiceMap());
-        nodeVarMap.put("proc", proc);
-        nodeVarMap.put("branch", branchNode);
-        nodeVarMap.put("node", node);
+        nodeVarMap.put("proc", operationContext.getCurrentProc());
+        nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
+        nodeVarMap.put("node", operationContext.getCurrentNode());
+        nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
@@ -217,7 +246,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
     }
 
     @Override
-    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
@@ -236,12 +265,26 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         node.setLastCompleteNodeIds(StringUtils.join(lastCompleteNodeIdList, ","));
 
         // 设置JUEL解析环境
-        Map<String, Object> nodeVarMap = ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap();// 获取节点变量
+        if (operationContext.getCurrentProc() == null || !operationContext.getCurrentProc().getProcId().equals(node.getProcId())) {
+            operationContext.setCurrentProc(ffService.loadProc(node.getProcId()));
+        }
+        if (operationContext.getCurrentBranchNode() == null || !operationContext.getCurrentBranchNode().getNodeId().equals(node.getParentNodeId())) {
+            operationContext.setCurrentBranchNode(ffService.loadNode(node.getParentNodeId()));
+        }
+        if (operationContext.getCurrentNode() == null || !operationContext.getCurrentNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNode(node);
+        }
+        if (operationContext.getCurrentNodeVarMapNode() == null || !operationContext.getCurrentNodeVarMapNode().getNodeId().equals(node.getNodeId())) {
+            operationContext.setCurrentNodeVarMapNode(node);
+            operationContext.setCurrentNodeVarMap(ffService.createNodeVarQuery().setNodeId(node.getNodeId()).setRecursive(true).queryForMap());// 获取节点变量
+        }
+        HashMap<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.putAll(ffService.getInternalServiceMap());
         nodeVarMap.putAll(ffService.getExternalServiceMap());
-        nodeVarMap.put("proc", ffService.loadProc(node.getProcId()));
-        nodeVarMap.put("branch", ffService.loadNode(node.getParentNodeId()));
-        nodeVarMap.put("node", node);
+        nodeVarMap.put("proc", operationContext.getCurrentProc());
+        nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
+        nodeVarMap.put("node", operationContext.getCurrentNode());
+        nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.putAll(ffNodeService.getChildNodeStatistic(node.getNodeId()));// 获取节点任务完成信息
         ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
@@ -278,10 +321,10 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
             }
         }
         // 完成节点
-        String nodeEndUserName = ffHelper.getUserName(executor);
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), executor, nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(executor);
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(operationContext.getExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
@@ -294,7 +337,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         Node parentNode = ffService.loadNode(node.getParentNodeId());
         if (!nextNodeDefList.isEmpty()) {// 有后续节点定义，新增后续节点。
             for (NodeDef nextNodeDef : nextNodeDefList) {
-                ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, parentNode, node.getNodeId(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
+                ffResult.addAll(ffService.getNodeHandler(nextNodeDef.getNodeType()).insertNodeByNodeDef(nextNodeDef, parentNode, node.getNodeId(), fullCandidateList, operationContext));
             }
         }
         else// 无后续节点定义。
@@ -310,22 +353,22 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
                 }
                 fullCandidateList.add(new Candidate(ffService.getSubProcPath(previousNode), previousNode.getNodeCode(), StringUtils.join(assigneeList, ",")));
 
-                ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), fullCandidateList, FfService.OPERATION_COMPLETE, executor));
+                ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), fullCandidateList, operationContext));
             }
             else {// 非完成返回节点，递归完成上级节点。
-                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, initialOperation, executor));
+                ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, operationContext));
             }
 
         return ffResult;
     }
 
     @Override
-    public FfResult rejectNode(Node node, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
         return new FfResult();
     }
 
     @Override
-    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, String initialOperation, String executor) {
+    public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         return new FfResult();
     }
 }
