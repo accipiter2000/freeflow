@@ -103,7 +103,7 @@
             "claim": "0",
             "forwardable": "0",
             "priority": "5",
-            "candidateAssignee": "${ffOmService.selectOrgLeader(ffOmService.selectOrg(INIT_COM_ID_, null, null, \"财务\").get(0).getOrgId(),\"2\")}",
+            "candidateAssignee": "28fcc1e79d8440019bf9884ab0559394,b58656cfc219487b86283e7644e58dec",
             "action": "commonApproveDoc.do?DOC_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
         },
         {
@@ -123,7 +123,7 @@
             "claim": "0",
             "forwardable": "0",
             "priority": "5",
-            "assignee": "${ffOmService.selectOrgLeader(INIT_ORG_ID_,\"1,2\")}",
+            "assignee": "28fcc1e79d8440019bf9884ab0559394,b58656cfc219487b86283e7644e58dec",
             "action": "commonApproveDoc.do?DOC_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
         },
         {
@@ -143,7 +143,7 @@
             "claim": "0",
             "forwardable": "0",
             "priority": "5",
-            "assignee": "${ffOmService.selectOrgLeader(INIT_ORG_ID_,\"3\")}",
+            "assignee": "",
             "action": "commonApproveDoc.do?DOC_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
         },
         {

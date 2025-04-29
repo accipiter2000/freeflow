@@ -620,8 +620,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
                 runningNodeDefList.addAll(getRunningNodeDef(subProcPath, nextNodeDef, nodeVarMap));
             }
         }
-        // TASK,CENTER_FORWARD_TASK候选人解析
-        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK)) && StringUtils.isNotEmpty(nodeDef.getCandidateAssignee())) {
+        // TASK,CENTER_FORWARD_TASK,NODE_TYPE_SERVICE_TASK候选人解析
+        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_SERVICE_TASK)) && StringUtils.isNotEmpty(nodeDef.getCandidateAssignee())) {
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateAssignee(), Object.class);
             Object object;
             try {
@@ -644,8 +644,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             runningNodeDef.setCandidateAssigneeList(candidateAssigneeList);
             runningNodeDefList.add(runningNodeDef);
         }
-        // TASK,CENTER_FORWARD_TASK办理人解析
-        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK)) && StringUtils.isNotEmpty(nodeDef.getAssignee())) {
+        // TASK,CENTER_FORWARD_TASK,NODE_TYPE_SERVICE_TASK办理人解析
+        if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_SERVICE_TASK)) && StringUtils.isNotEmpty(nodeDef.getAssignee())) {
             ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
             Object object;
             try {
@@ -666,6 +666,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
             runningNodeDef.setSubProcPath(subProcPath);
             runningNodeDef.setAssigneeList(assigneeList);
+            runningNodeDefList.add(runningNodeDef);
+        }
+        // SERVICE_TASK无办理人和候选人
+        if (nodeDef.getNodeType().equals(FfService.NODE_TYPE_SERVICE_TASK) && StringUtils.isEmpty(nodeDef.getCandidateAssignee()) && StringUtils.isEmpty(nodeDef.getAssignee())) {
+            RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
+            runningNodeDef.setSubProcPath(subProcPath);
             runningNodeDefList.add(runningNodeDef);
         }
         // SUB_PROC候选子流程定义解析
@@ -750,6 +756,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
             runningNodeDef.setSubProcPath(subProcPath);
             runningNodeDef.setAssignSubProcDefList(assignSubProcDefList);
+            runningNodeDefList.add(runningNodeDef);
+        }
+        // END
+        if (nodeDef.getNodeType().equals(FfService.NODE_TYPE_END)) {
+            RunningNodeDef runningNodeDef = new RunningNodeDef(nodeDef, null);
+            runningNodeDef.setSubProcPath(subProcPath);
             runningNodeDefList.add(runningNodeDef);
         }
 
@@ -1309,7 +1321,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
     @Override
     @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult completeNode(String nodeId, CandidateList candidateList, String executor) {
+    public FfResult completeNode(String nodeId, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1317,6 +1329,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         }
 
         Node node = loadNode(nodeId);
+        updateNodeVar(node.getParentNodeId(), branchNodeVar);// 更新当前分支节点变量
         List<Task> taskList = createTaskQuery().setNodeId(nodeId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
@@ -1328,7 +1341,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             ffResult.addCompleteTask(task);
         }
 
-        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_COMPLETE).setInitialNode(node).setExecutor(executor);
+        OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_COMPLETE).setInitialNode(node).setInitialNodeVarMap(branchNodeVar).setExecutor(executor);
         ffResult.addAll(getNodeHandler(node.getNodeType()).completeNode(node, null, candidateList, operationContext));
 
         return ffResult;

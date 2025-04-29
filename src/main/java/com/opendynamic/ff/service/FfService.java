@@ -869,7 +869,7 @@ public interface FfService {
      * @return 所有变化的流程，节点和任务。
      */
     @FfOperation
-    public FfResult completeNode(String nodeId, CandidateList candidateList, String executor);
+    public FfResult completeNode(String nodeId, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor);
 
     /**
      * 异常完成节点。
