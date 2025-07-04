@@ -227,6 +227,26 @@ public interface FfService {
      */
     public static final String OPERATION_TYPE_DELETE = "DELETE";
     /**
+     * 节点处理器操作-新增。
+     */
+    public static final String NODE_HANDLER_OPERATION_INSERT = "INSERT";
+    /**
+     * 节点处理器操作-新增。
+     */
+    public static final String NODE_HANDLER_OPERATION_APPEND = "APPEND";
+    /**
+     * 节点处理器操作-新增。
+     */
+    public static final String NODE_HANDLER_OPERATION_COMPLETE = "COMPLETE";
+    /**
+     * 节点处理器操作-新增。
+     */
+    public static final String NODE_HANDLER_OPERATION_REJECT = "REJECT";
+    /**
+     * 节点处理器操作-新增。
+     */
+    public static final String NODE_HANDLER_OPERATION_ACTIVATE = "ACTIVATE";
+    /**
      * 数据范围-流程定义。
      */
     public static final String DATA_SCOPE_PROC_DEF = "PROC_DEF";

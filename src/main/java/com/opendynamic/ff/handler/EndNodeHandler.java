@@ -17,9 +17,10 @@ import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.service.FfTaskService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
-import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.NodeHandlerOperation;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.Task;
 
@@ -45,6 +46,7 @@ public class EndNodeHandler implements NodeHandler {
     @Override
     public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_INSERT, null));
 
         // 终止该节点所属子流程或独立子流程内的所有节点。如该节点直属于主流程，则终止流程所有节点
         List<Node> nodeList; // 需要终止的节点
@@ -72,9 +74,9 @@ public class EndNodeHandler implements NodeHandler {
         List<Task> taskList = ffService.createTaskQuery().setNodeIdList(OdUtils.collectFromBean(nodeList, "nodeId", String.class)).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), operationContext.getExecutor(), ffHelper.getUserName(operationContext.getExecutor()), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
-            task.setTaskEndUser(operationContext.getExecutor());
-            task.setTaskEndUserName(ffHelper.getUserName(operationContext.getExecutor()));
+            ffTaskService.updateTaskStatus(task.getTaskId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
+            task.setTaskEndUser(operationContext.getCurrentExecutor());
+            task.setTaskEndUserName(ffHelper.getUserName(operationContext.getCurrentExecutor()));
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
             ffResult.addTerminateTask(task);
@@ -83,9 +85,9 @@ public class EndNodeHandler implements NodeHandler {
         for (Node node : nodeList) {
             if (node.getNodeStatus().equals(FfService.NODE_STATUS_ACTIVE)) {
                 Date COMPLETE_DATE_ = new Date();
-                ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), ffHelper.getUserName(operationContext.getExecutor()), COMPLETE_DATE_, candidateList.toJson(), FfService.NODE_STATUS_TERMINATE);
-                node.setNodeEndUser(operationContext.getExecutor());
-                node.setNodeEndUserName(ffHelper.getUserName(operationContext.getExecutor()));
+                ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), COMPLETE_DATE_, candidateList.toJson(), FfService.NODE_STATUS_TERMINATE);
+                node.setNodeEndUser(operationContext.getCurrentExecutor());
+                node.setNodeEndUserName(ffHelper.getUserName(operationContext.getCurrentExecutor()));
                 node.setNodeEndDate(COMPLETE_DATE_);
                 node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
                 ffResult.addTerminateNode(node);
@@ -96,7 +98,7 @@ public class EndNodeHandler implements NodeHandler {
             ffResult.addAll(ffService.getNodeHandler(subProcBranchNode.getNodeType()).completeNode(subProcBranchNode, null, candidateList, operationContext));
         }
         else {// 终止流程
-            ffProcService.updateProcStatus(branchNode.getProcId(), operationContext.getExecutor(), ffHelper.getUserName(operationContext.getExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
+            ffProcService.updateProcStatus(branchNode.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
             Proc proc = ffService.loadProc(branchNode.getProcId());
             ffResult.addCompleteProc(proc);
         }
@@ -106,21 +108,25 @@ public class EndNodeHandler implements NodeHandler {
 
     @Override
     public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_APPEND, node));
         return new FfResult();
     }
 
     @Override
     public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_COMPLETE, node));
         return new FfResult();
     }
 
     @Override
     public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_REJECT, node));
         return new FfResult();
     }
 
     @Override
     public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_ACTIVATE, node));
         return new FfResult();
     }
 }

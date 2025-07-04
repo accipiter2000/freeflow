@@ -32,6 +32,7 @@ import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.FlowDef;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.NodeHandlerOperation;
 import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
@@ -73,6 +74,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         ffNodeService.insertNode(nodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_CENTER_FORWARD_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         node = ffService.loadNode(nodeId);
         ffResult.addCreateNode(node);
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_INSERT, node));
 
         // 新增任务
         // 设置JUEL解析环境
@@ -110,6 +112,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
+        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
         // JUEL解析
         // 计算办理人
@@ -185,7 +188,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             task.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
             task.setCreationDate(new Date());
 
-            ffService.insertTask(task, operationContext.getExecutor());
+            ffService.insertTask(task, operationContext.getCurrentExecutor());
             task = ffService.loadTask(taskId);
             ffResult.addCreateTask(task);
             createTaskList.add(task);
@@ -220,7 +223,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         }
 
         OperationContext systemExecutorOperationContext = (OperationContext) OdUtils.deepClone(operationContext);
-        systemExecutorOperationContext.setExecutor(systemExecutor);
+        systemExecutorOperationContext.setCurrentExecutor(systemExecutor);
         if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
             // 自动完成通知节点
             if (FfService.BOOLEAN_TRUE.equals(inform)) {
@@ -269,6 +272,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
     @Override
     public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_APPEND, node));
 
         Node branchNode = ffService.loadNode(node.getParentNodeId());
         ProcDef procDef = ffService.loadProcDef(node.getSubProcDefId());
@@ -301,6 +305,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
+        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
         // JUEL解析
         // 计算办理人
@@ -364,7 +369,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             task.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
             task.setCreationDate(new Date());
 
-            ffService.insertTask(task, operationContext.getExecutor());
+            ffService.insertTask(task, operationContext.getCurrentExecutor());
             task = ffService.loadTask(taskId);
             ffResult.addCreateTask(task);
             createTaskList.add(task);
@@ -399,6 +404,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
     @Override
     public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_COMPLETE, node));
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
             return ffResult;
@@ -431,6 +437,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
+        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
         // JUEL解析
         String inform = FfService.BOOLEAN_FALSE;
         String completeReturn = FfService.BOOLEAN_FALSE;
@@ -461,10 +468,10 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(task.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getExecutor());
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(operationContext.getCurrentExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
@@ -505,6 +512,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
     @Override
     public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_REJECT, node));
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_TERMINATE) || node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {
             return ffResult;
@@ -516,10 +524,10 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         }
 
         // 完成节点
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
-        node.setNodeEndUser(operationContext.getExecutor());
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
+        node.setNodeEndUser(operationContext.getCurrentExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
@@ -544,6 +552,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
     @Override
     public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_ACTIVATE, node));
 
         if (!node.getNodeStatus().equals(FfService.NODE_STATUS_ACTIVE)) {
             ffNodeService.updateNodeStatus(node.getNodeId(), FfService.NODE_STATUS_ACTIVE);
@@ -593,6 +602,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
                     simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
+                simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
                 // JUEL解析
                 ValueExpression expression = expressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
                 autoCompleteEmptyAssignee = (String) expression.getValue(simpleContext);
@@ -600,7 +610,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
 
             if (FfService.OPERATION_REJECT.equals(operationContext.getInitialOperation()) && taskList.isEmpty() && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
                 OperationContext systemExecutorOperationContext = (OperationContext) OdUtils.deepClone(operationContext);
-                systemExecutorOperationContext.setExecutor(FfService.USER_FF_SYSTEM);
+                systemExecutorOperationContext.setCurrentExecutor(FfService.USER_FF_SYSTEM);
                 ffResult.addAll(rejectNode(node, candidateList, systemExecutorOperationContext));
             }
         }

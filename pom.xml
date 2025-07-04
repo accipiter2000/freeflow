@@ -6,7 +6,7 @@
 
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>5.0.1-RELEASE</version>
+    <version>6.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>freeflow</name>

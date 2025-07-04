@@ -25,6 +25,7 @@ import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.NodeHandlerOperation;
 import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
@@ -58,6 +59,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         ffNodeService.insertNode(nodeId, branchNode.getNodeId(), branchNode.getProcId(), previousNodeIds, null, branchNode.getSubProcDefId(), branchNode.getAdjustSubProcDefId(), FfService.NODE_TYPE_SERVICE_TASK, nodeDef.getNodeCode(), nodeDef.getNodeName(), nodeDef.getParentNodeCode(), nodeDef.getCandidateAssignee(), nodeDef.getCompleteExpression(), nodeDef.getCompleteReturn(), nodeDef.getExclusive(), nodeDef.getWaitingForCompleteNode(), nodeDef.getAutoCompleteSameAssignee(), nodeDef.getAutoCompleteEmptyAssignee(), nodeDef.getInform(), nodeDef.getAssignee(), nodeDef.getAction(), nodeDef.getDueDate(), nodeDef.getClaim(), nodeDef.getForwardable(), nodeDef.getPriority(), null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
         node = ffService.loadNode(nodeId);
         ffResult.addCreateNode(node);
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_INSERT, node));
 
         // 执行服务
         // 设置JUEL解析环境
@@ -86,6 +88,8 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
+        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+
         // 执行Service调用
         ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
         expression.getValue(simpleContext);
@@ -105,22 +109,24 @@ public class ServiceTaskNodeHandler implements NodeHandler {
 
     @Override
     public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_APPEND, node));
         return new FfResult();
     }
 
     @Override
     public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_COMPLETE, node));
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
             return ffResult;
         }
 
         // 完成节点
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, candidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getExecutor());
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, candidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(operationContext.getCurrentExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(candidateList.toJson());
@@ -154,6 +160,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
             simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
+        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
         // JUEL解析
         String completeReturn = FfService.BOOLEAN_FALSE;
         ValueExpression expression;
@@ -195,12 +202,14 @@ public class ServiceTaskNodeHandler implements NodeHandler {
 
     @Override
     public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_REJECT, node));
         return new FfResult();// 返回值
     }
 
     @Override
     public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_ACTIVATE, node));
 
         // 有并发下级节点不能驳回
         if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_SUSPEND, FfService.NODE_STATUS_COMPLETE)).count() > 1) {

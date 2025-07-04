@@ -18,9 +18,10 @@ import com.opendynamic.ff.service.FfProcService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
-import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.NodeHandlerOperation;
+import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Proc;
 
 @Service
@@ -42,17 +43,20 @@ public class BranchNodeHandler implements NodeHandler {
 
     @Override
     public FfResult insertNodeByNodeDef(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_INSERT, null));
         return new FfResult();
     }
 
     @Override
     public FfResult appendCandidate(Node node, CandidateList candidateList, OperationContext operationContext) {
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_APPEND, node));
         return new FfResult();
     }
 
     @Override
     public FfResult completeNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_COMPLETE, node));
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {// 如已经完成，直接返回
             return ffResult;
@@ -83,10 +87,10 @@ public class BranchNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(previousNode.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getExecutor());
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(operationContext.getCurrentExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
@@ -99,7 +103,7 @@ public class BranchNodeHandler implements NodeHandler {
             ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, operationContext));
         }
         else {// 如没有上级节点，完成流程。
-            ffProcService.updateProcStatus(node.getProcId(), operationContext.getExecutor(), ffHelper.getUserName(operationContext.getExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
+            ffProcService.updateProcStatus(node.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
             Proc proc = ffService.loadProc(node.getProcId());
             ffResult.addCompleteProc(proc);
 
@@ -116,6 +120,7 @@ public class BranchNodeHandler implements NodeHandler {
     @Override
     public FfResult rejectNode(Node node, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_REJECT, node));
 
         if (node.getNodeStatus().equals(FfService.NODE_STATUS_TERMINATE) || node.getNodeStatus().equals(FfService.NODE_STATUS_COMPLETE)) {
             return ffResult;
@@ -126,17 +131,17 @@ public class BranchNodeHandler implements NodeHandler {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }
 
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getExecutor());
+        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成任务
-        node.setNodeEndUser(operationContext.getExecutor());
+        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成任务
+        node.setNodeEndUser(operationContext.getCurrentExecutor());
         node.setNodeEndUserName(nodeEndUserName);
         node.setNodeEndDate(nodeEndDate);
         node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
         ffResult.addTerminateNode(node);
 
         if (node.getLastCompleteNodeIds() == null) {// 完成流程
-            ffProcService.updateProcStatus(node.getProcId(), operationContext.getExecutor(), ffHelper.getUserName(operationContext.getExecutor()), new Date(), FfService.PROC_STATUS_TERMINATE);
+            ffProcService.updateProcStatus(node.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_TERMINATE);
             Proc proc = ffService.loadProc(node.getProcId());
             ffResult.addTerminateProc(proc);
 
@@ -167,6 +172,7 @@ public class BranchNodeHandler implements NodeHandler {
     @Override
     public FfResult activateNode(Node node, String previousNodeIds, CandidateList candidateList, OperationContext operationContext) {
         FfResult ffResult = new FfResult();// 返回值
+        operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_ACTIVATE, node));
 
         if (FfService.OPERATION_ACTIVATE.equals(operationContext.getInitialOperation()) && StringUtils.isNotEmpty(previousNodeIds)) {// 去除最后完成节点ID
             List<String> lastCompleteNodeIdList = new ArrayList<>();
