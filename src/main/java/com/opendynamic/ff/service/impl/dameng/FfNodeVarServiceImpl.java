@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.OdSqlCriteria;
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfNodeVarService;
 import com.opendynamic.ff.service.FfOperationService;
 import com.opendynamic.ff.service.FfService;
@@ -31,8 +30,6 @@ import com.opendynamic.ff.service.FfService;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class FfNodeVarServiceImpl implements FfNodeVarService {
-    @Autowired
-    private FfNodeService ffNodeService;
     @Autowired
     private FfOperationService ffOperationService;
     @Autowired
@@ -90,27 +87,21 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         Map<String, Object> paramMap = new HashMap<>();
 
         if (count) {
-            sql = "select count(*) from FFV_NODE_VAR where 1 = 1";
+            sql = "select count(*) from FFV_NODE_VAR";
         }
         else {
-            sql = "select * from FFV_NODE_VAR where 1 = 1";
+            sql = "select * from FFV_NODE_VAR";
         }
 
-        if (NODE_VAR_ID_ != null) {
-            sql += " and NODE_VAR_ID_ = :NODE_VAR_ID_";
-            paramMap.put("NODE_VAR_ID_", NODE_VAR_ID_);
-        }
-        if (NODE_VAR_ID_LIST != null && !NODE_VAR_ID_LIST.isEmpty()) {
-            sql += " and NODE_VAR_ID_ in (:NODE_VAR_ID_LIST)";
-            paramMap.put("NODE_VAR_ID_LIST", NODE_VAR_ID_LIST);
-        }
         if (recursive != null && recursive.equals(true)) {
-            sql += " and NODE_ID_ in (:NODE_ID_LIST)";
-            List<Map<String, Object>> nodeList = ffNodeService.selectParentNode(NODE_ID_, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, recursive, true, FfService.DATA_SCOPE_NODE);
-            NODE_ID_LIST = OdUtils.collect(nodeList, "NODE_ID_", String.class);
-            paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
+            sql += " inner join (select NODE_ID_, LEVEL as LVL from FF_NODE start with NODE_ID_ = :NODE_ID_ connect by prior PARENT_NODE_ID_ = NODE_ID_) NH on FFV_NODE_VAR.NODE_ID_ = NH.NODE_ID_";
+            paramMap.put("NODE_ID_", NODE_ID_);
+
+            sql += " where 1 = 1";
         }
         else {
+            sql += " where 1 = 1";
+
             if (StringUtils.isNotEmpty(NODE_ID_)) {
                 sql += " and NODE_ID_ = :NODE_ID_";
                 paramMap.put("NODE_ID_", NODE_ID_);
@@ -119,6 +110,14 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
                 sql += " and NODE_ID_ in (:NODE_ID_LIST)";
                 paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
             }
+        }
+        if (NODE_VAR_ID_ != null) {
+            sql += " and NODE_VAR_ID_ = :NODE_VAR_ID_";
+            paramMap.put("NODE_VAR_ID_", NODE_VAR_ID_);
+        }
+        if (NODE_VAR_ID_LIST != null && !NODE_VAR_ID_LIST.isEmpty()) {
+            sql += " and NODE_VAR_ID_ in (:NODE_VAR_ID_LIST)";
+            paramMap.put("NODE_VAR_ID_LIST", NODE_VAR_ID_LIST);
         }
         if (VAR_TYPE_ != null) {
             sql += " and VAR_TYPE_ = :VAR_TYPE_";
@@ -146,11 +145,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         }
 
         if (recursive != null && recursive.equals(true)) {
-            sql += " order by DECODE(NODE_ID_,";// 按流程范围从小到大排序
-            for (int i = 0; i < NODE_ID_LIST.size(); i++) {
-                sql += " '" + NODE_ID_LIST.get(i) + "', " + i + ",";
-            }
-            sql += NODE_ID_LIST.size() + ")";
+            sql += " order by LVL";
         }
 
         return new OdSqlCriteria(sql, paramMap);
