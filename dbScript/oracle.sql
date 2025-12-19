@@ -365,6 +365,8 @@ alter table FF_NODE
 alter table FF_NODE
   add constraint FK_FF_NODE_PROC_DEF foreign key (SUB_PROC_DEF_ID_)
   references FF_PROC_DEF (PROC_DEF_ID_);
+create index IX_FF_NODE_CODE on FF_NODE (NODE_CODE_);
+create index IX_FF_NODE_PROC_ID on FF_NODE (PROC_ID_);
 
 prompt
 prompt Creating table FF_OPERATION
@@ -830,6 +832,7 @@ alter table FF_TASK
 alter table FF_TASK
   add constraint FK_FF_TASK_PARENT foreign key (PREVIOUS_TASK_ID_)
   references FF_TASK (TASK_ID_);
+create index IX_FF_TASK_NODE_ID on FF_TASK (NODE_ID_);
 
 prompt
 prompt Creating table FF_TASK_OP

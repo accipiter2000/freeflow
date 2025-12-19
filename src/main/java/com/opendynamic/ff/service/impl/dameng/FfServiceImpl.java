@@ -786,6 +786,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
+        if (nodeVarMap == null) {
+            nodeVarMap = new HashMap<>();
+        }
 
         return startProc(procDef, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, nodeVarMap, candidateList, null);
     }
@@ -800,6 +803,10 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     @Override
     @FfOperation(operator = "${procStartUser}")
     public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+        if (nodeVarMap == null) {
+            nodeVarMap = new HashMap<>();
+        }
+
         FfResult ffResult = new FfResult();
 
         Node isolateSubProcNode = loadNode(isolateSubProcNodeId);
@@ -817,6 +824,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
             String isolateSubProcCandidate = isolateSubProcNode.getIsolateSubProcCandidate();
             if (StringUtils.isNotEmpty(isolateSubProcCandidate)) {
                 candidateList = new Gson().fromJson(isolateSubProcCandidate, CandidateList.class);
+            }
+            else {
+                candidateList = new CandidateList();
             }
         }
 
@@ -866,6 +876,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
+        if (nodeVarMap == null) {
+            nodeVarMap = new HashMap<>();
+        }
 
         return startProcToNode(procDef, subProcPath, nodeCode, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, nodeVarMap, candidateList, null);
     }
@@ -878,19 +891,37 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     }
 
     private FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId) {
-        FfResult ffResult = new FfResult();
-
         if (procDef == null || procDef.getProcDefStatus().equals(FfService.PROC_DEF_STATUS_DISABLE)) {
             throw new RuntimeException("errors.procDefIsNotActive");
         }
 
         String procId = OdUtils.getUuid();
         ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
+
+        return startProcToNode(procId, subProcPath, nodeCode, procStartUser, nodeVarMap, candidateList, isolateSubProcNodeId, false);
+    }
+
+    private FfResult startProcToNode(String procId, String subProcPath, String nodeCode, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId, boolean restart) {
+        FfResult ffResult = new FfResult();
+
         Proc proc = createProcQuery().setProcId(procId).queryForObject();
-        ffResult.addCreateProc(proc);
-        ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
-        Node branchNode = createNodeQuery().setNodeId(procId).queryForObject();
-        ffResult.addCreateNode(branchNode);
+        ProcDef procDef;
+        Node branchNode;
+        if (restart) {
+            ffProcService.updateProcStatus(procId, FfService.PROC_STATUS_ACTIVE);
+            ffResult.addActivateProc(proc);
+            ffNodeService.updateNodeStatus(procId, FfService.NODE_STATUS_ACTIVE);
+            branchNode = createNodeQuery().setNodeId(procId).queryForObject();
+            ffResult.addActivateNode(branchNode);
+            procDef = getNodeProcDef(branchNode);
+        }
+        else {
+            ffResult.addCreateProc(proc);
+            procDef = createProcDefQuery().setProcDefId(proc.getProcDefId()).queryForObject();
+            ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
+            branchNode = createNodeQuery().setNodeId(procId).queryForObject();
+            ffResult.addCreateNode(branchNode);
+        }
 
         for (ProcVarDef procVarDef : procDef.getProcVarDefList()) {
             if (!nodeVarMap.containsKey(procVarDef.getVarName())) {
@@ -925,11 +956,13 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
         ffResult.addAll(insertParentNodes(nodeCode, subProcDef, branchNode.getNodeId(), procId, false));
         List<Node> createNodeList = ffResult.getCreateNodeList();
-        branchNode = createNodeList.get(createNodeList.size() - 1);
+        if (createNodeList.size() > 0) {
+            branchNode = createNodeList.get(createNodeList.size() - 1);
+        }
 
         NodeDef nodeDef = subProcDef.getNodeDef(nodeCode);
         OperationContext operationContext = new OperationContext().setInitialOperation(FfService.OPERATION_INSERT).setInitialNodeVarMap(nodeVarMap).setInitCandidateList(candidateList).setInitExecutor(procStartUser).setCurrentProc(proc).setCurrentBranchNode(branchNode).setCurrentNodeVarMapNode(branchNode).setCurrentNodeVarMap(nodeVarMap).setCurrentCandidateList(candidateList).setCurrentExecutor(procStartUser);
-        ;
+
         ffResult.addAll(getNodeHandler(nodeDef.getNodeType()).insertNodeByNodeDef(nodeDef, branchNode, null, candidateList, operationContext));
 
         return ffResult;
@@ -958,6 +991,19 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         }
 
         return ffResult;
+    }
+
+    @Override
+    @FfOperation(operator = "${procStartUser}")
+    public FfResult restartProcToNode(String procId, String subProcPath, String nodeCode, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+        if (candidateList == null) {
+            candidateList = new CandidateList();
+        }
+        if (nodeVarMap == null) {
+            nodeVarMap = new HashMap<>();
+        }
+
+        return startProcToNode(procId, subProcPath, nodeCode, procStartUser, nodeVarMap, candidateList, null, true);
     }
 
     @Override

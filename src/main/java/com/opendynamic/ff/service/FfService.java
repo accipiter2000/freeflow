@@ -761,6 +761,26 @@ public interface FfService {
     public FfResult startProcToNodeByProcDefCode(String procDefCode, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
 
     /**
+     * 重新启动流程,并直接跳转到指定节点。
+     * 
+     * @param procId
+     *        流程ID。
+     * @param subProcPath
+     *        跳转节点的子流程路径。
+     * @param nodeCode
+     *        跳转节点的节点编码。
+     * @param procStartUser
+     *        流程开始人员。
+     * @param nodeVarMap
+     *        节点变量。
+     * @param candidateList
+     *        候选列表。
+     * @return 所有变化的流程，节点和任务。
+     */
+    @FfOperation
+    public FfResult restartProcToNode(String procId, String subProcPath, String nodeCode, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
+
+    /**
      * 挂起流程。
      * 
      * @param procId
