@@ -105,6 +105,7 @@ html, body {
 				<li><a href="#2.23" class="navigation">2.23 通知</a></li>
 				<li><a href="#2.24" class="navigation">2.24 调整流程定义</a></li>
 				<li><a href="#2.25" class="navigation">2.25 代理</a></li>
+				<li><a href="#2.26" class="navigation">2.26 执行上下文</a></li>
 			</ul>
 			<li><a href="#3" class="navigation">3 流程定义配置</a></li>
 			<ul>
@@ -150,7 +151,7 @@ html, body {
 <dependency>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>4.1.0-RELEASE</version>
+    <version>6.0.1-RELEASE</version>
 </dependency>
 		</textarea>
 		<p class="subTitle">JAR</p>
@@ -203,65 +204,68 @@ html, body {
 		<p class="content">
 			系统可根据流程定义生成流程图。图形样式定义在流程定义中，语法类似于CSS。<br /> 流程图有两种。<br /> 第一种是静态的流程定义图，是流程定义的图形化展示。该图由系统根据流程定义自动生成，也可由用户上传图片指定。<br /> 第二种是动态流程图，是正在运行的流程实例的图形化展示。除静态的流程定义图外，还包含当前运行节点、可跳转节点、内部子流程图、节点变量等信息。该图由系统根据流程定义和流程流转信息生成。
 		</p>
-		<p class="subTitle" id="2.2">2.2 办理人</p>
+		<p class="subTitle" id="2.2">2.2 办理人 assignee</p>
 		<p class="content">办理人定义在节点定义中。流程在生成节点时，依据该定义为每个办理人生成该节点下的任务。</p>
-		<p class="subTitle" id="2.3">2.3 候选人</p>
+		<p class="subTitle" id="2.3">2.3 候选人 candidateAssignee</p>
 		<p class="content">候选人定义在节点定义中。上一个节点任务的办理人可获取该节点的候选人，在完成其任务时指定其中的若干人为该节点的办理人。</p>
-		<p class="subTitle" id="2.4">2.4 办理子流程</p>
+		<p class="subTitle" id="2.4">2.4 办理子流程 subProcDef</p>
 		<p class="content">办理子流程定义在子流程节点定义中。流程在生成子流程节点时，依据该定义生成该节点下的子流程。</p>
-		<p class="subTitle" id="2.5">2.5 候选子流程</p>
+		<p class="subTitle" id="2.5">2.5 候选子流程 candidateSubProcDef</p>
 		<p class="content">候选子流程定义在子流程节点定义中。上一个节点任务的办理人可获取该节点的候选子流程，在完成任务时指定其中的若干子流程为该节点需要生成的子流程。</p>
-		<p class="subTitle" id="2.6">2.6 获取下个节点定义</p>
+		<p class="subTitle" id="2.6">2.6 获取下个节点定义 getNextRunningNodeDefList()</p>
 		<p class="content">在办理任务时，可获取下个节点定义。</p>
-		<p class="subTitle" id="2.7">2.7 调整任务办理人</p>
+		<p class="content">使用getStartRunningNodeDefList可获取流程启动时的下个节点定义。</p>
+		<p class="subTitle" id="2.7">2.7 调整任务办理人 updateTaskAssignee()</p>
 		<p class="content">任务生成后，可调整其办理人。</p>
-		<p class="subTitle" id="2.8">2.8 完成任务</p>
+		<p class="subTitle" id="2.8">2.8 完成任务 completeTask()</p>
 		<p class="content">完成任务后，如果该任务所在节点下的所有任务都已完成，该节点完成。流程根据流程定义流转到下一个节点，生成新的节点和任务。</p>
-		<p class="subTitle" id="2.9">2.9 驳回任务</p>
+		<p class="subTitle" id="2.9">2.9 驳回任务 rejectTask()</p>
 		<p class="content">
 			驳回任务后，任务返回到上一个节点处理时的初始状态。<br /> 并发任务不能被驳回。
 		</p>
-		<p class="subTitle" id="2.10">2.10 启动流程到指定节点</p>
+		<p class="subTitle" id="2.10">2.10 启动流程到指定节点 startProcToNode()</p>
 		<p class="content">
 			启动流程后，不按照流程定义流转，而是直接跳转到指定节点。
 		</p>
-		<p class="subTitle" id="2.11">2.11 完成任务到指定节点</p>
+		<p class="subTitle" id="2.11">2.11 完成任务到指定节点 completeTaskToNode()</p>
 		<p class="content">完成任务后，不按照流程定义流转，而是直接跳转到指定节点。此时当前任务所在的节点以及其上级相关节点被完成。</p>
-		<p class="subTitle" id="2.12">2.12 驳回任务到指定节点</p>
+		<p class="subTitle" id="2.12">2.12 驳回任务到指定节点 rejectTaskToNode()</p>
 		<p class="content">驳回任务后，不返回到上一个节点处理时的初始状态，而是直接跳转到指定节点。此时当前任务所在的节点以及其上级相关节点被异常完成。</p>
-		<p class="subTitle" id="2.13">2.13 认领任务</p>
+		<p class="subTitle" id="2.13">2.13 认领任务 claimTask()</p>
 		<p class="content">一个节点下有多个任务，且设置了认领属性时，第一个被认领的任务变更为待办状态，其它任务被自动终止。</p>
-		<p class="subTitle" id="2.14">2.14 排他任务</p>
+		<p class="subTitle" id="2.14">2.14 排他任务 exclusive</p>
 		<p class="content">一个节点下有多个任务，且设置了排他属性时，第一个完成的任务将自动终止其它任务。</p>
-		<p class="subTitle" id="2.15">2.15 转发任务</p>
+		<p class="subTitle" id="2.15">2.15 转发任务 forwardable</p>
 		<p class="content">
 			当任务被设置属性可转发时，该任务的办理人可生成转发任务发送给其它人，此时该任务的状态变更为转发处理中。转发任务全部完成后，该任务的状态变更为转发处理完成。<br /> 转发任务如具有可转发属性，可继续转发。
 		</p>
-		<p class="subTitle" id="2.16">2.16 挂起</p>
+		<p class="subTitle" id="2.16">2.16 挂起 suspendTask()</p>
 		<p class="content">流程，节点，任务临时无法处理时，可选择挂起。挂起逻辑等同于异常完成，但可被重新激活。</p>
-		<p class="subTitle" id="2.17">2.17 激活</p>
+		<p class="subTitle" id="2.17">2.17 激活 activateTask()</p>
 		<p class="content">被挂起的流程，节点，任务可被重新激活，变更为运行中状态。</p>
-		<p class="subTitle" id="2.18">2.18 取消操作</p>
+		<p class="subTitle" id="2.18">2.18 取消操作 undo()</p>
 		<p class="content">
 			所有的流程操作，如有问题，且后续任务未被处理时，该操作可被取消。<br /> 当有后续任务已被处理时，该操作不能被取消。但如果取消了该后续任务的操作，则该操作可恢复为可取消。
 		</p>
 		<p class="subTitle" id="2.19">2.19 FfResult对象</p>
 		<p class="content">所有的流程操作接口调用均返回FfResult对象。该对象中包含在本次操作中所有变化的流程，节点和任务的信息。</p>
-		<p class="subTitle" id="2.20">2.20 等待完成节点</p>
+		<p class="subTitle" id="2.20">2.20 等待完成节点 waitingForCompleteNode</p>
 		<p class="content">节点可设置属性等待完成节点，此时，该节点下的任务完成不会触发节点完成。如需完成节点需要额外调用节点完成接口。该设置对任务节点、中心转发任务节点、服务任务节点、阶段节点、子流程节点、独立子流程节点有效。</p>
-		<p class="subTitle" id="2.21">2.21 自动完成相同办理人任务</p>
+		<p class="subTitle" id="2.21">2.21 自动完成相同办理人任务 autoCompleteSameAssignee</p>
 		<p class="content">节点可设置属性自动完成相同办理人任务，此时，该节点下的任务，如果其办理人已经在同一个流程中办理过其它任务，可自动完成。</p>
-		<p class="subTitle" id="2.22">2.22 自动完成空节点</p>
+		<p class="subTitle" id="2.22">2.22 自动完成空节点 autoCompleteEmptyAssignee</p>
 		<p class="content">节点可设置属性自动完成空节点，此时，该节点下如因未找到办理人而未生成任何任务时，可自动完成。</p>
-		<p class="subTitle" id="2.23">2.23 通知</p>
+		<p class="subTitle" id="2.23">2.23 通知 inform</p>
 		<p class="content">节点可设置属性通知，此时，该节点自动完成，不会等待其下的任务完成。其下的任务可在任何时候完成，并且不影响已完成的流程。</p>
-		<p class="subTitle" id="2.24">2.24 调整流程定义</p>
+		<p class="subTitle" id="2.24">2.24 调整流程定义 adjustBranchProcDef()</p>
 		<p class="content">某流程在运行时，可动态调整其流程定义。调整后，该流程将按照新的流程定义继续流转。该调整不会影响其它流程。</p>
-		<p class="subTitle" id="2.25">2.25 代理</p>
+		<p class="subTitle" id="2.25">2.25 代理 delegateService</p>
 		<p class="content">审批人可设置其代理人，代理人在允许的范围内可办理该审批人的任务。</p>
+		<p class="subTitle" id="2.26">2.26 执行上下文 operationContext</p>
+		<p class="content">执行上下文为运行流程命令时在表达式解析环境中预置的变量，内含本次操作的上下文，如初始命令，初始节点变量，初始候选人列表，初始执行人等等。用于在表达式中获取所需的变量。</p>
 		<p class="title" id="3">3 流程定义配置</p>
 		<p class="content">流程定义为JSON格式的文本，内含流程定义属性、节点定义、流转定义、注释定义、流程变量定义、图形显示样式等信息。</p>
-		<textarea name="textarea" cols="160" rows="87" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="90" readonly="readonly" class="code">
 {
     "procDefCode": "demo",
     "procDefName": "简单流程示例",
@@ -481,7 +485,7 @@ html, body {
 		</p>
 		<p class="subTitle" id="3.5">3.5 形状定义</p>
 		<p class="content">节点，流转，注释的显示样式放置在各自的shape属性中。</p>
-		<textarea name="textarea" cols="160" rows="11" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="12" readonly="readonly" class="code">
 	{
 		"nodeType" : "STAGE",
 		"nodeCode" : "secretoryStage",
@@ -560,14 +564,14 @@ html, body {
 		<p>TOTAL：节点下已完成任务数。</p>
 		<p class="title" id="4">4 系统配置</p>
 		<p class="subTitle" id="4.1">4.1 JAR设置</p>
-		<p class="content">将freeflow-4.1.0-RELEASE.jar放置于classpath中。</p>
+		<p class="content">将freeflow-6.0.1-RELEASE.jar放置于classpath中。</p>
 		<p class="content"><a href="https://github.com/accipiter2000/freeflow/tree/main/release">https://github.com/accipiter2000/freeflow/tree/main/release</a></p>
 		<p class="content">或通过maven配置</p>
-		<textarea name="textarea" cols="160" rows="6" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="8" readonly="readonly" class="code">
 <dependency>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>4.1.0-RELEASE</version>
+    <version>6.0.1-RELEASE</version>
 </dependency>
 		</textarea>
 		<p class="subTitle" id="4.2">4.2 数据库表</p>
@@ -576,7 +580,10 @@ html, body {
 		<p class="subTitle" id="4.3">4.3 spring配置</p>
 		<p class="content">spring配置包括ffDataSource、ffJdbcTemplate和FfHelper接口的实现类。</p>
 		<p class="content">如果流程数据库表单独建立在一个数据库用户下，需要配置分布式事务。</p>
-		<textarea name="textarea" cols="160" rows="30" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="40" readonly="readonly" class="code">
+	<context:component-scan base-package="com.opendynamic">
+		<context:exclude-filter type="regex" expression="com.opendynamic.ff.service.impl.(?!oracle).*" /><!-- 设置数据库类型-->
+	</context:component-scan>
 	<bean id="ffDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@10.18.26.86:1521:FF" />
@@ -608,7 +615,10 @@ html, body {
 	</context:component-scan>
 </textarea>
 		<p class="content">如果流程数据库表和业务数据库表共用一个数据库用户，可使用alias方法将业务相关bean赋予ff的别名，此时使用数据库内部事务即可，不必配置分布式事务。</p>
-		<textarea name="textarea" cols="160" rows="32" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="40" readonly="readonly" class="code">
+	<context:component-scan base-package="com.opendynamic">
+		<context:exclude-filter type="regex" expression="com.opendynamic.ff.service.impl.(?!oracle).*" /><!-- 设置数据库类型-->
+	</context:component-scan>
 	<bean id="msDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@10.18.26.86:1521:MS" />
@@ -645,7 +655,7 @@ html, body {
 		<p class="content">在系统启动时，需通过ffService.addExternalService将外置spring beans设置到解析环境中。</p>
 		<p class="content">外置spring beans中必须包含FfHelper接口的实现。</p>
 		<p class="content">例如。</p>
-		<textarea name="textarea" cols="160" rows="16" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="20" readonly="readonly" class="code">
 @Service
 public class InitServiceImpl implements InitService {
     @Autowired
@@ -664,13 +674,13 @@ public class InitServiceImpl implements InitService {
 </textarea>
 		<p class="subTitle" id="4.5">4.5 事务</p>
 		<p class="content">普通事务配置。</p>
-		<textarea name="textarea" cols="160" rows="4" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="5" readonly="readonly" class="code">
 <bean id="ffTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	<property name="dataSource" ref="ffDataSource" />
 </bean>
 </textarea>
 		<p class="content">JTA事务配置。</p>
-		<textarea name="textarea" cols="160" rows="63" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="65" readonly="readonly" class="code">
 <bean id="ffDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	<property name="uniqueResourceName">
 		<value>ffDataSource</value>
@@ -740,7 +750,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">流程定义部署后，会自动添加版本信息。如已存在相同流程编码的流程定义，则新部署的流程定义具有最新的版本。</p>
 		<p class="content">部署时可指定流程定义图。如不指定，则系统会根据流程定义自动生成。</p>
 		<p class="content">指定流程定义图时，需同时输入procDefDiagramFile，procDefDiagramFileName，procDefDiagramFileLength等参数。</p>
-		<textarea name="textarea" cols="160" rows="7" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="10" readonly="readonly" class="code">
         InputStream inputStream = this.getClass().getResource("/procdef/centerForwardDemo.json").openStream();
         String procDef = OdUtils.inputStreamToString(inputStream);//获取json格式的流程定义。
         inputStream.close();
@@ -752,7 +762,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">使用ffService.startProcByProcDefCode按流程定义编码启动流程。如果该编码的流程定义有多个版本，则按最新的版本启动。已启动的流程在版本更新后仍依照原版本运行。</p>
 		<p class="content">参数nodeVarMap为流程启动后放入的根节点变量。与依照流程定义中的流程变量定义生成的根节点变量合并，同名覆盖。</p>
 		<p class="content">如果下一个节点需要候选，则在candidateList中传递。</p>
-		<textarea name="textarea" cols="160" rows="12" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="15" readonly="readonly" class="code">
         Map<String, Object> nodeVarMap = new HashMap<>();
          nodeVarMap.put("initOrgId", "cbk119");
         nodeVarMap.put("initPosiEmpId", "abcde12345");
@@ -771,7 +781,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">如要在完成任务时，更新其它节点的节点变量，可使用ffService.updateNodeVar。</p>
 		<p class="content">完成任务后，流程会尝试完成节点。如节点完成，则继续向下流转，创建新的节点和任务。通过FfResult可以获取这些已完成和新创建的节点和任务。</p>
 		<p class="content">当所有节点都完成时，流程正常完成。</p>
-		<textarea name="textarea" cols="160" rows="12" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="15" readonly="readonly" class="code">
         String taskId = "78793545e3ef4cf09a0a55e80e732118";
         Map<String , Object> branchNodeVar = new HashMap<>();
         //branchNodeVar.put("verifyEmp", "zhao");
@@ -787,7 +797,7 @@ public class InitServiceImpl implements InitService {
 		<p class="subTitle" id="5.4">5.4 转发任务</p>
 		<p class="content">使用ffService.forwardTask。</p>
 		<p class="content">转发任务后，原任务的转发状态被修改为转发处理中，其它属性和流转逻辑不变。</p>
-		<textarea name="textarea" cols="160" rows="13" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="15" readonly="readonly" class="code">
         String taskId = "67df3be3993d4e7082a63de9afe4460e";
         List<String> assigneeList = Arrays.asList("z3", "z4");
         String action = "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}";
@@ -804,7 +814,7 @@ public class InitServiceImpl implements InitService {
 		<p class="subTitle" id="5.5">5.5 驳回任务</p>
 		<p class="content">使用ffService.rejectTask。</p>
 		<p class="content">驳回任务后，该任务所属节点下的其它未完成的任务被异常完成，然后该节点被异常完成，并激活该节点的前节点及其任务。</p>
-		<textarea name="textarea" cols="160" rows="5" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="6" readonly="readonly" class="code">
         String taskId = "52d0bef1873842728bd8afe199c0ddb6";
         String executor = "SYSADMIN";
 		
@@ -814,7 +824,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">使用ffService.undo。</p>
 		<p class="content">ffService中所有可能导致流程，节点，任务和节点变量变化的接口调用（即操作）都会被记录。在后续任务未被处理时，该操作可被取消。此时流程完全回滚到操作前的状态。</p>
 		<p class="content">当后续任务已被处理时，该操作不能被取消。但当该后续任务的操作被取消，恢复为未处理状态时，该操作变更为可被取消。</p>
-		<textarea name="textarea" cols="160" rows="4" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="5" readonly="readonly" class="code">
         String operationId = "9393267ad50040d78cd96d2a63299d8c";
         FfResult ffResult = ffService.undo(operationId);
         System.out.println(ffResult);
@@ -824,7 +834,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">查询类包括ProcDefQuery、ProcQuery、NodeQuery、ParentNodeQuery、ChildNodeQuery、TaskQuery、NodeVarQuery、InvolvedProcQuery、DelegateQuery、OperationQuery，分别对应查询流程定义、流程、节点、上级节点、下级节点、任务、节点变量、参与的流程，代理、操作。</p>
 		<p class="content">查询类有若干设置查询条件的方法，用来设置对象的查询值、数据范围和分页。</p>
 		<p class="content">查询类有5个查询方法，分别为查询对象列表，对象格式为Map；查询单个对象，对象格式为Map；查询对象列表，对象格式为实体类；查询单个对象，对象格式为实体类；查询总数。</p>
-		<textarea name="textarea" cols="160" rows="8" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="10" readonly="readonly" class="code">
         List<Task> taskList = ffService.createTaskQuery().setProcId("43cf7729c2524288862a4fa5d31905fe").setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND)).setDataScope(FfService.DATA_SCOPE_PROC).queryForObjectList();
         for (Task task : taskList) {
             System.out.println(task.getCreationDate());
@@ -835,7 +845,7 @@ public class InitServiceImpl implements InitService {
 <p class="subTitle" id="5.8">5.8 获取下一个运行期节点定义</p>
 		<p class="content">使用ffService.getNextRunningNodeDefList。</p>
 		<p class="content">下一个运行期节点定义通常用来获取下一个节点的名称，候选等信息。若信息为JUEL表达式则根据流程相关信息将表达式转化为实际值。</p>
-		<textarea name="textarea" cols="160" rows="9" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="10" readonly="readonly" class="code">
         String taskId = "72aa1659f1634ffc93e51dc0470bc720";
         Map<String, Object> nodeVarMap = new HashMap<>();
         nodeVarMap.put("initPosiEmpId", "initer");
@@ -847,7 +857,7 @@ public class InitServiceImpl implements InitService {
 </textarea>
 <p class="subTitle" id="5.9">5.9 获取流程定义图</p>
 		<p class="content">使用ffService.loadProcDefDiagramFile。</p>
-		<textarea name="textarea" cols="160" rows="4" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="5" readonly="readonly" class="code">
         String procDefId = "7acadc50b31c46049b430b4c47eed917";
 
         InputStream procDefDiagramFile = ffService.loadProcDefDiagramFile(procDefId);
@@ -855,7 +865,7 @@ public class InitServiceImpl implements InitService {
 <p class="subTitle" id="5.10">5.10 获取动态流程图</p>
 		<p class="content">使用ffService.getRunningProcDef。该方法除返回动态流程图外，还返回流程运行的相关信息。</p>
 		<p class="content">动态流程图，是正在运行的流程实例的图形化展示。除静态的流程定义图外，还包含当前运行节点，可跳转节点，内部子流程图，节点变量等信息。该图由系统根据流程定义和流程流转信息生成。</p>
-		<textarea name="textarea" cols="160" rows="9" readonly="readonly" class="code">
+		<textarea name="textarea" cols="160" rows="10" readonly="readonly" class="code">
         String procId = "44ebfcc770fb4f3e806af87280534f03";
         String taskId = null;
         boolean drawOptional = true;

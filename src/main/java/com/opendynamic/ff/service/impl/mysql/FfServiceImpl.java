@@ -99,9 +99,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
     private static List<ProcDef> procDefList;
     private static Queue<ProcDef> adjustProcDefList = new LinkedList<>();
-    private static Map<String, NodeHandler> nodeHandlerMap;
-    private static Map<String, Object> internalServiceMap;
-    private static Map<String, Object> externalServiceMap;
+    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>();
+    private static Map<String, Object> internalServiceMap = new HashMap<>();
+    private static Map<String, Object> externalServiceMap = new HashMap<>();
 
     @Autowired
     private FfProcDefService ffProcDefService;
@@ -146,7 +146,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
     private void initNodeHandler() {
         System.out.println("Initializing node handler...");
 
-        FfServiceImpl.nodeHandlerMap = new HashMap<>();
         Map<String, NodeHandler> nodeHandlerMap = applicationContext.getBeansOfType(NodeHandler.class);// 装配节点处理器
         for (Map.Entry<String, NodeHandler> entry : nodeHandlerMap.entrySet()) {
             FfServiceImpl.nodeHandlerMap.put(entry.getValue().getNodeType(), entry.getValue());
@@ -160,9 +159,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
 
     @PostConstruct
     private void initJuel() {
-        internalServiceMap = new HashMap<>();
-        externalServiceMap = new HashMap<>();
-
         internalServiceMap.put("ffService", this);
         internalServiceMap.put("ffProcDefService", ffProcDefService);// 装配默认的service bean
         internalServiceMap.put("ffProcService", ffProcService);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import com.opendynamic.ff.vo.ThreadOperation;
 public class FfOperationServiceImpl implements FfOperationService {
     private static ThreadLocal<ThreadOperation> threadLocal = new ThreadLocal<>();
 
+    @Lazy
     @Autowired
     private FfService ffService;
     @Autowired
