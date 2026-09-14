@@ -155,6 +155,10 @@ public interface FfService {
      */
     public static final String NODE_TYPE_GATEWAY = "GATEWAY";
     /**
+     * 节点类型-开始。
+     */
+    public static final String NODE_TYPE_START = "START";
+    /**
      * 节点类型-结束。
      */
     public static final String NODE_TYPE_END = "END";
@@ -282,14 +286,14 @@ public interface FfService {
 
     /**
      * 刷新流程定义缓存。
-     * 
+     *
      * @return 成功返回true，否则返回false。
      */
     public boolean refreshProcDefCache();
 
     /**
      * 获取节点处理器。
-     * 
+     *
      * @param nodeType
      *        节点类型。
      * @return 节点处理器。
@@ -298,21 +302,21 @@ public interface FfService {
 
     /**
      * 获取内部服务MAP，用于JUEL解析。
-     * 
+     *
      * @return 内部服务MAP。
      */
     public Map<String, Object> getInternalServiceMap();
 
     /**
      * 获取外部服务MAP，用于JUEL解析。
-     * 
+     *
      * @return 外部服务MAP。
      */
     public Map<String, Object> getExternalServiceMap();
 
     /**
      * 添加外部服务，用于JUEL解析。
-     * 
+     *
      * @param serviceName
      *        服务名称。
      * @param service
@@ -322,77 +326,77 @@ public interface FfService {
 
     /**
      * 创建流程定义查询。
-     * 
+     *
      * @return 流程定义查询。
      */
     public ProcDefQuery createProcDefQuery();
 
     /**
      * 创建流程查询。
-     * 
+     *
      * @return 流程查询。
      */
     public ProcQuery createProcQuery();
 
     /**
      * 创建参与的流程查询。
-     * 
+     *
      * @return 参与的流程查询。
      */
     public InvolvedProcQuery createInvolvedProcQuery();
 
     /**
      * 创建节点查询。
-     * 
+     *
      * @return 节点查询。
      */
     public NodeQuery createNodeQuery();
 
     /**
      * 创建上级节点查询。
-     * 
+     *
      * @return 上级节点查询。
      */
     public ParentNodeQuery createParentNodeQuery();
 
     /**
      * 创建下级节点查询。
-     * 
+     *
      * @return 下级节点查询。
      */
     public ChildNodeQuery createChildNodeQuery();
 
     /**
      * 创建任务查询。
-     * 
+     *
      * @return 任务查询。
      */
     public TaskQuery createTaskQuery();
 
     /**
      * 创建节点变量查询。
-     * 
+     *
      * @return 节点变量查询。
      */
     public NodeVarQuery createNodeVarQuery();
 
     /**
      * 创建代理查询。
-     * 
+     *
      * @return 任务查询。
      */
     public DelegateQuery createDelegateQuery();
 
     /**
      * 创建操作查询。
-     * 
+     *
      * @return 操作查询。
      */
     public OperationQuery createOperationQuery();
 
     /**
      * 按主键查询流程定义。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @return 流程定义。
@@ -401,7 +405,7 @@ public interface FfService {
 
     /**
      * 按流程定义编码查询流程定义。
-     * 
+     *
      * @param procDefCode
      *        流程定义编码。
      * @return 生效的最新版本的流程定义。
@@ -410,7 +414,7 @@ public interface FfService {
 
     /**
      * 获取流程定义图文件。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @return 流程定义图文件。
@@ -419,7 +423,7 @@ public interface FfService {
 
     /**
      * 部署流程定义。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @param procDef
@@ -440,7 +444,7 @@ public interface FfService {
 
     /**
      * 修改流程定义图文件。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @param procDefDiagramFile
@@ -463,7 +467,7 @@ public interface FfService {
 
     /**
      * 废弃流程定义。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @param operatorId
@@ -476,7 +480,7 @@ public interface FfService {
 
     /**
      * 恢复流程定义。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @param operatorId
@@ -489,7 +493,7 @@ public interface FfService {
 
     /**
      * 删除流程定义。
-     * 
+     *
      * @param procDefId
      *        流程定义ID。
      * @param operatorId
@@ -524,7 +528,7 @@ public interface FfService {
 
     /**
      * 删除调整流程定义。
-     * 
+     *
      * @param adjustProcDefId
      *        调整流程定义ID。
      * @param updateDate
@@ -539,7 +543,7 @@ public interface FfService {
 
     /**
      * 获取节点的流程定义。如有调整，获取调整流程定义。
-     * 
+     *
      * @param node
      *        节点。
      * @return 流程定义。
@@ -548,7 +552,7 @@ public interface FfService {
 
     /**
      * 获取运行期流程定义。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param currentTaskId
@@ -561,7 +565,7 @@ public interface FfService {
 
     /**
      * 获取起始运行节点定义列表。
-     * 
+     *
      * @param subProcPath
      *        子流程路径。
      * @param procDef
@@ -574,7 +578,7 @@ public interface FfService {
 
     /**
      * 获取下一个运行的节点定义列表。
-     * 
+     *
      * @param taskId
      *        当前节点ID。
      * @param nodeVarMap
@@ -585,7 +589,7 @@ public interface FfService {
 
     /**
      * 获取下一个运行的节点定义列表。
-     * 
+     *
      * @param node
      *        当前节点。
      * @param nodeVarMap
@@ -596,7 +600,7 @@ public interface FfService {
 
     /**
      * 按主键查询流程。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @return 流程。
@@ -605,7 +609,7 @@ public interface FfService {
 
     /**
      * 修改流程业务数据。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param bizId
@@ -624,7 +628,7 @@ public interface FfService {
 
     /**
      * 按流程定义启动流程。
-     * 
+     *
      * @param procDef
      *        流程定义。
      * @param bizId
@@ -650,7 +654,7 @@ public interface FfService {
 
     /**
      * 按流程定义编码启动流程。如有多个版本，按最新版本的流程定义启动。
-     * 
+     *
      * @param procDefCode
      *        流程定义编码。
      * @param bizId
@@ -676,7 +680,7 @@ public interface FfService {
 
     /**
      * 启动独立子流程。
-     * 
+     *
      * @param isolateSubProcNodeId
      *        独立子流程所挂接的主流程节点ID。
      * @param bizId
@@ -702,7 +706,7 @@ public interface FfService {
 
     /**
      * 按流程定义启动流程,并直接跳转到指定节点。
-     * 
+     *
      * @param procDef
      *        流程定义。
      * @param subProcPath
@@ -732,7 +736,7 @@ public interface FfService {
 
     /**
      * 按流程定义编码启动流程,并直接跳转到指定节点。
-     * 
+     *
      * @param procDefCode
      *        流程定义编码。
      * @param subProcPath
@@ -762,7 +766,7 @@ public interface FfService {
 
     /**
      * 重新启动流程,并直接跳转到指定节点。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param subProcPath
@@ -782,7 +786,7 @@ public interface FfService {
 
     /**
      * 挂起流程。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param taskId
@@ -796,7 +800,7 @@ public interface FfService {
 
     /**
      * 激活流程。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param taskId
@@ -810,7 +814,7 @@ public interface FfService {
 
     /**
      * 正常完成流程。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param taskId
@@ -824,7 +828,7 @@ public interface FfService {
 
     /**
      * 异常完成流程。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param taskId
@@ -838,7 +842,7 @@ public interface FfService {
 
     /**
      * 删除流程。包括所有流程数据。
-     * 
+     *
      * @param procId
      *        流程ID。
      * @param executor
@@ -850,7 +854,7 @@ public interface FfService {
 
     /**
      * 清除流程。包括所有流程数据和操作数据。
-     * 
+     *
      * @param procId
      *        流程ID。
      */
@@ -858,7 +862,7 @@ public interface FfService {
 
     /**
      * 按主键查询节点。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @return 节点。
@@ -867,7 +871,7 @@ public interface FfService {
 
     /**
      * 新增节点。
-     * 
+     *
      * @param nodeDef
      *        节点定义。
      * @param branchNode
@@ -885,7 +889,7 @@ public interface FfService {
 
     /**
      * 激活节点。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param candidateList
@@ -899,7 +903,7 @@ public interface FfService {
 
     /**
      * 正常完成节点。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param candidateList
@@ -913,7 +917,7 @@ public interface FfService {
 
     /**
      * 异常完成节点。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param candidateList
@@ -927,7 +931,7 @@ public interface FfService {
 
     /**
      * 删除节点。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param executor
@@ -939,7 +943,7 @@ public interface FfService {
 
     /**
      * 获取节点的子流程路径。
-     * 
+     *
      * @param node
      *        节点。
      * @return 子流程路径。
@@ -948,7 +952,7 @@ public interface FfService {
 
     /**
      * 按主键查询任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @return 任务。
@@ -957,7 +961,7 @@ public interface FfService {
 
     /**
      * 新增任务。
-     * 
+     *
      * @param task
      *        任务。
      * @param executor
@@ -969,7 +973,7 @@ public interface FfService {
 
     /**
      * 修改任务办理人。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param assignee
@@ -985,7 +989,7 @@ public interface FfService {
 
     /**
      * 挂起任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param executor
@@ -997,7 +1001,7 @@ public interface FfService {
 
     /**
      * 激活任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param executor
@@ -1009,7 +1013,7 @@ public interface FfService {
 
     /**
      * 异常完成任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param executor
@@ -1021,7 +1025,7 @@ public interface FfService {
 
     /**
      * 删除任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param executor
@@ -1033,7 +1037,7 @@ public interface FfService {
 
     /**
      * 正常完成任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param branchNodeVar
@@ -1049,7 +1053,7 @@ public interface FfService {
 
     /**
      * 完成任务并跳转到指定节点。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param subProcPath
@@ -1069,7 +1073,7 @@ public interface FfService {
 
     /**
      * 认领任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param executor
@@ -1081,7 +1085,7 @@ public interface FfService {
 
     /**
      * 转发任务。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param assigneeList
@@ -1105,7 +1109,7 @@ public interface FfService {
 
     /**
      * 驳回任务。驳回后，前节点和任务被重新激活。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param candidateList
@@ -1119,7 +1123,7 @@ public interface FfService {
 
     /**
      * 驳回任务并跳转到指定节点，原任务异常完成。
-     * 
+     *
      * @param taskId
      *        任务ID。
      * @param subProcPath
@@ -1137,7 +1141,7 @@ public interface FfService {
 
     /**
      * 追加候选。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param candidateList
@@ -1151,7 +1155,7 @@ public interface FfService {
 
     /**
      * 按主键查询节点变量。
-     * 
+     *
      * @param nodeVarId
      *        节点变量ID。
      * @return 节点变量。
@@ -1160,7 +1164,7 @@ public interface FfService {
 
     /**
      * 新增节点变量。
-     * 
+     *
      * @param nodeVar
      *        节点变量。
      * @return 成功返回true，否则返回false。
@@ -1169,7 +1173,7 @@ public interface FfService {
 
     /**
      * 修改节点变量。
-     * 
+     *
      * @param nodeVar
      *        节点变量。
      * @return 成功返回true，否则返回false。
@@ -1178,7 +1182,7 @@ public interface FfService {
 
     /**
      * 批量修改节点变量.同名覆盖。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @param nodeVarMap
@@ -1189,7 +1193,7 @@ public interface FfService {
 
     /**
      * 删除节点变量。
-     * 
+     *
      * @param nodeVarId
      *        节点变量ID。
      * @return 成功返回true，否则返回false。
@@ -1198,7 +1202,7 @@ public interface FfService {
 
     /**
      * 删除节点下的所有节点变量。
-     * 
+     *
      * @param nodeId
      *        节点ID。
      * @return 成功返回true，否则返回false。
@@ -1207,7 +1211,7 @@ public interface FfService {
 
     /**
      * 按主键查询代理。
-     * 
+     *
      * @param delegateId
      *        代理ID。
      * @return 代理。
@@ -1216,7 +1220,7 @@ public interface FfService {
 
     /**
      * 新增代理。
-     * 
+     *
      * @param delegateId
      *        代理ID。
      * @param assignee
@@ -1237,7 +1241,7 @@ public interface FfService {
 
     /**
      * 修改代理。
-     * 
+     *
      * @param delegateId
      *        代理ID。
      * @param assignee
@@ -1258,7 +1262,7 @@ public interface FfService {
 
     /**
      * 删除代理。
-     * 
+     *
      * @param delegateId
      *        代理ID。
      * @return 成功返回true，否则返回false。
@@ -1267,7 +1271,7 @@ public interface FfService {
 
     /**
      * 是否为代理人。
-     * 
+     *
      * @param assignee
      *        办理人。
      * @param delegator
@@ -1278,7 +1282,7 @@ public interface FfService {
 
     /**
      * 按主键查询操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 操作。
@@ -1287,7 +1291,7 @@ public interface FfService {
 
     /**
      * 查询流程操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 流程操作列表。
@@ -1296,7 +1300,7 @@ public interface FfService {
 
     /**
      * 查询节点操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 节点操作列表。
@@ -1305,7 +1309,7 @@ public interface FfService {
 
     /**
      * 查询任务操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 任务操作列表。
@@ -1314,7 +1318,7 @@ public interface FfService {
 
     /**
      * 查询节点变量操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 节点变量操作列表。
@@ -1323,7 +1327,7 @@ public interface FfService {
 
     /**
      * 取消操作。
-     * 
+     *
      * @param operationId
      *        操作ID。
      * @return 所有变化的任务，节点和任务。
@@ -1332,7 +1336,7 @@ public interface FfService {
 
     /**
      * 将逗号分割的办理人字符串转换为FfUser列表。
-     * 
+     *
      * @param assigneeString
      *        逗号分割的办理人字符串。
      * @return FfUser列表。

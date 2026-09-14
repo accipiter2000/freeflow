@@ -92,12 +92,19 @@ input {
 			if (nodeType == 'GATEWAY') {
 				nodeDef.nodeName = 'GATEWAY';
 			}
+			if (nodeType == 'START') {
+				nodeDef.nodeName = 'START';
+			}
 			if (nodeType == 'END') {
 				nodeDef.nodeName = 'END';
 			}
 			nodeDef.shape.type = 'rectangle';
 			if (nodeType == 'GATEWAY') {
 				nodeDef.shape.type = 'diamond';
+			}
+			if (nodeType == 'START') {
+				nodeDef.shape.width = 50;
+				nodeDef.shape.type = 'oval';
 			}
 			if (nodeType == 'END') {
 				nodeDef.shape.width = 50;
@@ -300,6 +307,9 @@ input {
 			$nodeDefOuter.css('user-select', 'none');
 			if (this.nodeType == 'GATEWAY') {
 				$nodeDefOuter.css('clip-path', 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)');
+			}
+			if (this.nodeType == 'START') {
+				$nodeDefOuter.css('border-radius', '50% 50% 50% 50%');
 			}
 			if (this.nodeType == 'END') {
 				$nodeDefOuter.css('border-radius', '50% 50% 50% 50%');
@@ -994,6 +1004,12 @@ input {
 			helper : 'clone',
 			stop : function(e, ui) {
 				procDef.addNodeDef('GATEWAY', ui.position.left + $('#diagram').scrollLeft() - diagramOffsetLeft, ui.position.top + $('#diagram').scrollTop() - diagramOffsetTop);
+			}
+		});
+		$('#START').draggable({
+			helper : 'clone',
+			stop : function(e, ui) {
+				procDef.addNodeDef('START', ui.position.left + $('#diagram').scrollLeft() - diagramOffsetLeft, ui.position.top + $('#diagram').scrollTop() - diagramOffsetTop);
 			}
 		});
 		$('#END').draggable({
@@ -1747,6 +1763,10 @@ input {
 				<p></p>
 				<div id="GATEWAY" style="width: 100px; height: 50px; margin: 0px auto; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); border: 1px solid black; border-radius: 10px; box-shadow: 1px 1px; background: #ffffc8; cursor: pointer; user-select: none;">
 					<div style="width: 100px; height: 50px; font-size: 13px; display: table-cell; text-align: center; vertical-align: middle;">GATEWAY</div>
+				</div>
+				<p></p>
+				<div id="START" style="width: 50px; height: 50px; margin: 0px auto; border: 1px solid black; border-radius: 50% 50% 50% 50%; box-shadow: 1px 1px; background: #ffffc8; cursor: pointer; user-select: none;">
+					<div style="width: 100px; height: 50px; font-size: 13px; display: table-cell; text-align: center; vertical-align: middle;">START</div>
 				</div>
 				<p></p>
 				<div id="END" style="width: 50px; height: 50px; margin: 0px auto; border: 1px solid black; border-radius: 50% 50% 50% 50%; box-shadow: 1px 1px; background: #ffffc8; cursor: pointer; user-select: none;">

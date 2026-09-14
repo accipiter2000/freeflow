@@ -101,8 +101,10 @@ public class NodeDef implements Serializable {
             }
 
             for (NodeDef childNodeDef : childNodeDefList) {
-                if (childNodeDef.getIncomingFlowDefList().isEmpty()) {
-                    startChildNodeDefList.add(childNodeDef);
+                if (childNodeDef.getNodeType().equals(FfService.NODE_TYPE_START)) {
+                    for (FlowDef flowDef : childNodeDef.getOutgoingFlowDefList()) {
+                        startChildNodeDefList.add(flowDef.getTargetNodeDef());
+                    }
                 }
             }
         }
