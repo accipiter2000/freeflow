@@ -29,6 +29,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -94,12 +95,12 @@ import de.odysseus.el.util.SimpleContext;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-public class FfServiceImpl implements FfService, ApplicationContextAware {
+public class FfServiceImpl implements FfService, ApplicationContextAware, SmartInitializingSingleton {
     private ApplicationContext applicationContext;
 
     private static List<ProcDef> procDefList;
     private static Queue<ProcDef> adjustProcDefList = new LinkedList<>();
-    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>();
+    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>() ;
     private static Map<String, Object> internalServiceMap = new HashMap<>();
     private static Map<String, Object> externalServiceMap = new HashMap<>();
 
@@ -142,8 +143,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware {
         return true;
     }
 
-    @PostConstruct
-    private void initNodeHandler() {
+    @Override
+    public void afterSingletonsInstantiated() {
+        initNodeHandler();
+    }
+
+    public void  initNodeHandler(){
         System.out.println("Initializing node handler...");
 
         Map<String, NodeHandler> nodeHandlerMap = applicationContext.getBeansOfType(NodeHandler.class);// 装配节点处理器
