@@ -1,5 +1,0 @@
-        <dependency>
-            <groupId>io.github.accipiter2000</groupId>
-            <artifactId>freeflow</artifactId>
-            <version>3.1.0-RELEASE</version>
-        </dependency>
