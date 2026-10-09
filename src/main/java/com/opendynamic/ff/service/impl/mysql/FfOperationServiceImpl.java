@@ -517,7 +517,7 @@ public class FfOperationServiceImpl implements FfOperationService {
         }
 
         // 设置操作状态为已经取消。
-        sql = "update FF_OPERATION set OPERATION_STATUS_ = 9 where OPERATION_ID_ = ?";
+        sql = "update FF_OPERATION set OPERATION_STATUS_ = '9' where OPERATION_ID_ = ?";
         ffJdbcTemplate.update(sql, operationId);
 
         // 更新操作后续
