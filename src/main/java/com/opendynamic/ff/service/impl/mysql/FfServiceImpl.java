@@ -626,8 +626,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 object = expression.getValue(simpleContext);
             }
             catch (Exception e) {
-                e.printStackTrace();
-                object = null;
+                throw new RuntimeException("errors.invalidCandidateAssignee");
             }
             List<FfUser> candidateAssigneeList;// 解析后候选人列表
             if (object instanceof List) {
@@ -650,8 +649,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 object = expression.getValue(simpleContext);
             }
             catch (Exception e) {
-                e.printStackTrace();
-                object = null;
+                throw new RuntimeException("errors.invalidAssignee");
             }
             List<FfUser> assigneeList;// 解析后办理人列表
             if (object instanceof List) {
@@ -680,8 +678,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 object = expression.getValue(simpleContext);
             }
             catch (Exception e) {
-                e.printStackTrace();
-                object = null;
+                throw new RuntimeException("errors.invalidCandidateSubProcDef");
             }
             List<RunningProcDef> candidateSubProcDefList = new ArrayList<>();// 解析后候选子流程定义列表
             if (object instanceof List) {
@@ -722,8 +719,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 object = expression.getValue(simpleContext);
             }
             catch (Exception e) {
-                e.printStackTrace();
-                object = null;
+                throw new RuntimeException("errors.invalidAssignSubProcDef");
             }
             List<RunningProcDef> assignSubProcDefList = new ArrayList<>();// 解析后候选子流程定义列表
             if (object instanceof List) {
