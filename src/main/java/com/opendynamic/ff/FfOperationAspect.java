@@ -109,7 +109,7 @@ public class FfOperationAspect {
             ffResult = (FfResult) point.proceed(arguments);// 执行原方法
         }
         catch (Throwable e) {
-            ffOperationService.finalize();// 清理threadLocal
+            ffOperationService.clear();// 清理threadLocal
             throw new RuntimeException(e.getMessage(), e);
         }
 
@@ -204,7 +204,7 @@ public class FfOperationAspect {
                 }
             }
 
-            ffOperationService.finalize();
+            ffOperationService.clear();
         }
 
         return ffResult;

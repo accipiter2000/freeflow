@@ -109,7 +109,7 @@ public interface FfOperationService {
     /**
      * 界定操作的结束。清空线程变量ThreadOperation。
      */
-    public void finalize();
+    public void clear();
 
     /**
      * 获取当前线程的ThreadOperation。

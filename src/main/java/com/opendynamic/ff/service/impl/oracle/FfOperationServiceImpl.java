@@ -452,7 +452,7 @@ public class FfOperationServiceImpl implements FfOperationService {
     }
 
     @Override
-    public void finalize() {
+    public void clear() {
         threadLocal.remove();
     }
 
