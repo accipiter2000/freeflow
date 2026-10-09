@@ -17,14 +17,14 @@ public class OperationContext implements Serializable {
     private Task initialTask;// 初始任务。
     private Map<String, Object> initialNodeVarMap;// 初始节点变量MAP。
     private CandidateList initCandidateList;// 初始候选列表。
-    private String initExecutor;// 初始执行人。
+    private FfUser initExecutor;// 初始执行人。
     private Proc currentProc;// 当前流程。
     private Node currentBranchNode;// 当前分支节点。
     private Node currentNode;// 当前节点。
     private Node currentNodeVarMapNode;// 当前节点变量MAP的节点。
     private Map<String, Object> currentNodeVarMap;// 当前节点变量MAP。
     private CandidateList currentCandidateList;// 当前候选列表。
-    private String currentExecutor;// 当前执行人。
+    private FfUser currentExecutor;// 当前执行人。
     private List<NodeHandlerOperation> nodeHandlerOperationList = new ArrayList<NodeHandlerOperation>();// 节点处理器操作列表。
 
     public OperationContext() {
@@ -85,11 +85,11 @@ public class OperationContext implements Serializable {
         return this;
     }
 
-    public String getInitExecutor() {
+    public FfUser getInitExecutor() {
         return initExecutor;
     }
 
-    public OperationContext setInitExecutor(String initExecutor) {
+    public OperationContext setInitExecutor(FfUser initExecutor) {
         this.initExecutor = initExecutor;
         return this;
     }
@@ -148,11 +148,11 @@ public class OperationContext implements Serializable {
         return this;
     }
 
-    public String getCurrentExecutor() {
+    public FfUser getCurrentExecutor() {
         return currentExecutor;
     }
 
-    public OperationContext setCurrentExecutor(String currentExecutor) {
+    public OperationContext setCurrentExecutor(FfUser currentExecutor) {
         this.currentExecutor = currentExecutor;
         return this;
     }

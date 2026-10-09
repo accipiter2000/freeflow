@@ -1,6 +1,8 @@
 package com.opendynamic.ff.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 候选。
@@ -10,17 +12,23 @@ public class Candidate implements Serializable {
 
     private String subProcPath;// 子流程路径。
     private String nodeCode;// 节点编码。
-    private String candidateExpression;// 候选表达式。
+    private List<FfUser> candidateAssigneeList;// 候选人列表。
+    private List<String> candidateSubProcDefList;// 候选子流程定义编码列表。
 
     public Candidate() {
         super();
+
+        this.candidateAssigneeList = new ArrayList<FfUser>();
+        this.candidateSubProcDefList = new ArrayList<String>();
     }
 
-    public Candidate(String subProcPath, String nodeCode, String candidateExpression) {
+    public Candidate(String subProcPath, String nodeCode, List<FfUser> candidateAssigneeList, List<String> candidateSubProcDefList) {
         super();
+
         this.subProcPath = subProcPath;
         this.nodeCode = nodeCode;
-        this.candidateExpression = candidateExpression;
+        setCandidateAssigneeList(candidateAssigneeList);
+        setCandidateSubProcDefList(candidateSubProcDefList);
     }
 
     /**
@@ -62,21 +70,46 @@ public class Candidate implements Serializable {
     }
 
     /**
-     * 获取候选表达式。
+     * 获取候选人列表。
      * 
-     * @return 候选表达式。
+     * @return 候选人列表。
      */
-    public String getCandidateExpression() {
-        return candidateExpression;
+    public List<FfUser> getCandidateAssigneeList() {
+        return candidateAssigneeList;
     }
 
     /**
-     * 设置候选表达式。
+     * 设置候选人列表。
      * 
-     * @param candidateExpression
-     *        候选表达式。
+     * @param candidateAssigneeList
+     *        候选人列表。
      */
-    public void setCandidateExpression(String candidateExpression) {
-        this.candidateExpression = candidateExpression;
+    public void setCandidateAssigneeList(List<FfUser> candidateAssigneeList) {
+        this.candidateAssigneeList = candidateAssigneeList;
+        if (this.candidateAssigneeList == null) {
+            this.candidateAssigneeList = new ArrayList<FfUser>();
+        }
+    }
+
+    /**
+     * 获取候选子流程定义编码列表。
+     * 
+     * @return 候选子流程定义编码列表。
+     */
+    public List<String> getCandidateSubProcDefList() {
+        return candidateSubProcDefList;
+    }
+
+    /**
+     * 设置候选子流程定义编码列表。
+     * 
+     * @param candidateSubProcDefList
+     *        候选子流程定义编码列表。
+     */
+    public void setCandidateSubProcDefList(List<String> candidateSubProcDefList) {
+        this.candidateSubProcDefList = candidateSubProcDefList;
+        if (this.candidateSubProcDefList == null) {
+            this.candidateSubProcDefList = new ArrayList<String>();
+        }
     }
 }

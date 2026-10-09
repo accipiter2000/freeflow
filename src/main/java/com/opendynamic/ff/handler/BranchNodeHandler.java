@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfProcService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
 import com.opendynamic.ff.vo.NodeHandlerOperation;
@@ -33,8 +33,6 @@ public class BranchNodeHandler implements NodeHandler {
     private FfProcService ffProcService;
     @Autowired
     private FfNodeService ffNodeService;
-    @Autowired
-    private FfHelper ffHelper;
 
     @Override
     public String getNodeType() {
@@ -87,11 +85,11 @@ public class BranchNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(previousNode.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
         node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
@@ -103,7 +101,7 @@ public class BranchNodeHandler implements NodeHandler {
             ffResult.addAll(ffService.getNodeHandler(parentNode.getNodeType()).completeNode(parentNode, node.getNodeId(), fullCandidateList, operationContext));
         }
         else {// 如没有上级节点，完成流程。
-            ffProcService.updateProcStatus(node.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
+            ffProcService.updateProcStatus(node.getProcId(), currentExecutor.getUserId(), currentExecutor.getUserName(), new Date(), FfService.PROC_STATUS_COMPLETE);
             Proc proc = ffService.loadProc(node.getProcId());
             ffResult.addCompleteProc(proc);
 
@@ -131,17 +129,17 @@ public class BranchNodeHandler implements NodeHandler {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }
 
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成任务
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成任务
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
         ffResult.addTerminateNode(node);
 
         if (node.getLastCompleteNodeIds() == null) {// 完成流程
-            ffProcService.updateProcStatus(node.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_TERMINATE);
+            ffProcService.updateProcStatus(node.getProcId(), currentExecutor.getUserId(), currentExecutor.getUserName(), new Date(), FfService.PROC_STATUS_TERMINATE);
             Proc proc = ffService.loadProc(node.getProcId());
             ffResult.addTerminateProc(proc);
 

@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class FfUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected String id;// ID。
     protected String userId;// 用户ID。
     protected String userCode;// 用户编码。
     protected String userName;// 用户名称。
@@ -19,23 +18,29 @@ public class FfUser implements Serializable {
     protected String orgCode;// 机构编码。
     protected String orgName;// 机构名称。
 
-    /**
-     * 获取ID。
-     * 
-     * @return ID。
-     */
-    public String getId() {
-        return id;
+    public FfUser() {
+        super();
     }
 
-    /**
-     * 设置ID。
-     * 
-     * @param id
-     *        ID。
-     */
-    public void setId(String id) {
-        this.id = id;
+    public FfUser(String userId, String userName) {
+        super();
+
+        this.userId = userId;
+        this.userName = userName;
+    }
+
+    public FfUser(String userId, String userCode, String userName, String roleId, String roleCode, String roleName, String orgId, String orgCode, String orgName) {
+        super();
+
+        this.userId = userId;
+        this.userCode = userCode;
+        this.userName = userName;
+        this.roleId = roleId;
+        this.roleCode = roleCode;
+        this.roleName = roleName;
+        this.orgId = orgId;
+        this.orgCode = orgCode;
+        this.orgName = orgName;
     }
 
     /**
@@ -53,8 +58,9 @@ public class FfUser implements Serializable {
      * @param userId
      *        用户ID。
      */
-    public void setUserId(String userId) {
+    public FfUser setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
     /**
@@ -72,8 +78,9 @@ public class FfUser implements Serializable {
      * @param userCode
      *        用户编码。
      */
-    public void setUserCode(String userCode) {
+    public FfUser setUserCode(String userCode) {
         this.userCode = userCode;
+        return this;
     }
 
     /**
@@ -91,8 +98,9 @@ public class FfUser implements Serializable {
      * @param userName
      *        用户名称。
      */
-    public void setUserName(String userName) {
+    public FfUser setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     /**
@@ -110,8 +118,9 @@ public class FfUser implements Serializable {
      * @param roleId
      *        角色ID。
      */
-    public void setRoleId(String roleId) {
+    public FfUser setRoleId(String roleId) {
         this.roleId = roleId;
+        return this;
     }
 
     /**
@@ -129,8 +138,9 @@ public class FfUser implements Serializable {
      * @param roleCode
      *        角色编码。
      */
-    public void setRoleCode(String roleCode) {
+    public FfUser setRoleCode(String roleCode) {
         this.roleCode = roleCode;
+        return this;
     }
 
     /**
@@ -148,8 +158,9 @@ public class FfUser implements Serializable {
      * @param roleName
      *        角色名称。
      */
-    public void setRoleName(String roleName) {
+    public FfUser setRoleName(String roleName) {
         this.roleName = roleName;
+        return this;
     }
 
     /**
@@ -167,8 +178,9 @@ public class FfUser implements Serializable {
      * @param orgId
      *        机构ID。
      */
-    public void setOrgId(String orgId) {
+    public FfUser setOrgId(String orgId) {
         this.orgId = orgId;
+        return this;
     }
 
     /**
@@ -186,8 +198,9 @@ public class FfUser implements Serializable {
      * @param orgCode
      *        机构编码。
      */
-    public void setOrgCode(String orgCode) {
+    public FfUser setOrgCode(String orgCode) {
         this.orgCode = orgCode;
+        return this;
     }
 
     /**
@@ -205,7 +218,16 @@ public class FfUser implements Serializable {
      * @param orgName
      *        机构名称。
      */
-    public void setOrgName(String orgName) {
+    public FfUser setOrgName(String orgName) {
         this.orgName = orgName;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object ffUser) {
+        if (ffUser != null && ffUser instanceof FfUser && ((FfUser) ffUser).getUserId().equals(this.userId)) {
+            return true;
+        }
+        return false;
     }
 }

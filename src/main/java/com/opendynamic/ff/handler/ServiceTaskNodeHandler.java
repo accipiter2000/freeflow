@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.Candidate;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
 import com.opendynamic.ff.vo.NodeHandlerOperation;
@@ -40,8 +40,6 @@ public class ServiceTaskNodeHandler implements NodeHandler {
     private FfService ffService;
     @Autowired
     private FfNodeService ffNodeService;
-    @Autowired
-    private FfHelper ffHelper;
 
     @Override
     public String getNodeType() {
@@ -123,11 +121,11 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         }
 
         // 完成节点
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, candidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, candidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(candidateList.toJson());
         node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
@@ -185,11 +183,11 @@ public class ServiceTaskNodeHandler implements NodeHandler {
 
                 // 计算激活的办理人，为上一次该节点任务的办理人。
                 List<Task> taskList = ffService.createTaskQuery().setNodeId(previousNode.getNodeId()).queryForObjectList();
-                List<String> assigneeList = new ArrayList<>();
+                List<FfUser> assigneeList = new ArrayList<>();
                 for (Task task : taskList) {
-                    assigneeList.add(task.getAssignee());
+                    assigneeList.add(new FfUser(task.getAssignee(), task.getAssigneeName()));
                 }
-                candidateList.add(new Candidate(ffService.getSubProcPath(previousNode), previousNode.getNodeCode(), StringUtils.join(assigneeList, ",")));
+                candidateList.add(new Candidate(ffService.getSubProcPath(previousNode), previousNode.getNodeCode(), assigneeList, null));
 
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), candidateList, operationContext));
             }

@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.FlowDef;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
@@ -40,8 +40,6 @@ public class GatewayNodeHandler implements NodeHandler {
     private FfService ffService;
     @Autowired
     private FfNodeService ffNodeService;
-    @Autowired
-    private FfHelper ffHelper;
 
     @Override
     public String getNodeType() {
@@ -147,11 +145,11 @@ public class GatewayNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(previousNode.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
         node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);

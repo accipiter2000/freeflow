@@ -6,23 +6,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
-import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
+import com.opendynamic.ff.vo.OperationContext;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public interface NodeHandler {
     /**
      * 获取节点类型。
-     *
+     * 
      * @return 节点类型。
      */
     public String getNodeType();
 
     /**
      * 按节点定义新增节点。
-     *
+     * 
      * @param nodeDef
      *        新增节点的节点定义。
      * @param branchNode
@@ -39,7 +39,7 @@ public interface NodeHandler {
 
     /**
      * 为节点追加候选。根据候选内容新增节点的办理人或办理子流程。
-     *
+     * 
      * @param node
      *        节点。
      * @param candidateList
@@ -52,7 +52,7 @@ public interface NodeHandler {
 
     /**
      * 完成节点。
-     *
+     * 
      * @param node
      *        要完成的节点。
      * @param previousNodeIds
@@ -67,7 +67,7 @@ public interface NodeHandler {
 
     /**
      * 驳回节点。
-     *
+     * 
      * @param node
      *        要驳回的节点
      * @param candidateList
@@ -80,7 +80,7 @@ public interface NodeHandler {
 
     /**
      * 激活节点。
-     *
+     * 
      * @param node
      *        要激活的节点。
      * @param previousNodeIds

@@ -28,4 +28,6 @@ public @interface FfOperation {
     String memo() default "";// 备注。
 
     String operator() default "";// 操作人。
+
+    String operatorName() default "";// 操作人名称。
 }

@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfNodeVarService;
 import com.opendynamic.ff.service.FfService;
@@ -51,8 +50,6 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
     private FfTaskService ffTaskService;
     @Autowired
     private FfNodeVarService ffNodeVarService;
-    @Autowired
-    private FfHelper ffHelper;
 
     private final Pattern outerPattern = Pattern.compile(FfService.CENTER_FORWARD_STEP + " *== *-?\\d+");
     private final Pattern innerPattern = Pattern.compile("-?\\d+");
@@ -123,7 +120,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                 candidate = candidateList.getCandidate(ffService.getSubProcPath(branchNode), nodeDef.getNodeCode());
             }
             if (candidate != null) {
-                assigneeList = ffService.getAssigneeList(candidate.getCandidateExpression());
+                assigneeList = candidate.getCandidateAssigneeList();
             }
             else {
                 assigneeList = new ArrayList<>();
@@ -155,7 +152,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             task.setTaskId(taskId);
             task.setNodeId(nodeId);
             task.setTaskType(FfService.TASK_TYPE_TASK);
-            task.setAssignee(assignee.getId());
+            task.setAssignee(assignee.getUserId());
             task.setAssigneeName(assignee.getUserName());
             // 解析JUEL,从节点定义中获取相关任务属性
             simpleContext.setVariable("task", expressionFactory.createValueExpression(task, Object.class));
@@ -194,8 +191,6 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             createTaskList.add(task);
         }
 
-        String systemExecutor = FfService.USER_FF_SYSTEM;
-        String systemExecutorName = ffHelper.getUserName(systemExecutor);
         String exclusive = nodeDef.getExclusive();
         String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
@@ -223,7 +218,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         }
 
         OperationContext systemExecutorOperationContext = (OperationContext) OdUtils.deepClone(operationContext);
-        systemExecutorOperationContext.setCurrentExecutor(systemExecutor);
+        systemExecutorOperationContext.setCurrentExecutor(new FfUser(FfService.USER_FF_SYSTEM, FfService.USER_FF_SYSTEM));
         if (!FfService.BOOLEAN_TRUE.equals(waitingForCompleteNode)) {// 自动完成节点
             // 自动完成通知节点
             if (FfService.BOOLEAN_TRUE.equals(inform)) {
@@ -232,11 +227,11 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             // 自动完成相同办理人任务
             if (FfService.BOOLEAN_TRUE.equals(autoCompleteSameAssignee)) {
                 for (Task createTask : createTaskList) {
-                    if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssigneeList(ffHelper.getAllUserIdList(createTask.getAssignee())).setTaskStatus(FfService.TASK_STATUS_COMPLETE).count() > 0) {
+                    if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssignee(createTask.getAssignee()).setTaskStatus(FfService.TASK_STATUS_COMPLETE).count() > 0) {
                         Date completeDate = new Date();
-                        ffTaskService.updateTaskStatus(createTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
-                        createTask.setTaskEndUser(systemExecutor);
-                        createTask.setTaskEndUserName(systemExecutorName);
+                        ffTaskService.updateTaskStatus(createTask.getTaskId(), FfService.USER_FF_SYSTEM, FfService.USER_FF_SYSTEM, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
+                        createTask.setTaskEndUser(FfService.USER_FF_SYSTEM);
+                        createTask.setTaskEndUserName(FfService.USER_FF_SYSTEM);
                         createTask.setTaskEndDate(completeDate);
                         createTask.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
                         ffResult.addCompleteTask(createTask);
@@ -244,9 +239,9 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                         if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
                             List<Task> remainActiveTaskList = ffService.createTaskQuery().setNodeId(node.getNodeId()).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
                             for (Task remainActiveTask : remainActiveTaskList) {
-                                ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                                remainActiveTask.setTaskEndUser(systemExecutor);
-                                remainActiveTask.setTaskEndUserName(systemExecutorName);
+                                ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), FfService.USER_FF_SYSTEM, FfService.USER_FF_SYSTEM, completeDate, FfService.TASK_STATUS_TERMINATE);
+                                remainActiveTask.setTaskEndUser(FfService.USER_FF_SYSTEM);
+                                remainActiveTask.setTaskEndUserName(FfService.USER_FF_SYSTEM);
                                 remainActiveTask.setTaskEndDate(completeDate);
                                 remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                                 ffResult.addTerminateTask(remainActiveTask);
@@ -315,7 +310,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             candidate = candidateList.getCandidate(ffService.getSubProcPath(branchNode), node.getNodeCode());
         }
         if (candidate != null) {
-            assigneeList = ffService.getAssigneeList(candidate.getCandidateExpression());
+            assigneeList = candidate.getCandidateAssigneeList();
         }
         else {
             assigneeList = new ArrayList<>();
@@ -336,7 +331,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             task.setTaskId(taskId);
             task.setNodeId(node.getNodeId());
             task.setTaskType(FfService.TASK_TYPE_TASK);
-            task.setAssignee(assignee.getId());
+            task.setAssignee(assignee.getUserId());
             task.setAssigneeName(assignee.getUserName());
             // 解析JUEL,从节点定义中获取相关任务属性
             simpleContext.setVariable("task", expressionFactory.createValueExpression(task, Object.class));
@@ -375,8 +370,6 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
             createTaskList.add(task);
         }
 
-        String systemExecutor = FfService.USER_FF_SYSTEM;
-        String systemExecutorName = ffHelper.getUserName(systemExecutor);
         String autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
         if (autoCompleteSameAssignee != null && autoCompleteSameAssignee.contains("${")) {// JUEL解析
             expression = expressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
@@ -386,11 +379,11 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         // 自动完成相同办理人任务
         if (FfService.BOOLEAN_TRUE.equals(autoCompleteSameAssignee)) {
             for (Task createTask : createTaskList) {
-                if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssigneeList(ffHelper.getAllUserIdList(createTask.getAssignee())).setTaskStatus(FfService.TASK_STATUS_COMPLETE).count() > 0) {
+                if (ffService.createTaskQuery().setProcId(createTask.getProcId()).setAssignee(createTask.getAssignee()).setTaskStatus(FfService.TASK_STATUS_COMPLETE).count() > 0) {
                     Date completeDate = new Date();
-                    ffTaskService.updateTaskStatus(createTask.getTaskId(), systemExecutor, systemExecutorName, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
-                    createTask.setTaskEndUser(systemExecutor);
-                    createTask.setTaskEndUserName(systemExecutorName);
+                    ffTaskService.updateTaskStatus(createTask.getTaskId(), FfService.USER_FF_SYSTEM, FfService.USER_FF_SYSTEM, completeDate, FfService.TASK_STATUS_COMPLETE);// 完成任务
+                    createTask.setTaskEndUser(FfService.USER_FF_SYSTEM);
+                    createTask.setTaskEndUserName(FfService.USER_FF_SYSTEM);
                     createTask.setTaskEndDate(completeDate);
                     createTask.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
                     ffResult.addCompleteTask(createTask);
@@ -468,11 +461,11 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
                 fullCandidateList.addAll(new Gson().fromJson(task.getNextCandidate(), CandidateList.class));
             }
         }
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, fullCandidateList.toJson(), FfService.NODE_STATUS_COMPLETE);// 完成节点
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNextCandidate(fullCandidateList.toJson());
         node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
@@ -494,11 +487,11 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
 
                 // 计算激活的办理人，为上一次该节点任务的办理人。
                 List<Task> taskList = ffService.createTaskQuery().setNodeId(previousNode.getNodeId()).queryForObjectList();
-                List<String> assigneeList = new ArrayList<>();
+                List<FfUser> assigneeList = new ArrayList<>();
                 for (Task task : taskList) {
-                    assigneeList.add(task.getAssignee());
+                    assigneeList.add(new FfUser(task.getAssignee(), task.getAssigneeName()));
                 }
-                fullCandidateList.add(new Candidate(ffService.getSubProcPath(previousNode), previousNode.getNodeCode(), StringUtils.join(assigneeList, ",")));
+                fullCandidateList.add(new Candidate(ffService.getSubProcPath(previousNode), previousNode.getNodeCode(), assigneeList, null));
 
                 ffResult.addAll(ffService.getNodeHandler(previousNode.getNodeType()).insertNodeByNodeDef(previousNodeDef, parentNode, previousNode.getPreviousNodeIds(), fullCandidateList, operationContext));
             }
@@ -524,11 +517,11 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
         }
 
         // 完成节点
-        String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         Date nodeEndDate = new Date();
-        ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
-        node.setNodeEndUser(operationContext.getCurrentExecutor());
-        node.setNodeEndUserName(nodeEndUserName);
+        ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
+        node.setNodeEndUser(currentExecutor.getUserId());
+        node.setNodeEndUserName(currentExecutor.getUserName());
         node.setNodeEndDate(nodeEndDate);
         node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
         ffResult.addTerminateNode(node);
@@ -610,7 +603,7 @@ public class CenterFarwardTaskNodeHandler implements NodeHandler {
 
             if (FfService.OPERATION_REJECT.equals(operationContext.getInitialOperation()) && taskList.isEmpty() && FfService.BOOLEAN_TRUE.equals(autoCompleteEmptyAssignee)) {
                 OperationContext systemExecutorOperationContext = (OperationContext) OdUtils.deepClone(operationContext);
-                systemExecutorOperationContext.setCurrentExecutor(FfService.USER_FF_SYSTEM);
+                systemExecutorOperationContext.setCurrentExecutor(new FfUser(FfService.USER_FF_SYSTEM, FfService.USER_FF_SYSTEM));
                 ffResult.addAll(rejectNode(node, candidateList, systemExecutorOperationContext));
             }
         }

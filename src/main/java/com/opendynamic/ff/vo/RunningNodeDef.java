@@ -23,7 +23,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 依据节点定义构建运行期节点定义。
-     *
+     * 
      * @param nodeDef
      *        节点定义。
      * @param runningProcDef
@@ -56,15 +56,15 @@ public class RunningNodeDef extends NodeDef implements Serializable {
         this.procDef = runningProcDef;
 
         this.parentNodeDef = nodeDef.parentNodeDef;
-        this.childNodeDefList = nodeDef.childNodeDefList;
-        this.startChildNodeDefList = nodeDef.startChildNodeDefList;
-        this.incomingFlowDefList = nodeDef.incomingFlowDefList;
-        this.outgoingFlowDefList = nodeDef.outgoingFlowDefList;
+        this.childNodeDefList = new ArrayList<>(nodeDef.childNodeDefList);
+        this.startChildNodeDefList = new ArrayList<>(nodeDef.startChildNodeDefList);
+        this.incomingFlowDefList = new ArrayList<>(nodeDef.incomingFlowDefList);
+        this.outgoingFlowDefList = new ArrayList<>(nodeDef.outgoingFlowDefList);
     }
 
     /**
      * 设置节点类型。
-     *
+     * 
      * @param nodeType
      *        节点类型。
      */
@@ -74,7 +74,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置节点编码。
-     *
+     * 
      * @param nodeCode
      *        节点编码。
      */
@@ -84,7 +84,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置节点名称。
-     *
+     * 
      * @param nodeName
      *        节点名称。
      */
@@ -94,7 +94,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置上级节点编码。
-     *
+     * 
      * @param parentNodeCode
      *        上级节点编码。
      */
@@ -104,7 +104,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置候选人。
-     *
+     * 
      * @param candidateAssignee
      *        候选人。
      */
@@ -114,7 +114,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置候选子流程定义。
-     *
+     * 
      * @param candidateSubProcDef
      *        候选子流程定义。
      */
@@ -124,7 +124,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置完成表达式。
-     *
+     * 
      * @param completeExpression
      *        完成表达式。
      */
@@ -134,7 +134,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置完成后返回前一个节点。
-     *
+     * 
      * @param completeReturn
      *        完成后返回前一个节点。
      */
@@ -144,7 +144,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置排他。
-     *
+     * 
      * @param exclusive
      *        排他。
      */
@@ -154,7 +154,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置等待完成节点。
-     *
+     * 
      * @param waitingForCompleteNode
      *        等待完成节点。
      */
@@ -164,7 +164,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置自动完成相同办理人任务。
-     *
+     * 
      * @param autoCompleteSameAssignee
      *        自动完成相同办理人任务。
      */
@@ -174,7 +174,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置自动完成没有办理人节点。
-     *
+     * 
      * @param autoCompleteEmptyAssignee
      *        自动完成没有办理人节点。
      */
@@ -184,7 +184,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置通知。
-     *
+     * 
      * @param inform
      *        通知。
      */
@@ -194,7 +194,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置办理人。
-     *
+     * 
      * @param assignee
      *        办理人。
      */
@@ -204,7 +204,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置办理子流程定义。
-     *
+     * 
      * @param assignSubProcDef
      *        办理子流程定义。
      */
@@ -214,7 +214,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置业务行为。
-     *
+     * 
      * @param action
      *        业务行为。
      */
@@ -224,7 +224,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置截止日期。
-     *
+     * 
      * @param dueDate
      *        截止日期。
      */
@@ -234,7 +234,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置认领。
-     *
+     * 
      * @param claim
      *        认领。
      */
@@ -244,7 +244,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置可转发。
-     *
+     * 
      * @param forwardable
      *        可转发。
      */
@@ -254,7 +254,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置优先级。
-     *
+     * 
      * @param priority
      *        优先级。
      */
@@ -264,7 +264,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置形状。
-     *
+     * 
      * @param shape
      *        形状。
      */
@@ -274,7 +274,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置所属流程定义。
-     *
+     * 
      * @param procDef
      *        所属流程定义。
      */
@@ -304,7 +304,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取节点状态。
-     *
+     * 
      * @return 节点状态。
      */
     public String getNodeStatus() {
@@ -313,7 +313,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置节点状态。
-     *
+     * 
      * @param nodeStatus
      *        节点状态。
      */
@@ -323,7 +323,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取中心转发步骤。
-     *
+     * 
      * @return 中心转发步骤。
      */
     public Integer getCenterForwardStep() {
@@ -332,7 +332,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置中心转发步骤。
-     *
+     * 
      * @param centerForwardStep
      *        中心转发步骤。
      */
@@ -342,7 +342,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取节点变量。
-     *
+     * 
      * @return 节点变量。
      */
     public Map<String, Object> getNodeVarMap() {
@@ -351,7 +351,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置节点变量。
-     *
+     * 
      * @param nodeVarMap
      *        节点变量。
      */
@@ -361,7 +361,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取子流程路径。
-     *
+     * 
      * @return 子流程路径。
      */
     public String getSubProcPath() {
@@ -370,7 +370,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置子流程路径。
-     *
+     * 
      * @param subProcPath
      *        子流程路径。
      */
@@ -380,7 +380,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取解析后候选人列表。
-     *
+     * 
      * @return 解析后候选人列表。
      */
     public List<FfUser> getCandidateAssigneeList() {
@@ -389,7 +389,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置解析后候选人列表。
-     *
+     * 
      * @param candidateAssigneeList
      *        解析后候选人列表。
      */
@@ -399,7 +399,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取解析后候选子流程定义列表。
-     *
+     * 
      * @return 解析后候选子流程定义列表。
      */
     public List<RunningProcDef> getCandidateSubProcDefList() {
@@ -408,7 +408,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置解析后候选子流程定义列表。
-     *
+     * 
      * @param candidateSubProcDefList
      *        解析后候选子流程定义列表。
      */
@@ -418,7 +418,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取解析后办理人列表。
-     *
+     * 
      * @return 解析后办理人列表。
      */
     public List<FfUser> getAssigneeList() {
@@ -427,7 +427,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置解析后办理人列表。
-     *
+     * 
      * @param assigneeList
      *        解析后办理人列表。
      */
@@ -437,7 +437,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取解析后办理子流程定义列表。
-     *
+     * 
      * @return 解析后办理子流程定义列表。
      */
     public List<RunningProcDef> getAssignSubProcDefList() {
@@ -446,7 +446,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置解析后办理子流程定义列表。
-     *
+     * 
      * @param assignSubProcDefList
      *        解析后办理子流程定义列表。
      */
@@ -456,7 +456,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 获取子流程运行期流程定义列表。
-     *
+     * 
      * @return 子流程运行期流程定义列表。
      */
     public List<RunningProcDef> getSubProcRunningProcDefList() {
@@ -465,7 +465,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 设置子流程运行期流程定义列表。
-     *
+     * 
      * @param subProcRunningProcDefList
      *        子流程运行期流程定义列表。
      */
@@ -475,7 +475,7 @@ public class RunningNodeDef extends NodeDef implements Serializable {
 
     /**
      * 添加子流程运行期流程定义。
-     *
+     * 
      * @param subProcRunningProcDef
      *        子流程运行期流程定义。
      */

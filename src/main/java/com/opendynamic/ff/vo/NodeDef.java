@@ -50,13 +50,13 @@ public class NodeDef implements Serializable {
     @JsonIgnore
     protected transient NodeDef parentNodeDef;// 上级节点定义。
     @JsonIgnore
-    protected transient List<NodeDef> childNodeDefList = new ArrayList<>();// 下级节点定义列表（阶段节点）。
+    protected transient List<NodeDef> childNodeDefList;// 下级节点定义列表（阶段节点）。
     @JsonIgnore
-    protected transient List<NodeDef> startChildNodeDefList = new ArrayList<>();// 开始节点定义列表（阶段节点）。
+    protected transient List<NodeDef> startChildNodeDefList;// 开始节点定义列表（阶段节点）。
     @JsonIgnore
-    protected transient List<FlowDef> incomingFlowDefList = new ArrayList<>();// 入口流转定义列表。
+    protected transient List<FlowDef> incomingFlowDefList;// 入口流转定义列表。
     @JsonIgnore
-    protected transient List<FlowDef> outgoingFlowDefList = new ArrayList<>();// 出口流转定义列表。
+    protected transient List<FlowDef> outgoingFlowDefList;// 出口流转定义列表。
 
     /**
      * 初始化。
@@ -65,6 +65,11 @@ public class NodeDef implements Serializable {
      *        流程定义。
      */
     public void init(ProcDef procDef) {
+        childNodeDefList = new ArrayList<>();
+        startChildNodeDefList = new ArrayList<>();
+        incomingFlowDefList = new ArrayList<>();
+        outgoingFlowDefList = new ArrayList<>();
+
         this.procDef = procDef;
 
         int count = 0;
@@ -112,7 +117,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取节点类型。
-     *
+     * 
      * @return 节点类型。
      */
     public String getNodeType() {
@@ -121,7 +126,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取节点编码。
-     *
+     * 
      * @return 节点编码。
      */
     public String getNodeCode() {
@@ -130,7 +135,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取节点名称。
-     *
+     * 
      * @return 节点名称。
      */
     public String getNodeName() {
@@ -139,7 +144,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取上级节点编码。
-     *
+     * 
      * @return 上级节点编码。
      */
     public String getParentNodeCode() {
@@ -148,7 +153,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取候选人。
-     *
+     * 
      * @return 候选人。
      */
     public String getCandidateAssignee() {
@@ -157,7 +162,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取候选子流程定义。
-     *
+     * 
      * @return 候选子流程定义。
      */
     public String getCandidateSubProcDef() {
@@ -166,7 +171,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取完成表达式。
-     *
+     * 
      * @return 完成表达式。
      */
     public String getCompleteExpression() {
@@ -175,7 +180,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取完成后返回前一个节点。
-     *
+     * 
      * @return 完成后返回前一个节点。
      */
     public String getCompleteReturn() {
@@ -184,7 +189,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取排他。
-     *
+     * 
      * @return 排他。
      */
     public String getExclusive() {
@@ -193,7 +198,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取等待完成节点。
-     *
+     * 
      * @return 等待完成节点。
      */
     public String getWaitingForCompleteNode() {
@@ -202,7 +207,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取自动完成相同办理人任务。
-     *
+     * 
      * @return 自动完成相同办理人任务。
      */
     public String getAutoCompleteSameAssignee() {
@@ -211,7 +216,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取自动完成没有办理人节点。
-     *
+     * 
      * @return 自动完成没有办理人节点。
      */
     public String getAutoCompleteEmptyAssignee() {
@@ -220,7 +225,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取通知。
-     *
+     * 
      * @return 通知。
      */
     public String getInform() {
@@ -229,7 +234,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取办理人。
-     *
+     * 
      * @return 办理人。
      */
     public String getAssignee() {
@@ -238,7 +243,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取办理子流程定义。
-     *
+     * 
      * @return 办理子流程定义。
      */
     public String getAssignSubProcDef() {
@@ -247,7 +252,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取业务行为。
-     *
+     * 
      * @return 业务行为。
      */
     public String getAction() {
@@ -256,7 +261,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取截止日期。
-     *
+     * 
      * @return 截止日期。
      */
     public String getDueDate() {
@@ -265,7 +270,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取认领。
-     *
+     * 
      * @return 认领。
      */
     public String getClaim() {
@@ -274,7 +279,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取可转发。
-     *
+     * 
      * @return 可转发。
      */
     public String getForwardable() {
@@ -283,7 +288,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取优先级。
-     *
+     * 
      * @return 优先级。
      */
     public String getPriority() {
@@ -292,7 +297,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取形状。
-     *
+     * 
      * @return 形状。
      */
     public Shape getShape() {
@@ -301,7 +306,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取所属流程定义。
-     *
+     * 
      * @return 所属流程定义。
      */
     public ProcDef getProcDef() {
@@ -310,7 +315,7 @@ public class NodeDef implements Serializable {
 
     /**
      * 获取上级节点定义。
-     *
+     * 
      * @return 上级节点定义。
      */
     public NodeDef getParentNodeDef() {

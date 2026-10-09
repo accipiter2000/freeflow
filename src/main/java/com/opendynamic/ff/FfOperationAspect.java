@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfOperationService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.vo.FfResult;
@@ -47,8 +46,6 @@ public class FfOperationAspect {
     private FfService ffService;
     @Autowired
     private FfOperationService ffOperationService;
-    @Autowired
-    private FfHelper ffHelper;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
 
@@ -84,6 +81,8 @@ public class FfOperationAspect {
             String memo = (String) expression.getValue(simpleContext);
             expression = expressionFactory.createValueExpression(simpleContext, annotation.operator(), String.class);
             String operator = (String) expression.getValue(simpleContext);
+            expression = expressionFactory.createValueExpression(simpleContext, annotation.operatorName(), String.class);
+            String operatorName = (String) expression.getValue(simpleContext);
             if (StringUtils.isNotEmpty(taskId) && StringUtils.isEmpty(nodeId)) {
                 Task task = ffService.loadTask(taskId);
                 nodeId = task.getNodeId();
@@ -101,7 +100,7 @@ public class FfOperationAspect {
             taskId = StringUtils.isNotEmpty(taskId) ? taskId : null;
             memo = StringUtils.isNotEmpty(memo) ? memo : null;
             operator = StringUtils.isNotEmpty(operator) ? operator : null;
-            String operatorName = ffHelper.getUserName(operator);
+            operatorName = StringUtils.isNotEmpty(operatorName) ? operatorName : null;
 
             ffOperationService.init(signature.getName(), procId, nodeId, taskId, memo, operator, operatorName);// 初始化ffOperation。
         }

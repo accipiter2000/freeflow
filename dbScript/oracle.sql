@@ -29,8 +29,7 @@ create table FF_PROC_DEF
   UPDATE_DATE_                  TIMESTAMP(6),
   OPERATOR_ID_                  VARCHAR2(40),
   OPERATOR_NAME_                VARCHAR2(60)
-)
-;
+);
 comment on table FF_PROC_DEF
   is '流程定义';
 comment on column FF_PROC_DEF.PROC_DEF_ID_
@@ -106,8 +105,7 @@ create table FF_ADJUST_PROC_DEF
   UPDATE_DATE_                  TIMESTAMP(6),
   OPERATOR_ID_                  VARCHAR2(40),
   OPERATOR_NAME_                VARCHAR2(60)
-)
-;
+);
 comment on table FF_ADJUST_PROC_DEF
   is '调整流程定义';
 comment on column FF_ADJUST_PROC_DEF.ADJUST_PROC_DEF_ID_
@@ -153,8 +151,7 @@ create table FF_DELEGATE
   DELEGATOR_NAME_ VARCHAR2(60),
   START_DATE_     TIMESTAMP(6),
   END_DATE_       TIMESTAMP(6)
-)
-;
+);
 comment on table FF_DELEGATE
   is '代理';
 comment on column FF_DELEGATE.DELEGATE_ID_
@@ -196,8 +193,7 @@ create table FF_PROC
   PROC_END_DATE_            TIMESTAMP(6),
   PROC_STATUS_              VARCHAR2(20) not null,
   CREATION_DATE_            TIMESTAMP(6) not null
-)
-;
+);
 comment on table FF_PROC
   is '流程';
 comment on column FF_PROC.PROC_ID_
@@ -279,8 +275,7 @@ create table FF_NODE
   ISOLATE_SUB_PROC_STATUS_      VARCHAR2(60),
   NODE_STATUS_                  VARCHAR2(20) not null,
   CREATION_DATE_                TIMESTAMP(6) not null
-)
-;
+);
 comment on table FF_NODE
   is '节点';
 comment on column FF_NODE.NODE_ID_
@@ -365,8 +360,6 @@ alter table FF_NODE
 alter table FF_NODE
   add constraint FK_FF_NODE_PROC_DEF foreign key (SUB_PROC_DEF_ID_)
   references FF_PROC_DEF (PROC_DEF_ID_);
-create index IX_FF_NODE_CODE on FF_NODE (NODE_CODE_);
-create index IX_FF_NODE_PROC_ID on FF_NODE (PROC_ID_);
 
 prompt
 prompt Creating table FF_OPERATION
@@ -384,8 +377,7 @@ create table FF_OPERATION
   OPERATOR_NAME_    VARCHAR2(60),
   OPERATION_DATE_   TIMESTAMP(6) not null,
   OPERATION_STATUS_ VARCHAR2(20) not null
-)
-;
+);
 comment on table FF_OPERATION
   is '操作';
 comment on column FF_OPERATION.OPERATION_ID_
@@ -460,8 +452,7 @@ create table FF_NODE_OP
   ISOLATE_SUB_PROC_STATUS_      VARCHAR2(60),
   NODE_STATUS_                  VARCHAR2(20),
   CREATION_DATE_                TIMESTAMP(6)
-)
-;
+);
 comment on table FF_NODE_OP
   is '节点操作';
 comment on column FF_NODE_OP.NODE_OP_ID_
@@ -566,8 +557,7 @@ create table FF_NODE_VAR
   VALUE_         VARCHAR2(3000),
   OBJ_           BLOB,
   CREATION_DATE_ TIMESTAMP(6) not null
-)
-;
+);
 comment on table FF_NODE_VAR
   is '节点变量';
 comment on column FF_NODE_VAR.NODE_VAR_ID_
@@ -608,8 +598,7 @@ create table FF_NODE_VAR_OP
   VALUE_            VARCHAR2(3000),
   OBJ_              BLOB,
   CREATION_DATE_    TIMESTAMP(6)
-)
-;
+);
 comment on table FF_NODE_VAR_OP
   is '节点变量操作';
 comment on column FF_NODE_VAR_OP.NODE_VAR_OP_ID_
@@ -655,8 +644,7 @@ create table FF_OPERATION_FOLLOW_UP
   OPERATION_ID_           VARCHAR2(40) not null,
   FOLLOW_UP_OPERATION_ID_ VARCHAR2(40) not null,
   OPERATION_DATE_         TIMESTAMP(6) not null
-)
-;
+);
 comment on table FF_OPERATION_FOLLOW_UP
   is '操作后续';
 comment on column FF_OPERATION_FOLLOW_UP.OPERATION_FOLLOW_UP_ID_
@@ -704,8 +692,7 @@ create table FF_PROC_OP
   PROC_END_DATE_            TIMESTAMP(6),
   PROC_STATUS_              VARCHAR2(20),
   CREATION_DATE_            TIMESTAMP(6)
-)
-;
+);
 comment on table FF_PROC_OP
   is '流程操作';
 comment on column FF_PROC_OP.PROC_OP_ID_
@@ -784,8 +771,7 @@ create table FF_TASK
   NEXT_CANDIDATE_     CLOB,
   TASK_STATUS_        VARCHAR2(20) not null,
   CREATION_DATE_      TIMESTAMP(6) not null
-)
-;
+);
 comment on table FF_TASK
   is '任务';
 comment on column FF_TASK.TASK_ID_
@@ -832,7 +818,6 @@ alter table FF_TASK
 alter table FF_TASK
   add constraint FK_FF_TASK_PARENT foreign key (PREVIOUS_TASK_ID_)
   references FF_TASK (TASK_ID_);
-create index IX_FF_TASK_NODE_ID on FF_TASK (NODE_ID_);
 
 prompt
 prompt Creating table FF_TASK_OP
@@ -864,8 +849,7 @@ create table FF_TASK_OP
   NEXT_CANDIDATE_     CLOB,
   TASK_STATUS_        VARCHAR2(20),
   CREATION_DATE_      TIMESTAMP(6)
-)
-;
+);
 comment on table FF_TASK_OP
   is '任务操作';
 comment on column FF_TASK_OP.TASK_OP_ID_

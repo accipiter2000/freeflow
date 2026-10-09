@@ -55,7 +55,6 @@ import com.opendynamic.ff.query.ProcQuery;
 import com.opendynamic.ff.query.TaskQuery;
 import com.opendynamic.ff.service.FfAdjustProcDefService;
 import com.opendynamic.ff.service.FfDelegateService;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfNodeVarService;
 import com.opendynamic.ff.service.FfOperationService;
@@ -100,7 +99,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
     private static List<ProcDef> procDefList;
     private static Queue<ProcDef> adjustProcDefList = new LinkedList<>();
-    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>() ;
+    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>();
     private static Map<String, Object> internalServiceMap = new HashMap<>();
     private static Map<String, Object> externalServiceMap = new HashMap<>();
 
@@ -120,8 +119,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     private FfDelegateService ffDelegateService;
     @Autowired
     private FfOperationService ffOperationService;
-    @Autowired
-    private FfHelper ffHelper;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -148,7 +145,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         initNodeHandler();
     }
 
-    public void  initNodeHandler(){
+    public void initNodeHandler() {
         System.out.println("Initializing node handler...");
 
         Map<String, NodeHandler> nodeHandlerMap = applicationContext.getBeansOfType(NodeHandler.class);// 装配节点处理器
@@ -283,7 +280,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    public boolean deployProcDef(String procDefId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, String operatorId, String operatorName) {
+    public boolean deployProcDef(String procDefId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, FfUser operator) {
         RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
         runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
         runtimeTypeAdapterFactory.registerSubtype(OvalShape.class, "oval");
@@ -331,7 +328,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             procDefDiagramFileLength = baos.size();
         }
 
-        ffProcDefService.insertProcDef(procDefId, _procDef.getProcDefCode(), _procDef.getProcDefName(), _procDef.getProcDefCat(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), _procDef.getMemo(), _procDef.getExtAttr1(), _procDef.getExtAttr2(), _procDef.getExtAttr3(), _procDef.getExtAttr4(), _procDef.getExtAttr5(), _procDef.getExtAttr6(), _procDef.getExtAttr7(), _procDef.getExtAttr8(), FfService.PROC_DEF_STATUS_ACTIVE, new Date(), new Date(), operatorId, operatorName);
+        ffProcDefService.insertProcDef(procDefId, _procDef.getProcDefCode(), _procDef.getProcDefName(), _procDef.getProcDefCat(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), _procDef.getMemo(), _procDef.getExtAttr1(), _procDef.getExtAttr2(), _procDef.getExtAttr3(), _procDef.getExtAttr4(), _procDef.getExtAttr5(), _procDef.getExtAttr6(), _procDef.getExtAttr7(), _procDef.getExtAttr8(), FfService.PROC_DEF_STATUS_ACTIVE, new Date(), new Date(), operator.getUserId(), operator.getUserName());
 
         refreshProcDefCache();
 
@@ -339,8 +336,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    public boolean updateProcDefDiagramFile(String procDefId, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, Integer procDefDiagramWidth, Integer procDefDiagramHeight, String operatorId, String operatorName) {
-        if (ffProcDefService.updateProcDefDiagramFile(procDefId, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, procDefDiagramWidth, procDefDiagramHeight, new Date(), operatorId, operatorName) == 1) {
+    public boolean updateProcDefDiagramFile(String procDefId, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, Integer procDefDiagramWidth, Integer procDefDiagramHeight, FfUser operator) {
+        if (ffProcDefService.updateProcDefDiagramFile(procDefId, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, procDefDiagramWidth, procDefDiagramHeight, new Date(), operator.getUserId(), operator.getUserName()) == 1) {
             refreshProcDefCache();
             return true;
         }
@@ -349,8 +346,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    public boolean disableProcDef(String procDefId, String operatorId, String operatorName) {
-        if (ffProcDefService.disableProcDef(procDefId, new Date(), operatorId, operatorName) == 1) {
+    public boolean disableProcDef(String procDefId, FfUser operator) {
+        if (ffProcDefService.disableProcDef(procDefId, new Date(), operator.getUserId(), operator.getUserName()) == 1) {
             refreshProcDefCache();
             return true;
         }
@@ -359,8 +356,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    public boolean enableProcDef(String procDefId, String operatorId, String operatorName) {
-        if (ffProcDefService.enableProcDef(procDefId, new Date(), operatorId, operatorName) == 1) {
+    public boolean enableProcDef(String procDefId, FfUser operator) {
+        if (ffProcDefService.enableProcDef(procDefId, new Date(), operator.getUserId(), operator.getUserName()) == 1) {
             refreshProcDefCache();
             return true;
         }
@@ -369,8 +366,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    public boolean deleteProcDef(String procDefId, String operatorId, String operatorName) {
-        if (ffProcDefService.deleteProcDef(procDefId, new Date(), operatorId, operatorName) == 1) {
+    public boolean deleteProcDef(String procDefId, FfUser operator) {
+        if (ffProcDefService.deleteProcDef(procDefId, new Date(), operator.getUserId(), operator.getUserName()) == 1) {
             refreshProcDefCache();
             return true;
         }
@@ -379,8 +376,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(nodeId = "${branchId}", operator = "${operatorId}")
-    public FfResult adjustBranchProcDef(String branchId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, String operatorId, String operatorName) {
+    @FfOperation(nodeId = "${branchId}", operator = "${operator.userId}", operatorName = "${operator.userName}")
+    public FfResult adjustBranchProcDef(String branchId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, FfUser operator) {
         FfResult ffResult = new FfResult();
 
         Node branch = loadNode(branchId);
@@ -389,7 +386,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         if (StringUtils.isEmpty(procDef)) {
             if (adjustSubProcDefId != null) {
                 ffNodeService.updateBranchAdjustSubProcDefId(branchId, null);
-                ffAdjustProcDefService.deleteAdjustProcDef(adjustSubProcDefId, new Date(), operatorId, operatorName);
+                ffAdjustProcDefService.deleteAdjustProcDef(adjustSubProcDefId, new Date(), operator.getUserId(), operator.getUserName());
                 return ffResult;
             }
             else {
@@ -446,19 +443,19 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
         if (adjustSubProcDefId == null) {
             adjustSubProcDefId = OdUtils.getUuid();
-            ffAdjustProcDefService.insertAdjustProcDef(adjustSubProcDefId, branch.getSubProcDefId(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), new Date(), new Date(), operatorId, operatorName);
+            ffAdjustProcDefService.insertAdjustProcDef(adjustSubProcDefId, branch.getSubProcDefId(), procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), new Date(), new Date(), operator.getUserId(), operator.getUserName());
             ffNodeService.updateBranchAdjustSubProcDefId(branchId, adjustSubProcDefId);
         }
         else {
-            ffAdjustProcDefService.updateAdjustProcDef(adjustSubProcDefId, procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), new Date(), operatorId, operatorName);
+            ffAdjustProcDefService.updateAdjustProcDef(adjustSubProcDefId, procDef, procDefDiagramFile, procDefDiagramFileName, procDefDiagramFileLength, _procDef.getProcDefDiagramWidth(), _procDef.getProcDefDiagramHeight(), new Date(), operator.getUserId(), operator.getUserName());
         }
 
         return ffResult;
     }
 
     @Override
-    public boolean deleteAdjustProcDef(String adjustProcDefId, Date updateDate, String operatorId, String operatorName) {
-        return ffAdjustProcDefService.deleteAdjustProcDef(adjustProcDefId, updateDate, operatorId, operatorName) == 1;
+    public boolean deleteAdjustProcDef(String adjustProcDefId, Date updateDate, FfUser operator) {
+        return ffAdjustProcDefService.deleteAdjustProcDef(adjustProcDefId, updateDate, operator.getUserId(), operator.getUserName()) == 1;
     }
 
     @Override
@@ -542,13 +539,13 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
                 // 计算激活的办理人，为上一次该节点任务的办理人。
                 List<Task> taskList = createTaskQuery().setNodeId(previousNode.getNodeId()).queryForObjectList();
-                List<String> assigneeList = new ArrayList<>();
+                List<FfUser> assigneeList = new ArrayList<>();
                 for (Task task : taskList) {
-                    assigneeList.add(task.getAssignee());
+                    assigneeList.add(new FfUser(task.getAssignee(), task.getAssigneeName()));
                 }
                 RunningNodeDef runningNodeDef = new RunningNodeDef(previousNodeDef, null);
                 runningNodeDef.setSubProcPath(subProcPath);
-                runningNodeDef.setAssigneeList(getAssigneeList(StringUtils.join(assigneeList, ",")));
+                runningNodeDef.setAssigneeList(assigneeList);
                 nextRunningNodeDefList.add(runningNodeDef);
             }
             else {// 非完成返回节点，继续处理其上一级节点。
@@ -782,8 +779,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
@@ -795,15 +792,15 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult startProcByProcDefCode(String procDefCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult startProcByProcDefCode(String procDefCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         ProcDef procDef = loadProcDefByCode(procDefCode);
         return startProc(procDef, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, nodeVarMap, candidateList);
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult startIsolateSubProc(String isolateSubProcNodeId, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         if (nodeVarMap == null) {
             nodeVarMap = new HashMap<>();
         }
@@ -839,7 +836,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         return ffResult;
     }
 
-    private FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId) {
+    private FfResult startProc(ProcDef procDef, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId) {
         FfResult ffResult = new FfResult();
 
         if (procDef == null || procDef.getProcDefStatus().equals(FfService.PROC_DEF_STATUS_DISABLE)) {
@@ -847,7 +844,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         }
 
         String procId = OdUtils.getUuid();
-        ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
+        ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser.getUserId(), procStartUser.getUserName(), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
         Proc proc = createProcQuery().setProcId(procId).queryForObject();
         ffResult.addCreateProc(proc);
         ffNodeService.insertNode(procId, null, procId, null, null, procDef.getProcDefId(), null, FfService.NODE_TYPE_BRANCH, null, procDef.getProcDefName(), null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, null, null, null, FfService.BOOLEAN_FALSE, FfService.BOOLEAN_FALSE, "5", null, null, null, null, null, null, null, FfService.NODE_STATUS_ACTIVE, new Date());
@@ -872,8 +869,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
@@ -885,24 +882,24 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult startProcToNodeByProcDefCode(String procDefCode, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult startProcToNodeByProcDefCode(String procDefCode, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         ProcDef procDef = loadProcDefByCode(procDefCode);
         return startProcToNode(procDef, subProcPath, nodeCode, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, nodeVarMap, candidateList);
     }
 
-    private FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId) {
+    private FfResult startProcToNode(ProcDef procDef, String subProcPath, String nodeCode, String bizId, String bizType, String bizCode, String bizName, String bizDesc, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId) {
         if (procDef == null || procDef.getProcDefStatus().equals(FfService.PROC_DEF_STATUS_DISABLE)) {
             throw new RuntimeException("errors.procDefIsNotActive");
         }
 
         String procId = OdUtils.getUuid();
-        ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser, ffHelper.getUserName(procStartUser), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
+        ffProcService.insertProc(procId, procDef.getProcDefId(), null, isolateSubProcNodeId, bizId, bizType, bizCode, bizName, bizDesc, procStartUser.getUserId(), procStartUser.getUserName(), null, null, null, FfService.PROC_STATUS_ACTIVE, new Date());// 新增主流程
 
         return startProcToNode(procId, subProcPath, nodeCode, procStartUser, nodeVarMap, candidateList, isolateSubProcNodeId, false);
     }
 
-    private FfResult startProcToNode(String procId, String subProcPath, String nodeCode, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId, boolean restart) {
+    private FfResult startProcToNode(String procId, String subProcPath, String nodeCode, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList, String isolateSubProcNodeId, boolean restart) {
         FfResult ffResult = new FfResult();
 
         Proc proc = createProcQuery().setProcId(procId).queryForObject();
@@ -995,8 +992,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${procStartUser}")
-    public FfResult restartProcToNode(String procId, String subProcPath, String nodeCode, String procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
+    @FfOperation(operator = "${procStartUser.userId}", operatorName = "${procStartUser.userName}")
+    public FfResult restartProcToNode(String procId, String subProcPath, String nodeCode, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList) {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
@@ -1188,16 +1185,16 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor}")
-    public FfResult suspendProc(String procId, String taskId, String executor) {
+    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult suspendProc(String procId, String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_SUSPEND);
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(ffHelper.getUserName(executor));
+            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_SUSPEND);
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_SUSPEND);
             ffResult.addSuspendTask(task);
@@ -1205,23 +1202,23 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         List<Node> nodeList = createNodeQuery().setProcId(procId).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObjectList();
         for (Node node : nodeList) {
             Date COMPLETE_DATE_ = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.NODE_STATUS_SUSPEND);
-            node.setNodeEndUser(executor);
-            node.setNodeEndUserName(ffHelper.getUserName(executor));
+            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.NODE_STATUS_SUSPEND);
+            node.setNodeEndUser(executor.getUserId());
+            node.setNodeEndUserName(executor.getUserName());
             node.setNodeEndDate(COMPLETE_DATE_);
             node.setNodeStatus(FfService.NODE_STATUS_SUSPEND);
             ffResult.addSuspendNode(node);
         }
 
-        ffProcService.updateProcStatus(procId, executor, ffHelper.getUserName(executor), new Date(), FfService.PROC_STATUS_SUSPEND);
+        ffProcService.updateProcStatus(procId, executor.getUserId(), executor.getUserName(), new Date(), FfService.PROC_STATUS_SUSPEND);
         ffResult.addSuspendProc(loadProc(procId));
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor}")
-    public FfResult activateProc(String procId, String taskId, String executor) {
+    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult activateProc(String procId, String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_SUSPEND).queryForObjectList();
@@ -1244,16 +1241,16 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor}")
-    public FfResult completeProc(String procId, String taskId, String executor) {
+    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult completeProc(String procId, String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_COMPLETE);
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(ffHelper.getUserName(executor));
+            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_COMPLETE);
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
             ffResult.addCompleteTask(task);
@@ -1261,31 +1258,31 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         List<Node> nodeList = createNodeQuery().setProcId(procId).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObjectList();
         for (Node node : nodeList) {
             Date COMPLETE_DATE_ = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.NODE_STATUS_COMPLETE);
-            node.setNodeEndUser(executor);
-            node.setNodeEndUserName(ffHelper.getUserName(executor));
+            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.NODE_STATUS_COMPLETE);
+            node.setNodeEndUser(executor.getUserId());
+            node.setNodeEndUserName(executor.getUserName());
             node.setNodeEndDate(COMPLETE_DATE_);
             node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
             ffResult.addCompleteNode(node);
         }
 
-        ffProcService.updateProcStatus(procId, executor, ffHelper.getUserName(executor), new Date(), FfService.PROC_STATUS_COMPLETE);
-        ffResult.addSuspendProc(loadProc(procId));
+        ffProcService.updateProcStatus(procId, executor.getUserId(), executor.getUserName(), new Date(), FfService.PROC_STATUS_COMPLETE);
+        ffResult.addCompleteProc(loadProc(procId));
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor}")
-    public FfResult terminateProc(String procId, String taskId, String executor) {
+    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult terminateProc(String procId, String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(ffHelper.getUserName(executor));
+            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
             ffResult.addTerminateTask(task);
@@ -1293,23 +1290,23 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         List<Node> nodeList = createNodeQuery().setProcId(procId).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObjectList();
         for (Node node : nodeList) {
             Date COMPLETE_DATE_ = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.NODE_STATUS_TERMINATE);
-            node.setNodeEndUser(executor);
-            node.setNodeEndUserName(ffHelper.getUserName(executor));
+            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.NODE_STATUS_TERMINATE);
+            node.setNodeEndUser(executor.getUserId());
+            node.setNodeEndUserName(executor.getUserName());
             node.setNodeEndDate(COMPLETE_DATE_);
             node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
             ffResult.addTerminateNode(node);
         }
 
-        ffProcService.updateProcStatus(procId, executor, ffHelper.getUserName(executor), new Date(), FfService.PROC_STATUS_TERMINATE);
+        ffProcService.updateProcStatus(procId, executor.getUserId(), executor.getUserName(), new Date(), FfService.PROC_STATUS_TERMINATE);
         ffResult.addTerminateProc(loadProc(procId));
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(procId = "${procId}", operator = "${executor}")
-    public FfResult deleteProc(String procId, String executor) {
+    @FfOperation(procId = "${procId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult deleteProc(String procId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Node> nodeList = createChildNodeQuery().setNodeId(procId).setRecursive(true).setIncludeSelf(true).queryForObjectList();
@@ -1346,8 +1343,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(operator = "${executor}")
-    public FfResult insertNode(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, String executor) {
+    @FfOperation(operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult insertNode(NodeDef nodeDef, Node branchNode, String previousNodeIds, CandidateList candidateList, FfUser executor) {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
@@ -1357,8 +1354,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult activateNode(String nodeId, CandidateList candidateList, String executor) {
+    @FfOperation(nodeId = "${nodeId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult activateNode(String nodeId, CandidateList candidateList, FfUser executor) {
         if (candidateList == null) {
             candidateList = new CandidateList();
         }
@@ -1369,8 +1366,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult completeNode(String nodeId, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor) {
+    @FfOperation(nodeId = "${nodeId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult completeNode(String nodeId, Map<String, Object> branchNodeVar, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1382,9 +1379,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         List<Task> taskList = createTaskQuery().setNodeId(nodeId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_COMPLETE);
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(ffHelper.getUserName(executor));
+            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_COMPLETE);
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
             ffResult.addCompleteTask(task);
@@ -1397,8 +1394,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult terminateNode(String nodeId, CandidateList candidateList, String executor) {
+    @FfOperation(nodeId = "${nodeId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult terminateNode(String nodeId, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1409,9 +1406,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         List<Task> taskList = createTaskQuery().setNodeId(nodeId).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor, ffHelper.getUserName(executor), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(ffHelper.getUserName(executor));
+            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
             ffResult.addTerminateTask(task);
@@ -1435,8 +1432,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         return ffResult;
     }
 
-    @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult deleteNode(String nodeId, String executor) {
+    @FfOperation(nodeId = "${nodeId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult deleteNode(String nodeId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         List<Node> childNodeList = createChildNodeQuery().setNodeId(nodeId).setRecursive(true).setIncludeSelf(true).queryForObjectList();
@@ -1497,8 +1494,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(procId = "${task.procId}", nodeId = "${task.nodeId}", taskId = "${task.taskId}", operator = "${executor}")
-    public FfResult insertTask(Task task, String executor) {
+    @FfOperation(procId = "${task.procId}", nodeId = "${task.nodeId}", taskId = "${task.taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult insertTask(Task task, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (ffTaskService.insertTask(task.getTaskId(), task.getNodeId(), task.getPreviousTaskId(), task.getTaskType(), task.getAssignee(), task.getAssigneeName(), task.getAction(), task.getDueDate(), task.getClaim(), task.getForwardable(), task.getPriority(), task.getForwardStatus(), task.getTaskEndUser(), task.getTaskEndUserName(), task.getTaskEndDate(), task.getNextCandidate(), task.getTaskStatus(), task.getCreationDate()) == 1) {
@@ -1509,29 +1506,29 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult updateTaskAssignee(String taskId, String assignee, String assigneeName, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult updateTaskAssignee(String taskId, FfUser assignee, FfUser executor) {
         FfResult ffResult = new FfResult();
 
-        ffTaskService.updateTaskAssignee(taskId, assignee, assigneeName);
+        ffTaskService.updateTaskAssignee(taskId, assignee.getUserId(), assignee.getUserName());
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult suspendTask(String taskId, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult suspendTask(String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
-        ffTaskService.updateTaskStatus(taskId, executor, ffHelper.getUserName(executor), new Date(), FfService.TASK_STATUS_SUSPEND);
+        ffTaskService.updateTaskStatus(taskId, executor.getUserId(), executor.getUserName(), new Date(), FfService.TASK_STATUS_SUSPEND);
         ffResult.addSuspendTask(loadTask(taskId));
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult activateTask(String taskId, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult activateTask(String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         ffTaskService.updateTaskStatus(taskId, FfService.TASK_STATUS_ACTIVE);
@@ -1541,19 +1538,19 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult terminateTask(String taskId, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult terminateTask(String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
-        ffTaskService.updateTaskStatus(taskId, executor, ffHelper.getUserName(executor), new Date(), FfService.TASK_STATUS_TERMINATE);
+        ffTaskService.updateTaskStatus(taskId, executor.getUserId(), executor.getUserName(), new Date(), FfService.TASK_STATUS_TERMINATE);
         ffResult.addTerminateTask(loadTask(taskId));
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult deleteTask(String taskId, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult deleteTask(String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         ffResult.addDeleteTask(loadTask(taskId));
@@ -1563,8 +1560,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult completeTask(String taskId, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult completeTask(String taskId, Map<String, Object> branchNodeVar, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1582,14 +1579,13 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             throw new RuntimeException("errors.claimRequired");
         }
 
-        if (task.getAssignee().equals(executor) || isDelegator(task.getAssignee(), executor)) {
+        if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             updateNodeVar(task.getParentNodeId(), branchNodeVar);// 更新当前分支节点变量
 
-            String executorName = ffHelper.getUserName(executor);
             Date completeDate = new Date();
-            ffTaskService.updateTaskStatus(taskId, executor, executorName, completeDate, candidateList.toJson(), FfService.TASK_STATUS_COMPLETE);// 完成任务
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(executorName);
+            ffTaskService.updateTaskStatus(taskId, executor.getUserId(), executor.getUserName(), completeDate, candidateList.toJson(), FfService.TASK_STATUS_COMPLETE);// 完成任务
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(completeDate);
             task.setNextCandidate(candidateList.toJson());
             task.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
@@ -1634,9 +1630,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
                 List<Task> remainActiveTaskList = createTaskQuery().setNodeId(node.getNodeId()).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
                 for (Task remainActiveTask : remainActiveTaskList) {
-                    ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), executor, executorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                    remainActiveTask.setTaskEndUser(executor);
-                    remainActiveTask.setTaskEndUserName(executorName);
+                    ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), executor.getUserId(), executor.getUserName(), completeDate, FfService.TASK_STATUS_TERMINATE);
+                    remainActiveTask.setTaskEndUser(executor.getUserId());
+                    remainActiveTask.setTaskEndUserName(executor.getUserName());
                     remainActiveTask.setTaskEndDate(completeDate);
                     remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                     ffResult.addTerminateTask(remainActiveTask);
@@ -1656,8 +1652,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult completeTaskToNode(String taskId, String subProcPath, String nodeCode, Map<String, Object> branchNodeVar, CandidateList candidateList, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult completeTaskToNode(String taskId, String subProcPath, String nodeCode, Map<String, Object> branchNodeVar, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1675,14 +1671,13 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             throw new RuntimeException("errors.claimRequired");
         }
 
-        if (task.getAssignee().equals(executor) || isDelegator(task.getAssignee(), executor)) {
+        if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             updateNodeVar(task.getParentNodeId(), branchNodeVar);// 更新当前分支节点变量
 
-            String executorName = ffHelper.getUserName(executor);
             Date completeDate = new Date();
-            ffTaskService.updateTaskStatus(taskId, executor, executorName, completeDate, candidateList.toJson(), FfService.TASK_STATUS_COMPLETE);// 完成任务
-            task.setTaskEndUser(executor);
-            task.setTaskEndUserName(executorName);
+            ffTaskService.updateTaskStatus(taskId, executor.getUserId(), executor.getUserName(), completeDate, candidateList.toJson(), FfService.TASK_STATUS_COMPLETE);// 完成任务
+            task.setTaskEndUser(executor.getUserId());
+            task.setTaskEndUserName(executor.getUserName());
             task.setTaskEndDate(completeDate);
             task.setNextCandidate(candidateList.toJson());
             task.setTaskStatus(FfService.TASK_STATUS_COMPLETE);
@@ -1714,20 +1709,19 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
                 List<Task> remainActiveTaskList = createTaskQuery().setNodeId(node.getNodeId()).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
                 for (Task remainActiveTask : remainActiveTaskList) {
-                    ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), executor, executorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                    remainActiveTask.setTaskEndUser(executor);
-                    remainActiveTask.setTaskEndUserName(executorName);
+                    ffTaskService.updateTaskStatus(remainActiveTask.getTaskId(), executor.getUserId(), executor.getUserName(), completeDate, FfService.TASK_STATUS_TERMINATE);
+                    remainActiveTask.setTaskEndUser(executor.getUserId());
+                    remainActiveTask.setTaskEndUserName(executor.getUserName());
                     remainActiveTask.setTaskEndDate(completeDate);
                     remainActiveTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                     ffResult.addTerminateTask(remainActiveTask);
                 }
             }
 
-            String nodeEndUserName = ffHelper.getUserName(executor);
             Date nodeEndDate = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_COMPLETE);// 完成节点
-            node.setNodeEndUser(executor);
-            node.setNodeEndUserName(nodeEndUserName);
+            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), nodeEndDate, FfService.NODE_STATUS_COMPLETE);// 完成节点
+            node.setNodeEndUser(executor.getUserId());
+            node.setNodeEndUserName(executor.getUserName());
             node.setNodeEndDate(nodeEndDate);
             node.setNodeStatus(FfService.NODE_STATUS_COMPLETE);
             ffResult.addCompleteNode(node);
@@ -1839,22 +1833,22 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         Node node;
         for (int i = index; i >= 0; i--) {
             node = parentNodeList.get(i);
-            String nodeEndUserName = ffHelper.getUserName(operationContext.getCurrentExecutor());
+            FfUser currentExecutor = operationContext.getCurrentExecutor();
             Date nodeEndDate = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), nodeEndUserName, nodeEndDate, nodeStatus);// 完成节点
-            node.setNodeEndUser(operationContext.getCurrentExecutor());
-            node.setNodeEndUserName(nodeEndUserName);
+            ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), nodeEndDate, nodeStatus);// 完成节点
+            node.setNodeEndUser(currentExecutor.getUserId());
+            node.setNodeEndUserName(currentExecutor.getUserName());
             node.setNodeEndDate(nodeEndDate);
             node.setNodeStatus(nodeStatus);
-            ffResult.addCompleteNode(node);
+            ffResult.addTerminateNode(node);
         }
 
         return ffResult;
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult claimTask(String taskId, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult claimTask(String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         Task task = loadTask(taskId);
@@ -1867,7 +1861,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
         ffTaskService.updateTaskClaim(taskId);
 
-        String executorName = ffHelper.getUserName(executor);
         Date completeDate = new Date();
         List<Task> activeTaskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task activeTask : activeTaskList) {
@@ -1875,9 +1868,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 continue;
             }
 
-            ffTaskService.updateTaskStatus(activeTask.getTaskId(), executor, executorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-            activeTask.setTaskEndUser(executor);
-            activeTask.setTaskEndUserName(executorName);
+            ffTaskService.updateTaskStatus(activeTask.getTaskId(), executor.getUserId(), executor.getUserName(), completeDate, FfService.TASK_STATUS_TERMINATE);
+            activeTask.setTaskEndUser(executor.getUserId());
+            activeTask.setTaskEndUserName(executor.getUserName());
             activeTask.setTaskEndDate(completeDate);
             activeTask.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
             ffResult.addTerminateTask(activeTask);
@@ -1887,8 +1880,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult forwardTask(String taskId, List<String> assigneeList, String action, Date dueDate, String claim, String forwardable, Integer priority, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult forwardTask(String taskId, List<FfUser> assigneeList, String action, Date dueDate, String claim, String forwardable, Integer priority, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         Task task = loadTask(taskId);
@@ -1902,7 +1895,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             throw new RuntimeException("errors.taskHasBeenExecuted");
         }
 
-        if (task.getAssignee().equals(executor) || isDelegator(task.getAssignee(), executor)) {
+        if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             Node node = loadNode(task.getNodeId());
             Node branchNode = loadNode(node.getParentNodeId());
             Proc proc = loadProc(node.getProcId());
@@ -1921,14 +1914,14 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             // JUEL解析
             ValueExpression expression;
             // 计算办理人
-            for (String assignee : assigneeList) {
+            for (FfUser assignee : assigneeList) {
                 Task forwardTask = new Task();
                 forwardTask.setTaskId(OdUtils.getUuid());
                 forwardTask.setNodeId(task.getNodeId());
                 forwardTask.setPreviousTaskId(taskId);
                 forwardTask.setTaskType(FfService.TASK_TYPE_FORWARD_TASK);
-                forwardTask.setAssignee(assignee);
-                forwardTask.setAssigneeName(ffHelper.getUserName(assignee));
+                forwardTask.setAssignee(assignee.getUserId());
+                forwardTask.setAssigneeName(assignee.getUserName());
                 forwardTask.setAction(action);
                 forwardTask.setDueDate(dueDate);
                 forwardTask.setClaim(claim);
@@ -1959,8 +1952,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult rejectTask(String taskId, CandidateList candidateList, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult rejectTask(String taskId, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -1978,7 +1971,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             throw new RuntimeException("errors.taskHasBeenExecuted");
         }
 
-        if (task.getAssignee().equals(executor) || isDelegator(task.getAssignee(), executor)) {
+        if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             Node node = createNodeQuery().setNodeId(task.getNodeId()).queryForObject();
             List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
 
@@ -2006,11 +1999,10 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             }
             for (Task _task : taskList) {// 设置其它任务状态为异常完成
                 if (_task.getTaskStatus().equals(FfService.TASK_STATUS_ACTIVE)) {
-                    String executorName = ffHelper.getUserName(executor);
                     Date completeDate = new Date();
-                    ffTaskService.updateTaskStatus(_task.getTaskId(), executor, executorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                    _task.setTaskEndUser(executor);
-                    _task.setTaskEndUserName(executorName);
+                    ffTaskService.updateTaskStatus(_task.getTaskId(), executor.getUserId(), executor.getUserName(), completeDate, FfService.TASK_STATUS_TERMINATE);
+                    _task.setTaskEndUser(executor.getUserId());
+                    _task.setTaskEndUserName(executor.getUserName());
                     _task.setTaskEndDate(completeDate);
                     _task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                     ffResult.addTerminateTask(_task);
@@ -2028,8 +2020,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor}")
-    public FfResult rejectTaskToNode(String taskId, String subProcPath, String nodeCode, CandidateList candidateList, String executor) {
+    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult rejectTaskToNode(String taskId, String subProcPath, String nodeCode, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         if (candidateList == null) {
@@ -2047,7 +2039,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             throw new RuntimeException("errors.taskHasBeenExecuted");
         }
 
-        if (task.getAssignee().equals(executor) || isDelegator(task.getAssignee(), executor)) {
+        if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             Node node = createNodeQuery().setNodeId(task.getNodeId()).queryForObject();
             List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
 
@@ -2075,22 +2067,20 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             }
             for (Task _task : taskList) {// 设置其它任务状态为异常完成
                 if (_task.getTaskStatus().equals(FfService.TASK_STATUS_ACTIVE)) {
-                    String executorName = ffHelper.getUserName(executor);
                     Date completeDate = new Date();
-                    ffTaskService.updateTaskStatus(_task.getTaskId(), executor, executorName, completeDate, FfService.TASK_STATUS_TERMINATE);
-                    _task.setTaskEndUser(executor);
-                    _task.setTaskEndUserName(executorName);
+                    ffTaskService.updateTaskStatus(_task.getTaskId(), executor.getUserId(), executor.getUserName(), completeDate, FfService.TASK_STATUS_TERMINATE);
+                    _task.setTaskEndUser(executor.getUserId());
+                    _task.setTaskEndUserName(executor.getUserName());
                     _task.setTaskEndDate(completeDate);
                     _task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
                     ffResult.addTerminateTask(_task);
                 }
             }
 
-            String nodeEndUserName = ffHelper.getUserName(executor);
             Date nodeEndDate = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor, nodeEndUserName, nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
-            node.setNodeEndUser(executor);
-            node.setNodeEndUserName(nodeEndUserName);
+            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), nodeEndDate, FfService.NODE_STATUS_TERMINATE);// 完成节点
+            node.setNodeEndUser(executor.getUserId());
+            node.setNodeEndUserName(executor.getUserName());
             node.setNodeEndDate(nodeEndDate);
             node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
             ffResult.addTerminateNode(node);
@@ -2106,8 +2096,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     @Override
-    @FfOperation(nodeId = "${nodeId}", operator = "${executor}")
-    public FfResult appendCandidate(String nodeId, CandidateList candidateList, String executor) {
+    @FfOperation(nodeId = "${nodeId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
+    public FfResult appendCandidate(String nodeId, CandidateList candidateList, FfUser executor) {
         FfResult ffResult = new FfResult();
 
         Node node = loadNode(nodeId);
@@ -2262,8 +2252,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             String[] assignees = assigneeString.split(",");
             for (String assignee : assignees) {
                 FfUser ffUser = new FfUser();
-                ffUser.setId(assignee);
-                ffUser.setUserName(ffHelper.getUserName(assignee));
+                ffUser.setUserId(assignee);
+                ffUser.setUserName(null);
                 assigneeList.add(ffUser);
             }
         }

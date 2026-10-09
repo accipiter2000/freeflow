@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opendynamic.OdUtils;
-import com.opendynamic.ff.service.FfHelper;
 import com.opendynamic.ff.service.FfNodeService;
 import com.opendynamic.ff.service.FfProcService;
 import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.service.FfTaskService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
 import com.opendynamic.ff.vo.NodeHandlerOperation;
@@ -35,8 +35,6 @@ public class EndNodeHandler implements NodeHandler {
     private FfNodeService ffNodeService;
     @Autowired
     private FfTaskService ffTaskService;
-    @Autowired
-    private FfHelper ffHelper;
 
     @Override
     public String getNodeType() {
@@ -70,13 +68,14 @@ public class EndNodeHandler implements NodeHandler {
             nodeList = ffService.createChildNodeQuery().setNodeId(subProcBranchNode.getNodeId()).setRecursive(true).setIncludeSelf(false).queryForObjectList();// 从子流程或独立子流程下的分支节点开始查找
         }
 
+        FfUser currentExecutor = operationContext.getCurrentExecutor();
         // 终止任务
         List<Task> taskList = ffService.createTaskQuery().setNodeIdList(OdUtils.collectFromBean(nodeList, "nodeId", String.class)).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
         for (Task task : taskList) {
             Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
-            task.setTaskEndUser(operationContext.getCurrentExecutor());
-            task.setTaskEndUserName(ffHelper.getUserName(operationContext.getCurrentExecutor()));
+            ffTaskService.updateTaskStatus(task.getTaskId(), currentExecutor.getUserId(), currentExecutor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_TERMINATE);
+            task.setTaskEndUser(currentExecutor.getUserId());
+            task.setTaskEndUserName(currentExecutor.getUserName());
             task.setTaskEndDate(COMPLETE_DATE_);
             task.setTaskStatus(FfService.TASK_STATUS_TERMINATE);
             ffResult.addTerminateTask(task);
@@ -85,9 +84,9 @@ public class EndNodeHandler implements NodeHandler {
         for (Node node : nodeList) {
             if (node.getNodeStatus().equals(FfService.NODE_STATUS_ACTIVE)) {
                 Date COMPLETE_DATE_ = new Date();
-                ffNodeService.updateNodeStatus(node.getNodeId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), COMPLETE_DATE_, candidateList.toJson(), FfService.NODE_STATUS_TERMINATE);
-                node.setNodeEndUser(operationContext.getCurrentExecutor());
-                node.setNodeEndUserName(ffHelper.getUserName(operationContext.getCurrentExecutor()));
+                ffNodeService.updateNodeStatus(node.getNodeId(), currentExecutor.getUserId(), currentExecutor.getUserName(), COMPLETE_DATE_, candidateList.toJson(), FfService.NODE_STATUS_TERMINATE);
+                node.setNodeEndUser(currentExecutor.getUserId());
+                node.setNodeEndUserName(currentExecutor.getUserName());
                 node.setNodeEndDate(COMPLETE_DATE_);
                 node.setNodeStatus(FfService.NODE_STATUS_TERMINATE);
                 ffResult.addTerminateNode(node);
@@ -98,7 +97,7 @@ public class EndNodeHandler implements NodeHandler {
             ffResult.addAll(ffService.getNodeHandler(subProcBranchNode.getNodeType()).completeNode(subProcBranchNode, null, candidateList, operationContext));
         }
         else {// 终止流程
-            ffProcService.updateProcStatus(branchNode.getProcId(), operationContext.getCurrentExecutor(), ffHelper.getUserName(operationContext.getCurrentExecutor()), new Date(), FfService.PROC_STATUS_COMPLETE);
+            ffProcService.updateProcStatus(branchNode.getProcId(), currentExecutor.getUserId(), currentExecutor.getUserName(), new Date(), FfService.PROC_STATUS_COMPLETE);
             Proc proc = ffService.loadProc(branchNode.getProcId());
             ffResult.addCompleteProc(proc);
         }

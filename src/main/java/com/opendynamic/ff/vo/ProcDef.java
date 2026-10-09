@@ -61,7 +61,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 依据数据库数据构造。
-     *
+     * 
      * @param data
      *        数据库数据。
      */
@@ -210,7 +210,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义ID。
-     *
+     * 
      * @return 流程定义ID。
      */
     public String getProcDefId() {
@@ -219,7 +219,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义编码。
-     *
+     * 
      * @return 流程定义编码。
      */
     public String getProcDefCode() {
@@ -228,7 +228,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义名称。
-     *
+     * 
      * @return 流程定义名称。
      */
     public String getProcDefName() {
@@ -237,7 +237,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义分类。
-     *
+     * 
      * @return 流程定义分类。
      */
     public String getProcDefCat() {
@@ -246,7 +246,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义模型。
-     *
+     * 
      * @return 流程定义模型。
      */
     public String getProcDefModel() {
@@ -255,7 +255,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义图文件。
-     *
+     * 
      * @return 流程定义图文件。
      */
     public byte[] getProcDefDiagramFile() {
@@ -264,7 +264,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义图文件名称。
-     *
+     * 
      * @return 流程定义图文件名称。
      */
     public String getProcDefDiagramFileName() {
@@ -273,7 +273,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义图文件长度。
-     *
+     * 
      * @return 流程定义图文件长度。
      */
     public int getProcDefDiagramFileLength() {
@@ -282,7 +282,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义图宽度。
-     *
+     * 
      * @return 流程定义图宽度。
      */
     public int getProcDefDiagramWidth() {
@@ -291,7 +291,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义图高度。
-     *
+     * 
      * @return 流程定义图高度。
      */
     public int getProcDefDiagramHeight() {
@@ -300,7 +300,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取备注。
-     *
+     * 
      * @return 备注。
      */
     public String getMemo() {
@@ -309,7 +309,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性1。
-     *
+     * 
      * @return 扩展属性1。
      */
     public String getExtAttr1() {
@@ -318,7 +318,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性2。
-     *
+     * 
      * @return 扩展属性2。
      */
     public String getExtAttr2() {
@@ -327,7 +327,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性3。
-     *
+     * 
      * @return 扩展属性3。
      */
     public String getExtAttr3() {
@@ -336,7 +336,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性4。
-     *
+     * 
      * @return 扩展属性4。
      */
     public String getExtAttr4() {
@@ -345,7 +345,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性5。
-     *
+     * 
      * @return 扩展属性5。
      */
     public String getExtAttr5() {
@@ -354,7 +354,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性6。
-     *
+     * 
      * @return 扩展属性6。
      */
     public String getExtAttr6() {
@@ -363,7 +363,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性7。
-     *
+     * 
      * @return 扩展属性7。
      */
     public String getExtAttr7() {
@@ -372,7 +372,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取扩展属性8。
-     *
+     * 
      * @return 扩展属性8。
      */
     public String getExtAttr8() {
@@ -381,7 +381,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取版本。
-     *
+     * 
      * @return 版本。
      */
     public int getVersion() {
@@ -390,7 +390,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取流程定义状态。
-     *
+     * 
      * @return 流程定义状态。
      */
     public String getProcDefStatus() {
@@ -399,7 +399,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取创建日期。
-     *
+     * 
      * @return 创建日期。
      */
     public Date getCreationDate() {
@@ -408,7 +408,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取更新日期。
-     *
+     * 
      * @return 更新日期。
      */
     public Date getUpdateDate() {
@@ -417,7 +417,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取操作人员ID。
-     *
+     * 
      * @return 操作人员ID。
      */
     public String getOperatorId() {
@@ -426,7 +426,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取操作人员名称。
-     *
+     * 
      * @return 操作人员名称。
      */
     public String getOperatorName() {
@@ -435,7 +435,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 根据节点编码获取节点定义。
-     *
+     * 
      * @param nodeCode
      *        节点编码。
      * @return 节点定义。
@@ -446,7 +446,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有节点定义列表。
-     *
+     * 
      * @return 所有节点定义列表。
      */
     public List<? extends NodeDef> getNodeDefList() {
@@ -455,7 +455,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取起始节点定义列表。
-     *
+     * 
      * @return 起始节点定义列表。
      */
     public List<? extends NodeDef> getStartNodeDefList() {
@@ -464,7 +464,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有流转定义列表。
-     *
+     * 
      * @return 所有流转定义列表。
      */
     public List<? extends FlowDef> getFlowDefList() {
@@ -473,7 +473,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有注释定义列表。
-     *
+     * 
      * @return 所有注释定义列表。
      */
     public List<? extends NoteDef> getNoteDefList() {
@@ -482,7 +482,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有流程变量定义列表。
-     *
+     * 
      * @return 所有流程变量定义列表。
      */
     public List<? extends ProcVarDef> getProcVarDefList() {
@@ -491,7 +491,7 @@ public class ProcDef implements Serializable {
 
     /**
      * 获取所有流程变量定义map。
-     *
+     * 
      * @return 所有流程变量定义map。键为流程变量名称，值为流程变量值。
      */
     public Map<String, Object> getProcVarDefMap() {
