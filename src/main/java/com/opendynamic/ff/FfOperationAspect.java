@@ -48,6 +48,8 @@ public class FfOperationAspect {
     private FfOperationService ffOperationService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Around("@annotation(com.opendynamic.ff.FfOperation)")
     public Object wrapper(ProceedingJoinPoint point) {
@@ -172,22 +174,22 @@ public class FfOperationAspect {
             }
 
             // 修改受影响的以往操作状态为不可取消
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
+
             if (!procIdSet.isEmpty()) {
                 sql = "update FF_PROC_OP set OPERATION_STATUS_ = 0 where PROC_ID_ in (:PROC_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
-                namedParameterJdbcTemplate.update(sql, paramMap);
+                ffNamedParameterJdbcTemplate.update(sql, paramMap);
             }
             if (!nodeIdSet.isEmpty()) {
                 sql = "update FF_NODE_OP set OPERATION_STATUS_ = 0 where NODE_ID_ in (:NODE_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
-                namedParameterJdbcTemplate.update(sql, paramMap);
+                ffNamedParameterJdbcTemplate.update(sql, paramMap);
             }
             if (!taskIdSet.isEmpty()) {
                 sql = "update FF_TASK_OP set OPERATION_STATUS_ = 0 where TASK_ID_ in (:TASK_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
-                namedParameterJdbcTemplate.update(sql, paramMap);
+                ffNamedParameterJdbcTemplate.update(sql, paramMap);
             }
             if (!nodeVarIdSet.isEmpty()) {
                 sql = "update FF_NODE_VAR_OP set OPERATION_STATUS_ = 0 where NODE_VAR_ID_ in (:NODE_VAR_ID_LIST) and OPERATION_ID_ != :OPERATION_ID_ and OPERATION_STATUS_ = 1";
-                namedParameterJdbcTemplate.update(sql, paramMap);
+                ffNamedParameterJdbcTemplate.update(sql, paramMap);
             }
 
             if (!operationIdSet.isEmpty()) {
@@ -195,7 +197,7 @@ public class FfOperationAspect {
                 sql = "update FF_OPERATION set OPERATION_STATUS_ = 0 where OPERATION_ID_ in (:OPERATION_ID_LIST) and OPERATION_STATUS_ = 1";
                 paramMap.clear();
                 paramMap.put("OPERATION_ID_LIST", operationIdSet);
-                namedParameterJdbcTemplate.update(sql, paramMap);
+                ffNamedParameterJdbcTemplate.update(sql, paramMap);
 
                 // 新增操作后续
                 sql = "insert into FF_OPERATION_FOLLOW_UP (OPERATION_FOLLOW_UP_ID_, OPERATION_ID_, FOLLOW_UP_OPERATION_ID_, OPERATION_DATE_) values (?, ?, ?, ?)";
@@ -258,8 +260,8 @@ public class FfOperationAspect {
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("NODE_ID_LIST", nodeIdList);
                 paramMap.put("OPERATION_ID_", operationId);
-                NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-                List<Map<String, Object>> nodeOpList = namedParameterJdbcTemplate.queryForList(sql, paramMap);
+
+                List<Map<String, Object>> nodeOpList = ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
                 for (Map<String, Object> nodeOp : nodeOpList) {
                     procIdSet.add((String) nodeOp.get("PROC_ID_"));
                     nodeIdSet.add((String) nodeOp.get("NODE_ID_"));
@@ -282,8 +284,8 @@ public class FfOperationAspect {
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("NODE_ID_LIST", previousNodeIdList);
                 paramMap.put("OPERATION_ID_", operationId);
-                NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-                List<Map<String, Object>> nodeOpList = namedParameterJdbcTemplate.queryForList(sql, paramMap);
+
+                List<Map<String, Object>> nodeOpList = ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
                 for (Map<String, Object> nodeOp : nodeOpList) {
                     procIdSet.add((String) nodeOp.get("PROC_ID_"));
                     nodeIdSet.add((String) nodeOp.get("NODE_ID_"));
@@ -322,8 +324,8 @@ public class FfOperationAspect {
     }
 
     private void addOperationId(String sql, Map<String, Object> paramMap, Set<String> operationIdSet) {
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        List<Map<String, Object>> list = namedParameterJdbcTemplate.queryForList(sql, paramMap);
+
+        List<Map<String, Object>> list = ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
         for (Map<String, Object> map : list) {
             operationIdSet.add((String) map.get("OPERATION_ID_"));
         }

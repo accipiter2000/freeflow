@@ -30,6 +30,8 @@ import com.opendynamic.ff.service.FfProcDefService;
 public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadProcDef(String PROC_DEF_ID_) {
@@ -78,8 +80,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
             sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -88,8 +89,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaProcDef(boolean count, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST, String PROC_DEF_CODE_, List<String> PROC_DEF_CODE_LIST, String PROC_DEF_NAME_, List<String> PROC_DEF_NAME_LIST, String PROC_DEF_CAT_, List<String> PROC_DEF_CAT_LIST, String EXT_ATTR_1_, List<String> EXT_ATTR_1_LIST, String EXT_ATTR_2_, List<String> EXT_ATTR_2_LIST, String EXT_ATTR_3_, List<String> EXT_ATTR_3_LIST, String EXT_ATTR_4_, List<String> EXT_ATTR_4_LIST, String EXT_ATTR_5_, List<String> EXT_ATTR_5_LIST, String EXT_ATTR_6_, List<String> EXT_ATTR_6_LIST, String EXT_ATTR_7_, List<String> EXT_ATTR_7_LIST, String EXT_ATTR_8_, List<String> EXT_ATTR_8_LIST, Integer VERSION_, List<Integer> VERSION_LIST, String PROC_DEF_STATUS_, List<String> PROC_DEF_STATUS_LIST) {// 组装查询SQL语句
@@ -245,8 +245,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override
@@ -280,8 +279,7 @@ public class FfProcDefServiceImpl implements FfProcDefService {// REFINED
         parameterSource.addValue("OPERATOR_NAME_", OPERATOR_NAME_, Types.VARCHAR);
         parameterSource.addValue("PROC_DEF_ID_", PROC_DEF_ID_, Types.VARCHAR);
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.update(sql, parameterSource);
+        return ffNamedParameterJdbcTemplate.update(sql, parameterSource);
     }
 
     @Override

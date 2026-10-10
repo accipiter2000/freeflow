@@ -27,6 +27,8 @@ public class FfNodeServiceImpl implements FfNodeService {
     private FfOperationService ffOperationService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> getTaskStatistic(String NODE_ID_) {
@@ -77,8 +79,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -90,8 +91,7 @@ public class FfNodeServiceImpl implements FfNodeService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaNode(boolean count, String NODE_ID_, List<String> NODE_ID_LIST, String PARENT_NODE_ID_, List<String> PARENT_NODE_ID_LIST, String PREVIOUS_NODE_IDS_, String LAST_COMPLETE_NODE_IDS_, String SUB_PROC_DEF_ID_, List<String> SUB_PROC_DEF_ID_LIST, String ADJUST_SUB_PROC_DEF_ID_, List<String> ADJUST_SUB_PROC_DEF_ID_LIST, String NODE_TYPE_, List<String> NODE_TYPE_LIST, String NODE_CODE_, List<String> NODE_CODE_LIST, String NODE_NAME_, List<String> NODE_NAME_LIST, String PARENT_NODE_CODE_, List<String> PARENT_NODE_CODE_LIST, String NODE_END_USER_, List<String> NODE_END_USER_LIST, String NODE_END_USER_NAME_, List<String> NODE_END_USER_NAME_LIST, Date FROM_NODE_END_DATE_, Date TO_NODE_END_DATE_, String ISOLATE_SUB_PROC_DEF_CODE_,
@@ -752,8 +752,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             sql += " connect by prior PARENT_NODE_ID_ = NODE_ID_ start with NODE_ID_ = :NODE_ID_";
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -1078,8 +1077,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             sql += " connect by prior NODE_ID_ = PARENT_NODE_ID_ start with NODE_ID_ = :NODE_ID_";
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -1104,8 +1102,7 @@ public class FfNodeServiceImpl implements FfNodeService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override

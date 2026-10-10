@@ -29,6 +29,8 @@ import com.opendynamic.ff.service.FfAdjustProcDefService;
 public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadAdjustProcDef(String ADJUST_PROC_DEF_ID_) {
@@ -64,8 +66,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
             sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -74,8 +75,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaAdjustProcDef(boolean count, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String PROC_DEF_ID_, List<String> PROC_DEF_ID_LIST) {// 组装查询SQL语句
@@ -131,8 +131,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override
@@ -160,8 +159,7 @@ public class FfAdjustProcDefServiceImpl implements FfAdjustProcDefService {
         parameterSource.addValue("OPERATOR_NAME_", OPERATOR_NAME_, Types.VARCHAR);
         parameterSource.addValue("ADJUST_PROC_DEF_ID_", ADJUST_PROC_DEF_ID_, Types.VARCHAR);
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.update(sql, parameterSource);
+        return ffNamedParameterJdbcTemplate.update(sql, parameterSource);
     }
 
     public int updateAdjustProcDefModel(String ADJUST_PROC_DEF_ID_, String PROC_DEF_MODEL_, Date UPDATE_DATE_, String OPERATOR_ID_, String OPERATOR_NAME_) {

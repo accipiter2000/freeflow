@@ -37,6 +37,8 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
     private FfOperationService ffOperationService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadNodeVar(String NODE_VAR_ID_) {
@@ -60,8 +62,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             sql = sql + " limit " + (page - 1) * limit + ", " + limit;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -70,8 +71,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaNodeVar(boolean count, String NODE_VAR_ID_, List<String> NODE_VAR_ID_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String VAR_TYPE_, List<String> VAR_TYPE_LIST, String VAR_NAME_, List<String> VAR_NAME_LIST, String PROC_ID_, List<String> PROC_ID_LIST, Boolean recursive) {// 组装查询SQL语句
@@ -181,8 +181,7 @@ public class FfNodeVarServiceImpl implements FfNodeVarService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override

@@ -30,6 +30,8 @@ public class FfProcServiceImpl implements FfProcService {
     private FfOperationService ffOperationService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadProc(String PROC_ID_) {
@@ -55,8 +57,7 @@ public class FfProcServiceImpl implements FfProcService {
             sql = sql + " limit " + (page - 1) * limit + ", " + limit;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -67,8 +68,7 @@ public class FfProcServiceImpl implements FfProcService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaProc(boolean count, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST, String BIZ_NAME_, List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST, String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST, Date FROM_PROC_END_DATE_, Date TO_PROC_END_DATE_, String PROC_STATUS_,
@@ -276,8 +276,7 @@ public class FfProcServiceImpl implements FfProcService {
             sql = sql + " limit " + (page - 1) * limit + ", " + limit;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -288,8 +287,7 @@ public class FfProcServiceImpl implements FfProcService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaInvolvedProc(boolean count, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST, String BIZ_NAME_, List<String> BIZ_NAME_LIST, String BIZ_DESC_, List<String> BIZ_DESC_LIST, String PROC_START_USER_, List<String> PROC_START_USER_LIST, String PROC_START_USER_NAME_, List<String> PROC_START_USER_NAME_LIST, String PROC_END_USER_, List<String> PROC_END_USER_LIST, String PROC_END_USER_NAME_, List<String> PROC_END_USER_NAME_LIST,
@@ -520,8 +518,7 @@ public class FfProcServiceImpl implements FfProcService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override
@@ -578,7 +575,6 @@ public class FfProcServiceImpl implements FfProcService {
     public int cleanProc(String PROC_ID_) {
         String sql;
         Map<String, Object> paramMap = new HashMap<>();
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
 
         List<Map<String, Object>> operationList = ffOperationService.selectOperation(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, PROC_ID_, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1, -1, null);
         if (!operationList.isEmpty()) {
@@ -586,13 +582,13 @@ public class FfProcServiceImpl implements FfProcService {
             paramMap.put("OPERATION_ID_LIST", OPERATION_ID_LIST);
 
             sql = "delete from FF_NODE_VAR_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
             sql = "delete from FF_TASK_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
             sql = "delete from FF_NODE_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
             sql = "delete from FF_PROC_OP where OPERATION_ID_ in (:OPERATION_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
 
             sql = "with recursive CTE as (select * from FF_OPERATION_FOLLOW_UP where OPERATION_ID_ = ? union all select FF_OPERATION_FOLLOW_UP.* from FF_OPERATION_FOLLOW_UP inner join CTE on CTE.FOLLOW_UP_OPERATION_ID_ = FF_OPERATION_FOLLOW_UP.OPERATION_ID_) select * from CTE";
             List<Map<String, Object>> operationFollowUpList = ffJdbcTemplate.queryForList(sql, operationList.get(operationList.size() - 1).get("OPERATION_ID_"));
@@ -612,10 +608,10 @@ public class FfProcServiceImpl implements FfProcService {
             paramMap.put("NODE_ID_LIST", NODE_ID_LIST);
 
             sql = "delete from FF_NODE_VAR where NODE_ID_ in (:NODE_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
 
             sql = "delete from FF_TASK where NODE_ID_ in (:NODE_ID_LIST)";
-            namedParameterJdbcTemplate.update(sql, paramMap);
+            ffNamedParameterJdbcTemplate.update(sql, paramMap);
 
             for (int i = NODE_ID_LIST.size() - 1; i >= 0; i--) {
                 sql = "delete from FF_NODE where NODE_ID_ = ?";

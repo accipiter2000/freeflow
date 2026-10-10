@@ -35,6 +35,8 @@ public class FfOperationServiceImpl implements FfOperationService {
     private FfService ffService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadOperation(String OPERATION_ID_) {
@@ -63,8 +65,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -76,8 +77,7 @@ public class FfOperationServiceImpl implements FfOperationService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaOperation(boolean count, String OPERATION_ID_, List<String> OPERATION_ID_LIST, String OPERATION_, List<String> OPERATION_LIST, String NODE_ID_, List<String> NODE_ID_LIST, String TASK_ID_, List<String> TASK_ID_LIST, String OPERATOR_, List<String> OPERATOR_LIST, String OPERATOR_NAME_, List<String> OPERATOR_NAME_LIST, Date FROM_OPERATION_DATE_, Date TO_OPERATION_DATE_, String OPERATION_STATUS_, List<String> OPERATION_STATUS_LIST, String PROC_ID_, List<String> PROC_ID_LIST, String ADJUST_PROC_DEF_ID_, List<String> ADJUST_PROC_DEF_ID_LIST, String ISOLATE_SUB_PROC_NODE_ID_, List<String> ISOLATE_SUB_PROC_NODE_ID_LIST, String BIZ_ID_, List<String> BIZ_ID_LIST, String BIZ_TYPE_, List<String> BIZ_TYPE_LIST, String BIZ_CODE_, List<String> BIZ_CODE_LIST,
@@ -364,8 +364,7 @@ public class FfOperationServiceImpl implements FfOperationService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override

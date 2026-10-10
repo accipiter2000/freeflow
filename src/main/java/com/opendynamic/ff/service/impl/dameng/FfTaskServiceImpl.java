@@ -26,6 +26,8 @@ public class FfTaskServiceImpl implements FfTaskService {
     private FfOperationService ffOperationService;
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadTask(String TASK_ID_) {
@@ -56,8 +58,7 @@ public class FfTaskServiceImpl implements FfTaskService {
             sql = "select * from (select FULLTABLE.*, ROWNUM RN from (" + sql + ") FULLTABLE where ROWNUM <= " + end + ") where RN >= " + start;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -71,8 +72,7 @@ public class FfTaskServiceImpl implements FfTaskService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaTask(boolean count, String TASK_ID_, List<String> TASK_ID_LIST, String PREVIOUS_TASK_ID_, List<String> PREVIOUS_TASK_ID_LIST, String TASK_TYPE_, List<String> TASK_TYPE_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String ACTION_, List<String> ACTION_LIST, Date FROM_DUE_DATE_, Date TO_DUE_DATE_, String CLAIM_, List<String> CLAIM_LIST, String FORWARDABLE_, List<String> FORWARDABLE_LIST, Integer PRIORITY_, List<Integer> PRIORITY_LIST, String FORWARD_STATUS_, List<String> FORWARD_STATUS_LIST, String TASK_END_USER_, List<String> TASK_END_USER_LIST, String TASK_END_USER_NAME_, List<String> TASK_END_USER_NAME_LIST, Date FROM_TASK_END_DATE_, Date TO_TASK_END_DATE_, String TASK_STATUS_,
@@ -566,8 +566,7 @@ public class FfTaskServiceImpl implements FfTaskService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override

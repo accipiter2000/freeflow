@@ -21,6 +21,8 @@ import com.opendynamic.ff.service.FfDelegateService;
 public class FfDelegateServiceImpl implements FfDelegateService {
     @Autowired
     private JdbcTemplate ffJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
 
     @Override
     public Map<String, Object> loadDelegate(String DELEGATE_ID_) {
@@ -44,8 +46,7 @@ public class FfDelegateServiceImpl implements FfDelegateService {
             sql = sql + " limit " + (page - 1) * limit + ", " + limit;
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
     @Override
@@ -54,8 +55,7 @@ public class FfDelegateServiceImpl implements FfDelegateService {
         String sql = odSqlCriteria.getSql();
         Map<String, Object> paramMap = odSqlCriteria.getParamMap();
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+        return ffNamedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
     }
 
     private OdSqlCriteria buildSqlCriteriaDelegate(boolean count, String DELEGATE_ID_, List<String> DELEGATE_ID_LIST, String ASSIGNEE_, List<String> ASSIGNEE_LIST, String ASSIGNEE_NAME_, List<String> ASSIGNEE_NAME_LIST, String DELEGATOR_, List<String> DELEGATOR_LIST, String DELEGATOR_NAME_, List<String> DELEGATOR_NAME_LIST, Date FROM_START_DATE_, Date TO_START_DATE_, Date FROM_END_DATE_, Date TO_END_DATE_) {// 组装查询SQL语句
@@ -151,8 +151,7 @@ public class FfDelegateServiceImpl implements FfDelegateService {
             }
         }
 
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ffJdbcTemplate);
-        return namedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
+        return ffNamedParameterJdbcTemplate.queryForList(sql.toString(), paramMap);
     }
 
     @Override
