@@ -32,7 +32,6 @@ import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -44,6 +43,8 @@ public class TaskNodeHandler implements NodeHandler {
     private FfNodeService ffNodeService;
     @Autowired
     private FfTaskService ffTaskService;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Override
     public String getNodeType() {
@@ -86,12 +87,11 @@ public class TaskNodeHandler implements NodeHandler {
         nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
         // JUEL解析
         // 计算办理人
@@ -109,7 +109,7 @@ public class TaskNodeHandler implements NodeHandler {
             }
         }
         else { // 否则使用办理人
-            expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
             Object object = expression.getValue(simpleContext);// 获取办理人
             if (object instanceof List) {
                 assigneeList = (List<FfUser>) object;
@@ -137,25 +137,25 @@ public class TaskNodeHandler implements NodeHandler {
             task.setAssignee(assignee.getUserId());
             task.setAssigneeName(assignee.getUserName());
             // 解析JUEL,从节点定义中获取相关任务属性
-            simpleContext.setVariable("task", expressionFactory.createValueExpression(task, Object.class));
+            simpleContext.setVariable("task", ffExpressionFactory.createValueExpression(task, Object.class));
             if (StringUtils.isNotEmpty(nodeDef.getAction())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
                 action = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getDueDate())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getDueDate(), Date.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getDueDate(), Date.class);
                 dueDate = (Date) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getClaim())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getClaim(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getClaim(), String.class);
                 claim = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getForwardable())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getForwardable(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getForwardable(), String.class);
                 forwardable = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getPriority())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getPriority(), Integer.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getPriority(), Integer.class);
                 priority = (Integer) expression.getValue(simpleContext);
             }
             task.setAction(action);
@@ -179,23 +179,23 @@ public class TaskNodeHandler implements NodeHandler {
         String autoCompleteEmptyAssignee = nodeDef.getAutoCompleteEmptyAssignee();
         String inform = nodeDef.getInform();
         if (exclusive != null && exclusive.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, exclusive, String.class);
             exclusive = (String) expression.getValue(simpleContext);
         }
         if (waitingForCompleteNode != null && waitingForCompleteNode.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
             waitingForCompleteNode = (String) expression.getValue(simpleContext);
         }
         if (autoCompleteSameAssignee != null && autoCompleteSameAssignee.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
             autoCompleteSameAssignee = (String) expression.getValue(simpleContext);
         }
         if (autoCompleteEmptyAssignee != null && autoCompleteEmptyAssignee.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
             autoCompleteEmptyAssignee = (String) expression.getValue(simpleContext);
         }
         if (inform != null && inform.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
 
@@ -277,12 +277,11 @@ public class TaskNodeHandler implements NodeHandler {
         nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
         // JUEL解析
         // 计算办理人
@@ -316,25 +315,25 @@ public class TaskNodeHandler implements NodeHandler {
             task.setAssignee(assignee.getUserId());
             task.setAssigneeName(assignee.getUserName());
             // 解析JUEL,从节点定义中获取相关任务属性
-            simpleContext.setVariable("task", expressionFactory.createValueExpression(task, Object.class));
+            simpleContext.setVariable("task", ffExpressionFactory.createValueExpression(task, Object.class));
             if (StringUtils.isNotEmpty(nodeDef.getAction())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAction(), String.class);
                 action = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getDueDate())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getDueDate(), Date.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getDueDate(), Date.class);
                 dueDate = (Date) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getClaim())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getClaim(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getClaim(), String.class);
                 claim = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getForwardable())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getForwardable(), String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getForwardable(), String.class);
                 forwardable = (String) expression.getValue(simpleContext);
             }
             if (StringUtils.isNotEmpty(nodeDef.getPriority())) {
-                expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getPriority(), Integer.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getPriority(), Integer.class);
                 priority = (Integer) expression.getValue(simpleContext);
             }
             task.setAction(action);
@@ -354,7 +353,7 @@ public class TaskNodeHandler implements NodeHandler {
 
         String autoCompleteSameAssignee = nodeDef.getAutoCompleteSameAssignee();
         if (autoCompleteSameAssignee != null && autoCompleteSameAssignee.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, autoCompleteSameAssignee, String.class);
             autoCompleteSameAssignee = (String) expression.getValue(simpleContext);
         }
 
@@ -408,27 +407,26 @@ public class TaskNodeHandler implements NodeHandler {
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         // JUEL解析
         String inform = FfService.BOOLEAN_FALSE;
         String completeReturn = FfService.BOOLEAN_FALSE;
         ValueExpression expression;
         if (StringUtils.isNotEmpty(node.getInform())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
             inform = (String) expression.getValue(simpleContext);
         }
         if (StringUtils.isNotEmpty(node.getCompleteReturn())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
             completeReturn = (String) expression.getValue(simpleContext);
         }
 
         if (FfService.BOOLEAN_FALSE.equals(inform) && !nodeVarMap.get("TOTAL").equals(0)) {// 非通知节点需完成判断
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
             }
@@ -572,14 +570,13 @@ public class TaskNodeHandler implements NodeHandler {
                 nodeVarMap.put("node", operationContext.getCurrentNode());
                 nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
-                simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+                simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, autoCompleteEmptyAssignee, String.class);
                 autoCompleteEmptyAssignee = (String) expression.getValue(simpleContext);
             }
 

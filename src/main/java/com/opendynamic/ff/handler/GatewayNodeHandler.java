@@ -30,7 +30,6 @@ import com.opendynamic.ff.vo.NodeHandlerOperation;
 import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -40,6 +39,8 @@ public class GatewayNodeHandler implements NodeHandler {
     private FfService ffService;
     @Autowired
     private FfNodeService ffNodeService;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Override
     public String getNodeType() {
@@ -123,14 +124,13 @@ public class GatewayNodeHandler implements NodeHandler {
         nodeVarMap.put("TOTAL", TOTAL);
         nodeVarMap.put("COMPLETE", COMPLETE);
         if (!nodeVarMap.get("TOTAL").equals(0)) {
-            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
             SimpleContext simpleContext = new SimpleContext();
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
             }
-            simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+            simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
             // JUEL解析
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
+            ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
             }

@@ -89,7 +89,6 @@ import com.opendynamic.ff.vo.Shape;
 import com.opendynamic.ff.vo.Task;
 import com.opendynamic.ff.vo.TaskOp;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -119,6 +118,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     private FfDelegateService ffDelegateService;
     @Autowired
     private FfOperationService ffOperationService;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -523,13 +524,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
 
                 // 设置JUEL解析环境
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, completeReturn, String.class);
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, completeReturn, String.class);
                 completeReturn = (String) expression.getValue(simpleContext);
             }
 
@@ -598,10 +598,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         if (nodeVarMap != null) {
             allNodeVarMap.putAll(nodeVarMap);
         }
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : allNodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
         // JUEL解析
         // Stage取其内部的开始节点定义
@@ -620,7 +619,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         }
         // TASK,CENTER_FORWARD_TASK,NODE_TYPE_SERVICE_TASK候选人解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_SERVICE_TASK)) && StringUtils.isNotEmpty(nodeDef.getCandidateAssignee())) {
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateAssignee(), Object.class);
+            ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateAssignee(), Object.class);
             Object object;
             try {
                 object = expression.getValue(simpleContext);
@@ -644,7 +643,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         }
         // TASK,CENTER_FORWARD_TASK,NODE_TYPE_SERVICE_TASK办理人解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_CENTER_FORWARD_TASK) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_SERVICE_TASK)) && StringUtils.isNotEmpty(nodeDef.getAssignee())) {
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
+            ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAssignee(), Object.class);
             Object object;
             try {
                 object = expression.getValue(simpleContext);
@@ -674,7 +673,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         }
         // SUB_PROC候选子流程定义解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_SUB_PROC) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_ISOLATE_SUB_PROC)) && StringUtils.isNotEmpty(nodeDef.getCandidateSubProcDef())) {
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateSubProcDef(), Object.class);
+            ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getCandidateSubProcDef(), Object.class);
             Object object;
             try {
                 object = expression.getValue(simpleContext);
@@ -715,7 +714,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         }
         // SUB_PROC子流程定义解析
         if ((nodeDef.getNodeType().equals(FfService.NODE_TYPE_SUB_PROC) || nodeDef.getNodeType().equals(FfService.NODE_TYPE_ISOLATE_SUB_PROC)) && StringUtils.isNotEmpty(nodeDef.getAssignSubProcDef())) {
-            ValueExpression expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignSubProcDef(), Object.class);
+            ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAssignSubProcDef(), Object.class);
             Object object;
             try {
                 object = expression.getValue(simpleContext);
@@ -1155,10 +1154,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         if (nodeVarMap != null) {
             allNodeVarMap.putAll(nodeVarMap);
         }
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : allNodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
 
         BufferedImage noteImage = new BufferedImage(procDef.getProcDefDiagramWidth(), procDef.getProcDefDiagramHeight(), BufferedImage.TYPE_INT_ARGB); // 创建绘制动态注释图用BufferedImage
@@ -1171,7 +1169,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         for (NoteDef noteDef : procDef.getNoteDefList()) {// 绘制动态注释
             if (noteDef.getDynamic().equals(FfService.BOOLEAN_TRUE) && StringUtils.isNotEmpty(noteDef.getNoteName())) {
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, noteDef.getNoteName(), String.class);// 解析注释EL表达式
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, noteDef.getNoteName(), String.class);// 解析注释EL表达式
                 noteDef.getShape().draw(noteG2d, (String) expression.getValue(simpleContext));
             }
         }
@@ -1611,16 +1609,15 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                     nodeVarMap.putAll(branchNodeVar);
                 }
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
                 ValueExpression expression;
-                expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, exclusive, String.class);
                 exclusive = (String) expression.getValue(simpleContext);
-                expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
                 waitingForCompleteNode = (String) expression.getValue(simpleContext);
             }
             if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
@@ -1693,13 +1690,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                     nodeVarMap.putAll(branchNodeVar);
                 }
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, exclusive, String.class);
                 exclusive = (String) expression.getValue(simpleContext);
             }
             if (FfService.BOOLEAN_TRUE.equals(exclusive)) {// 排他处理
@@ -1902,10 +1898,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             nodeVarMap.put("proc", proc);
             nodeVarMap.put("branch", branchNode);
             nodeVarMap.put("node", node);
-            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
             SimpleContext simpleContext = new SimpleContext();
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
             }
             // JUEL解析
             ValueExpression expression;
@@ -1926,9 +1921,9 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 forwardTask.setForwardStatus(FfService.FORWARD_STATUS_NOT_FORWARDED);
                 forwardTask.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
                 forwardTask.setCreationDate(new Date());
-                simpleContext.setVariable("task", expressionFactory.createValueExpression(forwardTask, Object.class));
+                simpleContext.setVariable("task", ffExpressionFactory.createValueExpression(forwardTask, Object.class));
                 if (StringUtils.isNotEmpty(action)) {// 解析JUEL,获取业务系统操作
-                    expression = expressionFactory.createValueExpression(simpleContext, action, String.class);
+                    expression = ffExpressionFactory.createValueExpression(simpleContext, action, String.class);
                     forwardTask.setAction((String) expression.getValue(simpleContext));
                 }
 
@@ -1981,13 +1976,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 nodeVarMap.put("branch", loadNode(node.getParentNodeId()));
                 nodeVarMap.put("node", node);
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, exclusive, String.class);
                 exclusive = (String) expression.getValue(simpleContext);
             }
             if (!FfService.BOOLEAN_TRUE.equals(exclusive) && taskList.size() > 1) {// 非独占任务不能驳回
@@ -2049,13 +2043,12 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
                 nodeVarMap.put("branch", loadNode(node.getParentNodeId()));
                 nodeVarMap.put("node", node);
                 nodeVarMap.putAll(ffNodeService.getTaskStatistic(node.getNodeId()));// 获取节点任务完成信息
-                ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
                 SimpleContext simpleContext = new SimpleContext();
                 for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                    simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                    simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
                 }
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, exclusive, String.class);
+                ValueExpression expression = ffExpressionFactory.createValueExpression(simpleContext, exclusive, String.class);
                 exclusive = (String) expression.getValue(simpleContext);
             }
             if (!FfService.BOOLEAN_TRUE.equals(exclusive) && taskList.size() > 1) {// 非独占任务不能驳回

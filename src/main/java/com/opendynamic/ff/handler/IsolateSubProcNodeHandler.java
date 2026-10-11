@@ -31,7 +31,6 @@ import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -41,6 +40,8 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
     private FfService ffService;
     @Autowired
     private FfNodeService ffNodeService;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Override
     public String getNodeType() {
@@ -82,12 +83,11 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
         // JUEL解析
         // 计算子流程
@@ -106,7 +106,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
             }
         }
         else { // 否则使用子流程定义
-            expression = expressionFactory.createValueExpression(simpleContext, nodeDef.getAssignSubProcDef(), Object.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, nodeDef.getAssignSubProcDef(), Object.class);
             Object object = expression.getValue(simpleContext);// 获取子流程定义
             if (object instanceof List) {
                 assignSubProcDefList = (List<ProcDef>) object;
@@ -140,7 +140,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
 
             Map<String, Object> subProcVarDefMap = procDef.getProcVarDefMap();
             for (Map.Entry<String, Object> entry : subProcVarDefMap.entrySet()) {
-                expression = expressionFactory.createValueExpression(simpleContext, (String) entry.getValue(), Object.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, (String) entry.getValue(), Object.class);
                 subProcVarDefMap.put(entry.getKey(), expression.getValue(simpleContext));
             }
             ffService.updateNodeVar(subProcBranchNodeId, subProcVarDefMap);// 更新子流程节点变量
@@ -149,11 +149,11 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         String waitingForCompleteNode = nodeDef.getWaitingForCompleteNode();
         String inform = nodeDef.getInform();
         if (waitingForCompleteNode != null && waitingForCompleteNode.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
             waitingForCompleteNode = (String) expression.getValue(simpleContext);
         }
         if (inform != null && inform.contains("${")) {// JUEL解析
-            expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
 
@@ -197,12 +197,11 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         ValueExpression expression;
 
         // JUEL解析
@@ -239,7 +238,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
 
             Map<String, Object> subProcVarDefMap = procDef.getProcVarDefMap();
             for (Map.Entry<String, Object> entry : subProcVarDefMap.entrySet()) {
-                expression = expressionFactory.createValueExpression(simpleContext, (String) entry.getValue(), Object.class);
+                expression = ffExpressionFactory.createValueExpression(simpleContext, (String) entry.getValue(), Object.class);
                 subProcVarDefMap.put(entry.getKey(), expression.getValue(simpleContext));
             }
             ffService.updateNodeVar(subProcBranchNodeId, subProcVarDefMap);// 更新子流程节点变量
@@ -290,28 +289,27 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.putAll(ffNodeService.getChildNodeStatistic(node.getNodeId()));// 获取节点任务完成信息
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         // JUEL解析
         String inform = FfService.BOOLEAN_FALSE;
         String completeReturn = FfService.BOOLEAN_FALSE;
         ValueExpression expression;
         if (StringUtils.isNotEmpty(node.getInform())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
             inform = (String) expression.getValue(simpleContext);
         }
         if (StringUtils.isNotEmpty(node.getCompleteReturn())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
             completeReturn = (String) expression.getValue(simpleContext);
         }
 
         // 非通知节点需完成判断
         if (FfService.BOOLEAN_FALSE.equals(inform) && !nodeVarMap.get("TOTAL").equals(0)) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
             }

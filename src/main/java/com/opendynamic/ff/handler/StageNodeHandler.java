@@ -31,7 +31,6 @@ import com.opendynamic.ff.vo.OperationContext;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.Task;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 @Service
@@ -41,6 +40,8 @@ public class StageNodeHandler implements NodeHandler {
     private FfService ffService;
     @Autowired
     private FfNodeService ffNodeService;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Override
     public String getNodeType() {
@@ -89,17 +90,16 @@ public class StageNodeHandler implements NodeHandler {
             nodeVarMap.put("branch", operationContext.getCurrentBranchNode());
             nodeVarMap.put("node", operationContext.getCurrentNode());
             nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
-            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
             SimpleContext simpleContext = new SimpleContext();
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
             }
-            simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+            simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
 
             ValueExpression expression;
-            expression = expressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, waitingForCompleteNode, String.class);
             waitingForCompleteNode = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, inform, String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, inform, String.class);
             inform = (String) expression.getValue(simpleContext);
         }
 
@@ -163,27 +163,26 @@ public class StageNodeHandler implements NodeHandler {
         nodeVarMap.put("node", operationContext.getCurrentNode());
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.putAll(ffNodeService.getChildNodeStatistic(node.getNodeId()));// 获取节点任务完成信息
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-            simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+            simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));
         }
-        simpleContext.setVariable("operationContext", expressionFactory.createValueExpression(operationContext, Object.class));
+        simpleContext.setVariable("operationContext", ffExpressionFactory.createValueExpression(operationContext, Object.class));
         // JUEL解析
         String inform = FfService.BOOLEAN_FALSE;
         String completeReturn = FfService.BOOLEAN_FALSE;
         ValueExpression expression;
         if (StringUtils.isNotEmpty(node.getInform())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getInform(), String.class);// 判断是否满足节点完成表达式
             inform = (String) expression.getValue(simpleContext);
         }
         if (StringUtils.isNotEmpty(node.getCompleteReturn())) {
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteReturn(), String.class);// 判断是否满足节点完成表达式
             completeReturn = (String) expression.getValue(simpleContext);
         }
 
         if (FfService.BOOLEAN_FALSE.equals(inform) && !nodeVarMap.get("TOTAL").equals(0)) { // 非通知节点需完成判断
-            expression = expressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
+            expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
             }

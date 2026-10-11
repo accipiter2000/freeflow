@@ -32,7 +32,6 @@ import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.Task;
 
-import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 /**
@@ -50,6 +49,8 @@ public class FfOperationAspect {
     private JdbcTemplate ffJdbcTemplate;
     @Autowired
     private NamedParameterJdbcTemplate ffNamedParameterJdbcTemplate;
+    @Autowired
+    private ExpressionFactory ffExpressionFactory;
 
     @Around("@annotation(com.opendynamic.ff.FfOperation)")
     public Object wrapper(ProceedingJoinPoint point) {
@@ -66,24 +67,23 @@ public class FfOperationAspect {
             FfOperation annotation = method.getAnnotation(FfOperation.class);
 
             // JUEL解析
-            ExpressionFactory expressionFactory = new ExpressionFactoryImpl();// 解析使用JUEL表达式的注解参数。
             SimpleContext simpleContext = new SimpleContext();
             String[] parameterNames = signature.getParameterNames();
             for (int i = 0; i < parameterNames.length; i++) {
-                simpleContext.setVariable(parameterNames[i], expressionFactory.createValueExpression(arguments[i], Object.class));
+                simpleContext.setVariable(parameterNames[i], ffExpressionFactory.createValueExpression(arguments[i], Object.class));
             }
             ValueExpression expression;
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.procId(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.procId(), String.class);
             procId = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.nodeId(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.nodeId(), String.class);
             nodeId = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.taskId(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.taskId(), String.class);
             taskId = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.memo(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.memo(), String.class);
             String memo = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.operator(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.operator(), String.class);
             String operator = (String) expression.getValue(simpleContext);
-            expression = expressionFactory.createValueExpression(simpleContext, annotation.operatorName(), String.class);
+            expression = ffExpressionFactory.createValueExpression(simpleContext, annotation.operatorName(), String.class);
             String operatorName = (String) expression.getValue(simpleContext);
             if (StringUtils.isNotEmpty(taskId) && StringUtils.isEmpty(nodeId)) {
                 Task task = ffService.loadTask(taskId);
