@@ -45,6 +45,8 @@ public class TaskNodeHandler implements NodeHandler {
     private FfTaskService ffTaskService;
     @Autowired
     private ExpressionFactory ffExpressionFactory;
+    @Autowired
+    private Gson ffGson;
 
     @Override
     public String getNodeType() {
@@ -438,7 +440,7 @@ public class TaskNodeHandler implements NodeHandler {
         fullCandidateList.addAll(candidateList);
         for (Task task : ffService.createTaskQuery().setNodeId(node.getNodeId()).queryForObjectList()) {
             if (StringUtils.isNotEmpty(task.getNextCandidate())) {
-                fullCandidateList.addAll(new Gson().fromJson(task.getNextCandidate(), CandidateList.class));
+                fullCandidateList.addAll(ffGson.fromJson(task.getNextCandidate(), CandidateList.class));
             }
         }
         FfUser currentExecutor = operationContext.getCurrentExecutor();

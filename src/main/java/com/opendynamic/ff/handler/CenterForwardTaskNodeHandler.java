@@ -51,6 +51,8 @@ public class CenterForwardTaskNodeHandler implements NodeHandler {
     private FfNodeVarService ffNodeVarService;
     @Autowired
     private ExpressionFactory ffExpressionFactory;
+    @Autowired
+    private Gson ffGson;
 
     private final Pattern outerPattern = Pattern.compile(FfService.CENTER_FORWARD_STEP + " *== *-?\\d+");
     private final Pattern innerPattern = Pattern.compile("-?\\d+");
@@ -456,7 +458,7 @@ public class CenterForwardTaskNodeHandler implements NodeHandler {
         fullCandidateList.addAll(candidateList);
         for (Task task : ffService.createTaskQuery().setNodeId(node.getNodeId()).queryForObjectList()) {
             if (StringUtils.isNotEmpty(task.getNextCandidate())) {
-                fullCandidateList.addAll(new Gson().fromJson(task.getNextCandidate(), CandidateList.class));
+                fullCandidateList.addAll(ffGson.fromJson(task.getNextCandidate(), CandidateList.class));
             }
         }
         FfUser currentExecutor = operationContext.getCurrentExecutor();

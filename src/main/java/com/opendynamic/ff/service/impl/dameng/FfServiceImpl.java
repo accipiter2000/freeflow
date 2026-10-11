@@ -38,8 +38,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import com.opendynamic.OdUtils;
 import com.opendynamic.ff.FfOperation;
 import com.opendynamic.ff.handler.NodeHandler;
@@ -64,11 +62,9 @@ import com.opendynamic.ff.service.FfService;
 import com.opendynamic.ff.service.FfTaskService;
 import com.opendynamic.ff.vo.CandidateList;
 import com.opendynamic.ff.vo.Delegate;
-import com.opendynamic.ff.vo.DiamondShape;
 import com.opendynamic.ff.vo.FfResult;
 import com.opendynamic.ff.vo.FfUser;
 import com.opendynamic.ff.vo.FlowDef;
-import com.opendynamic.ff.vo.LineShape;
 import com.opendynamic.ff.vo.Node;
 import com.opendynamic.ff.vo.NodeDef;
 import com.opendynamic.ff.vo.NodeOp;
@@ -77,15 +73,12 @@ import com.opendynamic.ff.vo.NodeVarOp;
 import com.opendynamic.ff.vo.NoteDef;
 import com.opendynamic.ff.vo.Operation;
 import com.opendynamic.ff.vo.OperationContext;
-import com.opendynamic.ff.vo.OvalShape;
 import com.opendynamic.ff.vo.Proc;
 import com.opendynamic.ff.vo.ProcDef;
 import com.opendynamic.ff.vo.ProcOp;
 import com.opendynamic.ff.vo.ProcVarDef;
-import com.opendynamic.ff.vo.RectangleShape;
 import com.opendynamic.ff.vo.RunningNodeDef;
 import com.opendynamic.ff.vo.RunningProcDef;
-import com.opendynamic.ff.vo.Shape;
 import com.opendynamic.ff.vo.Task;
 import com.opendynamic.ff.vo.TaskOp;
 
@@ -120,6 +113,10 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     private FfOperationService ffOperationService;
     @Autowired
     private ExpressionFactory ffExpressionFactory;
+    @Autowired
+    private Gson ffGson;
+    @Autowired
+    private Gson ffProcDefGson;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -282,14 +279,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
     @Override
     public boolean deployProcDef(String procDefId, String procDef, InputStream procDefDiagramFile, String procDefDiagramFileName, Integer procDefDiagramFileLength, FfUser operator) {
-        RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
-        runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
-        runtimeTypeAdapterFactory.registerSubtype(OvalShape.class, "oval");
-        runtimeTypeAdapterFactory.registerSubtype(DiamondShape.class, "diamond");
-        runtimeTypeAdapterFactory.registerSubtype(LineShape.class, "line");
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
-
-        ProcDef _procDef = gson.fromJson(procDef, ProcDef.class);
+        ProcDef _procDef = ffProcDefGson.fromJson(procDef, ProcDef.class);
 
         if (procDefDiagramFile == null || procDefDiagramFileLength == null || procDefDiagramFileLength == 0) {// 根据定义生成流程图
             _procDef.init();
@@ -395,14 +385,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
             }
         }
 
-        RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
-        runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
-        runtimeTypeAdapterFactory.registerSubtype(OvalShape.class, "oval");
-        runtimeTypeAdapterFactory.registerSubtype(DiamondShape.class, "diamond");
-        runtimeTypeAdapterFactory.registerSubtype(LineShape.class, "line");
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
-
-        ProcDef _procDef = gson.fromJson(procDef, ProcDef.class);
+        ProcDef _procDef = ffProcDefGson.fromJson(procDef, ProcDef.class);
 
         if (procDefDiagramFile == null || procDefDiagramFileLength == null || procDefDiagramFileLength == 0) {// 根据定义生成流程图
             _procDef.init();
@@ -818,7 +801,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         if (candidateList == null || candidateList.isEmpty()) {// 如果没有candidateList，使用节点定义中的isolateSubProcCandidate
             String isolateSubProcCandidate = isolateSubProcNode.getIsolateSubProcCandidate();
             if (StringUtils.isNotEmpty(isolateSubProcCandidate)) {
-                candidateList = new Gson().fromJson(isolateSubProcCandidate, CandidateList.class);
+                candidateList = ffGson.fromJson(isolateSubProcCandidate, CandidateList.class);
             }
             else {
                 candidateList = new CandidateList();

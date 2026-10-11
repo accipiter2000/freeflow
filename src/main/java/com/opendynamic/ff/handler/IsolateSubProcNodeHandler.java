@@ -42,6 +42,8 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
     private FfNodeService ffNodeService;
     @Autowired
     private ExpressionFactory ffExpressionFactory;
+    @Autowired
+    private Gson ffGson;
 
     @Override
     public String getNodeType() {
@@ -320,7 +322,7 @@ public class IsolateSubProcNodeHandler implements NodeHandler {
         fullCandidateList.addAll(candidateList);
         for (Node childNode : ffService.createChildNodeQuery().setNodeId(node.getNodeId()).queryForObjectList()) {
             if (StringUtils.isNotEmpty(childNode.getNextCandidate())) {
-                fullCandidateList.addAll(new Gson().fromJson(childNode.getNextCandidate(), CandidateList.class));
+                fullCandidateList.addAll(ffGson.fromJson(childNode.getNextCandidate(), CandidateList.class));
             }
         }
         // 完成节点

@@ -33,6 +33,8 @@ public class BranchNodeHandler implements NodeHandler {
     private FfProcService ffProcService;
     @Autowired
     private FfNodeService ffNodeService;
+    @Autowired
+    private Gson ffGson;
 
     @Override
     public String getNodeType() {
@@ -82,7 +84,7 @@ public class BranchNodeHandler implements NodeHandler {
         fullCandidateList.addAll(candidateList);
         for (Node previousNode : ffService.createNodeQuery().setNodeIdList(Arrays.asList(node.getLastCompleteNodeIds().split(","))).queryForObjectList()) {
             if (StringUtils.isNotEmpty(previousNode.getNextCandidate())) {
-                fullCandidateList.addAll(new Gson().fromJson(previousNode.getNextCandidate(), CandidateList.class));
+                fullCandidateList.addAll(ffGson.fromJson(previousNode.getNextCandidate(), CandidateList.class));
             }
         }
         FfUser currentExecutor = operationContext.getCurrentExecutor();
