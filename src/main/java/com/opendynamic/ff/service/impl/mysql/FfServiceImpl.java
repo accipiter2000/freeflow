@@ -19,6 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,10 +92,10 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     private ApplicationContext applicationContext;
 
     private static List<ProcDef> procDefList;
-    private static Queue<ProcDef> adjustProcDefList = new LinkedList<>();
-    private static Map<String, NodeHandler> nodeHandlerMap = new HashMap<>();
-    private static Map<String, Object> internalServiceMap = new HashMap<>();
-    private static Map<String, Object> externalServiceMap = new HashMap<>();
+    private static Queue<ProcDef> adjustProcDefList = new ConcurrentLinkedDeque<>();
+    private static Map<String, NodeHandler> nodeHandlerMap = new ConcurrentHashMap<>();
+    private static Map<String, Object> internalServiceMap = new ConcurrentHashMap<>();
+    private static Map<String, Object> externalServiceMap = new ConcurrentHashMap<>();
 
     @Autowired
     private FfProcDefService ffProcDefService;
