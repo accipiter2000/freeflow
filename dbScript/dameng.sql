@@ -224,7 +224,6 @@ alter table FF_PROC
 alter table FF_PROC
   add constraint FK_FF_PROC_PROC_DEF foreign key (PROC_DEF_ID_)
   references FF_PROC_DEF (PROC_DEF_ID_);
-create index FK_PROC_DEF on FF_PROC (PROC_DEF_ID_);
 
 create table FF_NODE
 (
@@ -384,7 +383,7 @@ comment on column FF_OPERATION.OPERATION_DATE_
 comment on column FF_OPERATION.OPERATION_STATUS_
   is '操作状态';
 alter table FF_OPERATION
-  add constraint FF_FF_OPERATION primary key (OPERATION_ID_);
+  add constraint PK_FF_OPERATION primary key (OPERATION_ID_);
 create index IX_FF_OPERATION_OPERATOR on FF_OPERATION (OPERATOR_);
 create index IX_FF_OPERATION_PROC on FF_OPERATION (PROC_ID_);
 
@@ -406,7 +405,7 @@ create table FF_NODE_OP
   NODE_TYPE_                    VARCHAR2(20),
   NODE_CODE_                    VARCHAR2(60),
   NODE_NAME_                    VARCHAR2(60),
-  PARENT_NODE_CODE_             VARCHAR2(60),
+  PARENT_NODE_CODE_             VARCHAR2(100),
   CANDIDATE_ASSIGNEE_           VARCHAR2(200),
   COMPLETE_EXPRESSION_          VARCHAR2(200),
   COMPLETE_RETURN_              VARCHAR2(200),
@@ -416,7 +415,7 @@ create table FF_NODE_OP
   AUTO_COMPLETE_EMPTY_ASSIGNEE_ VARCHAR2(200),
   INFORM_                       VARCHAR2(200),
   ASSIGNEE_                     VARCHAR2(200),
-  ACTION_                       VARCHAR2(200),
+  ACTION_                       VARCHAR2(300),
   DUE_DATE_                     VARCHAR2(200),
   CLAIM_                        VARCHAR2(200),
   FORWARDABLE_                  VARCHAR2(200),
@@ -525,7 +524,7 @@ create table FF_NODE_VAR
   NODE_ID_       VARCHAR2(40) not null,
   VAR_TYPE_      VARCHAR2(20) not null,
   VAR_NAME_      VARCHAR2(60) not null,
-  VALUE_         VARCHAR2(3000),
+  VALUE_         VARCHAR2(1000),
   OBJ_           BLOB,
   CREATION_DATE_ TIMESTAMP(6) not null
 );
@@ -549,6 +548,7 @@ alter table FF_NODE_VAR
   add constraint PK_FF_NODE_VAR primary key (NODE_VAR_ID_);
 create index IX_SUB_PROC_VAR_NAME on FF_NODE_VAR (VAR_NAME_);
 create index IX_SUB_PROC_VAR_VALUE on FF_NODE_VAR (VALUE_);
+CREATE INDEX IX_FF_NODE_VAR_NODE ON FF_NODE_VAR (NODE_ID_);
 
 create table FF_NODE_VAR_OP
 (
@@ -618,12 +618,12 @@ comment on column FF_OPERATION_FOLLOW_UP.FOLLOW_UP_OPERATION_ID_
 comment on column FF_OPERATION_FOLLOW_UP.OPERATION_DATE_
   is '操作日期';
 alter table FF_OPERATION_FOLLOW_UP
-  add constraint PK_FF_OPERATION_FOLOW_UP primary key (OPERATION_FOLLOW_UP_ID_);
+  add constraint PK_FF_OPERATION_FOLLOW_UP primary key (OPERATION_FOLLOW_UP_ID_);
 alter table FF_OPERATION_FOLLOW_UP
-  add constraint FK_FF_OPERATION_FOLOW_UP_O foreign key (OPERATION_ID_)
+  add constraint FK_FF_OPERATION_FOLLOW_UP_O foreign key (OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
 alter table FF_OPERATION_FOLLOW_UP
-  add constraint FK_FF_OPERATION_FOLOW_UP_OFU foreign key (FOLLOW_UP_OPERATION_ID_)
+  add constraint FK_FF_OPERATION_FOLLOW_UP_OFU foreign key (FOLLOW_UP_OPERATION_ID_)
   references FF_OPERATION (OPERATION_ID_);
 
 create table FF_PROC_OP
@@ -770,6 +770,7 @@ alter table FF_TASK
 alter table FF_TASK
   add constraint FK_FF_TASK_PARENT foreign key (PREVIOUS_TASK_ID_)
   references FF_TASK (TASK_ID_);
+CREATE INDEX IX_FF_TASK_ASSIGNEE_STATUS ON FF_TASK (ASSIGNEE_, TASK_STATUS_);
 
 create table FF_TASK_OP
 (
@@ -874,7 +875,7 @@ select N.NODE_ID_, N.PARENT_NODE_ID_, N.PREVIOUS_NODE_IDS_, N.LAST_COMPLETE_NODE
   from FF_NODE N
  inner join FF_PROC P on P.PROC_ID_ = N.PROC_ID_
  inner join FF_PROC_DEF PD on PD.PROC_DEF_ID_ = P.PROC_DEF_ID_
- inner join FF_PROC_DEF SPD on SPD.PROC_DEF_ID_ = N.SUB_PROC_DEF_ID_;
+ left outer join FF_PROC_DEF SPD on SPD.PROC_DEF_ID_ = N.SUB_PROC_DEF_ID_;
 
 create or replace view ffv_node_var as
 select PV.NODE_VAR_ID_, PV.NODE_ID_, PV.VAR_TYPE_, PV.VAR_NAME_, PV.VALUE_, PV.OBJ_, PV.CREATION_DATE_, N.PARENT_NODE_ID_, N.PROC_ID_ from FF_NODE_VAR PV inner join FF_NODE N on N.NODE_ID_ = PV.NODE_ID_;
