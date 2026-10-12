@@ -503,6 +503,10 @@ public class FfOperationServiceImpl implements FfOperationService {
         Map<String, Object> op;
         for (int i = allOpMap.size() - 1; i >= 0; i--) {
             op = allOpMap.get(i);
+            if (op == null) {
+                throw new RuntimeException("errors.discontinuous‌OperationOrder‌");
+            }
+
             if (op.containsKey("PROC_OP_ID_")) {
                 ffResult.addAll(undoProcOp(op));
             }
