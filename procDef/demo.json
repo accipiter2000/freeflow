@@ -1,86 +1,106 @@
 {
-    "procDefCode": "demo",
-    "procDefName": "简单流程示例",
-    "procDefCat": "demo.hq.hr",
-    "memo": "memo",
-    "nodeDefList": [
-        {
-            "shape": {
-                "type": "rectangle",
-                "style": "left: 50; top: 100; width: 100; height: 50;"
-            },
-            "nodeType": "TASK",
-            "nodeCode": "departmentLeader",
-            "nodeName": "部门领导审批",
-            "assignee": "departmentLeader",
-            "action": "commonApproveContract.do?CONTRACT_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
-        },
-        {
-            "shape": {
-                "type": "rectangle",
-                "style": "left: 50; top: 200; width: 100; height: 50;"
-            },
-            "nodeType": "TASK",
-            "nodeCode": "hrLeader",
-            "nodeName": "人力资源审批",
-            "candidateAssignee": "hrLeader,DevLeader",
-            "action": "commonApproveContract.do?CONTRACT_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
-        },
-        {
-            "shape": {
-                "type": "rectangle",
-                "style": "left: 50; top: 300; width: 100; height: 50;"
-            },
-            "nodeType": "TASK",
-            "nodeCode": "companyLeader",
-            "nodeName": "公司领导审批",
-            "candidateAssignee": "${initPosiEmpId}",
-            "action": "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
-        }
-    ],
-    "flowDefList": [
-        {
-            "shape": {
-                "type": "line",
-                "linePath": "SN"
-            },
-            "flowCode": "flow01",
-            "sourceNodeCode": "departmentLeader",
-            "targetNodeCode": "hrLeader",
-            "conditionExpression": "true"
-        },
-        {
-            "shape": {
-                "type": "line",
-                "linePath": "SN"
-            },
-            "flowCode": "flow02",
-            "sourceNodeCode": "hrLeader",
-            "targetNodeCode": "companyLeader",
-            "conditionExpression": "true"
-        }
-    ],
-    "noteDefList": [
-        {
-            "shape": {
-                "type": "rectangle",
-                "style": "left: 0; top: 0; width: 200; height: 50; font-size: 16; border-color: transparent; background-color: transparent"
-            },
-            "noteCode": "noteCode",
-            "noteName": "${subProcDefName}",
-            "dynamic": "1"
-        }
-    ],
-    "procVarDefList": [
-        {
-            "varType": "STRING",
-            "varName": "INIT_COM_ID",
-            "value": "258"
-        },
-        {
-            "varName": "INIT_COM_NAME",
-            "value": "电力厂",
-            "varType": "STRING"
-        }
-    ]
+	"procDefCode": "demo",
+	"procDefName": "简单流程示例",
+	"procDefCat": "demo.hq.hr",
+	"memo": "memo",
+	"nodeDefList": [{
+		"shape": {
+			"type": "oval",
+			"style": "left: 75; top: 0; width: 50; height: 50;"
+		},
+		"nodeType": "START",
+		"nodeCode": "开始",
+		"nodeName": "开始",
+		"completeExpression": "${COMPLETE/TOTAL>=1}",
+		"completeReturn": "0",
+		"exclusive": "0",
+		"autoCompleteSameAssignee": "0",
+		"autoCompleteEmptyAssignee": "0",
+		"inform": "0",
+		"priority": "5",
+		"claim": "0",
+		"forwardable": "0"
+	},
+	{
+		"shape": {
+			"type": "rectangle",
+			"style": "left: 50; top: 100; width: 100; height: 50;"
+		},
+		"nodeType": "TASK",
+		"nodeCode": "departmentLeader",
+		"nodeName": "部门领导审批",
+		"assignee": "dl",
+		"action": "commonApproveContract.do?CONTRACT_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
+	},
+	{
+		"shape": {
+			"type": "rectangle",
+			"style": "left: 50; top: 200; width: 100; height: 50;"
+		},
+		"nodeType": "TASK",
+		"nodeCode": "hrLeader",
+		"nodeName": "人力资源审批",
+		"candidateAssignee": "hrLeader,DevLeader",
+		"action": "commonApproveContract.do?CONTRACT_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
+	},
+	{
+		"shape": {
+			"type": "rectangle",
+			"style": "left: 50; top: 300; width: 100; height: 50;"
+		},
+		"nodeType": "TASK",
+		"nodeCode": "companyLeader",
+		"nodeName": "公司领导审批",
+		"candidateAssignee": "${initPosiEmpId}",
+		"action": "handle${proc.getBizType()}.do?BIZ_ID_=${proc.getBizId()}&TASK_ID_=${task.getTaskId()}"
+	}],
+	"flowDefList": [{
+		"shape": {
+			"type": "line",
+			"linePath": "SN"
+		},
+		"flowCode": "flow00",
+		"sourceNodeCode": "开始",
+		"targetNodeCode": "departmentLeader",
+		"conditionExpression": "true"
+	},
+	{
+		"shape": {
+			"type": "line",
+			"linePath": "SN"
+		},
+		"flowCode": "flow01",
+		"sourceNodeCode": "departmentLeader",
+		"targetNodeCode": "hrLeader",
+		"conditionExpression": "true"
+	},
+	{
+		"shape": {
+			"type": "line",
+			"linePath": "SN"
+		},
+		"flowCode": "flow02",
+		"sourceNodeCode": "hrLeader",
+		"targetNodeCode": "companyLeader",
+		"conditionExpression": "true"
+	}],
+	"noteDefList": [{
+		"shape": {
+			"type": "rectangle",
+			"style": "left: 0; top: 0; width: 200; height: 50; font-size: 16; border-color: transparent; background-color: transparent"
+		},
+		"noteCode": "noteCode",
+		"noteName": "${subProcDefName}",
+		"dynamic": "1"
+	}],
+	"procVarDefList": [{
+		"varType": "STRING",
+		"varName": "INIT_COM_ID",
+		"value": "258"
+	},
+	{
+		"varName": "INIT_COM_NAME",
+		"value": "电力厂",
+		"varType": "STRING"
+	}]
 }

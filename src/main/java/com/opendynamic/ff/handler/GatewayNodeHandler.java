@@ -125,7 +125,7 @@ public class GatewayNodeHandler implements NodeHandler {
         nodeVarMap.putAll(operationContext.getCurrentNodeVarMap());
         nodeVarMap.put("TOTAL", TOTAL);
         nodeVarMap.put("COMPLETE", COMPLETE);
-        if (!nodeVarMap.get("TOTAL").equals(0)) {
+        if (((Number) nodeVarMap.get("TOTAL")).doubleValue() != 0) {
             SimpleContext simpleContext = new SimpleContext();
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
                 simpleContext.setVariable(entry.getKey(), ffExpressionFactory.createValueExpression(entry.getValue(), Object.class));

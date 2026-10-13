@@ -22,6 +22,8 @@ import de.odysseus.el.util.SimpleContext;
 public class NodeDef implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static final ExpressionFactory EXPRESSION_FACTORY = new ExpressionFactoryImpl();
+
     protected String nodeType = FfService.NODE_TYPE_TASK;// 节点类型。
     protected String nodeCode;// 节点编码。
     protected String nodeName;// 节点名称。
@@ -372,11 +374,10 @@ public class NodeDef implements Serializable {
         List<NodeDef> nextNodeDefList = new ArrayList<>();
 
         // 设置JUEL解析环境
-        ExpressionFactory expressionFactory = new ExpressionFactoryImpl();
         SimpleContext simpleContext = new SimpleContext();
         if (nodeVarMap != null) {// 装配节点变量
             for (Map.Entry<String, Object> entry : nodeVarMap.entrySet()) {
-                simpleContext.setVariable(entry.getKey(), expressionFactory.createValueExpression(entry.getValue(), Object.class));
+                simpleContext.setVariable(entry.getKey(), EXPRESSION_FACTORY.createValueExpression(entry.getValue(), Object.class));
             }
         }
 
@@ -387,7 +388,7 @@ public class NodeDef implements Serializable {
             }
             else {
                 // JUEL解析
-                ValueExpression expression = expressionFactory.createValueExpression(simpleContext, flowDef.getConditionExpression(), Boolean.class);
+                ValueExpression expression = EXPRESSION_FACTORY.createValueExpression(simpleContext, flowDef.getConditionExpression(), Boolean.class);
                 if (Boolean.TRUE.equals(expression.getValue(simpleContext))) {
                     nextNodeDefList.add(flowDef.getTargetNodeDef());
                 }

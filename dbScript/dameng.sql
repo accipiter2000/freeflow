@@ -524,7 +524,7 @@ create table FF_NODE_VAR
   NODE_ID_       VARCHAR2(40) not null,
   VAR_TYPE_      VARCHAR2(20) not null,
   VAR_NAME_      VARCHAR2(60) not null,
-  VALUE_         VARCHAR2(1000),
+  VALUE_         VARCHAR2(600),
   OBJ_           BLOB,
   CREATION_DATE_ TIMESTAMP(6) not null
 );
