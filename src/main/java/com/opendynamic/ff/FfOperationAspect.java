@@ -109,6 +109,9 @@ public class FfOperationAspect {
 
         try {
             ffResult = (FfResult) point.proceed(arguments);// 执行原方法
+            if (ffResult == null) {
+                throw new RuntimeException("errors.ffResultCannotBeNull");
+            }
         }
         catch (Throwable e) {
             ffOperationService.clear();// 清理threadLocal
