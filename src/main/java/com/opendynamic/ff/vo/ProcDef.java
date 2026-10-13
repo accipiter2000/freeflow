@@ -20,6 +20,8 @@ import com.opendynamic.ff.service.FfService;
 public class ProcDef implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static final Gson GSON;
+
     protected String procDefId; // 流程定义ID。
     protected String procDefCode; // 流程定义编码。
     protected String procDefName; // 流程定义名称。
@@ -59,6 +61,15 @@ public class ProcDef implements Serializable {
     @JsonIgnore
     protected transient List<NodeDef> startNodeDefList;// 起始节点定义列表。
 
+    static {
+        RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
+        runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
+        runtimeTypeAdapterFactory.registerSubtype(OvalShape.class, "oval");
+        runtimeTypeAdapterFactory.registerSubtype(DiamondShape.class, "diamond");
+        runtimeTypeAdapterFactory.registerSubtype(LineShape.class, "line");
+        GSON = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+    }
+
     /**
      * 依据数据库数据构造。
      * 
@@ -71,13 +82,7 @@ public class ProcDef implements Serializable {
         }
 
         // 根据JSON生成流程定义
-        RuntimeTypeAdapterFactory<Shape> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Shape.class, "type");
-        runtimeTypeAdapterFactory.registerSubtype(RectangleShape.class, "rectangle");
-        runtimeTypeAdapterFactory.registerSubtype(OvalShape.class, "oval");
-        runtimeTypeAdapterFactory.registerSubtype(DiamondShape.class, "diamond");
-        runtimeTypeAdapterFactory.registerSubtype(LineShape.class, "line");
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
-        ProcDef procDef = gson.fromJson((String) data.get("PROC_DEF_MODEL_"), ProcDef.class);
+        ProcDef procDef = GSON.fromJson((String) data.get("PROC_DEF_MODEL_"), ProcDef.class);
 
         this.procDefId = (String) data.get("PROC_DEF_ID_");
         this.procDefCode = procDef.getProcDefCode();

@@ -23,9 +23,7 @@
 	</bean>
 
 	<bean id="ffJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource">
-			<ref local="ffDataSource" />
-		</property>
+		<property name="dataSource" ref="ffDataSource" />
 	</bean>
 
 	<bean id="ffTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
