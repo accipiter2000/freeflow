@@ -1,0 +1,99 @@
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.opendynamic.ff.service.FfProcService;
+import com.opendynamic.ff.service.FfService;
+import com.opendynamic.ff.vo.FfResult;
+import com.opendynamic.ff.vo.FfUser;
+import com.opendynamic.ff.vo.Proc;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+public class FfProcTest {
+    @Autowired
+    private FfProcService ffProcService;
+    @Autowired
+    private FfService ffService;
+
+    @Test
+    public void loadProc() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        Proc proc = ffService.loadProc(procId);
+        System.out.println(proc.getCreationDate());
+    }
+
+    @Test
+    public void createProcQuery() throws Exception {
+        // List<Proc> procList = ffService.createProcQuery().setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        List<Proc> procList = ffService.createProcQuery().setProcStatus(FfService.PROC_STATUS_ACTIVE).queryForObjectList();
+        for (Proc proc : procList) {
+            System.out.println(proc.getCreationDate());
+        }
+
+        System.out.println(ffService.createProcQuery().setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).count());
+    }
+
+    @Test
+    public void createInvolvedProcQuery() throws Exception {
+        // List<Proc> procList = ffService.createInvolvedProcQuery().setAssigneeList(Arrays.asList("z34")).setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).queryForObjectList();
+        List<Proc> procList = ffService.createInvolvedProcQuery().setAssignee("bff006f0658e43748e1bf7e578fa7f80").queryForObjectList();
+        for (Proc proc : procList) {
+            System.out.println(proc.getCreationDate());
+        }
+
+        System.out.println(ffService.createInvolvedProcQuery().setAssigneeList(Arrays.asList("z34")).setProcStatusList(Arrays.asList(FfService.PROC_STATUS_COMPLETE)).count());
+    }
+
+    @Test
+    public void updateProcBizInfo() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        ffService.updateProcBizInfo(procId, "bizId4", "bizType2", "bizCode3", "bizName2", "bizDesc5");
+    }
+
+    @Test
+    public void suspendProc() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        FfResult ffResult = ffService.suspendProc(procId, null, new FfUser("e", null));
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void activateProc() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        FfResult ffResult = ffService.activateProc(procId, null, new FfUser("e", null));
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void completeProc() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        FfResult ffResult = ffService.completeProc(procId, null, new FfUser("e", null));
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void terminateProc() throws Exception {
+        String procId = "266dd28c8eff43409596f5324f8ca99d";
+        FfResult ffResult = ffService.terminateProc(procId, null, new FfUser("e", null));
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void deleteProc() throws Exception {
+        String procId = "8bb3abfa0bbe46c0af0e07b6b4420c76";
+        FfResult ffResult = ffService.deleteProc(procId, new FfUser("e", null));
+        System.out.println(ffResult);
+    }
+
+    @Test
+    public void cleanProc() throws Exception {
+        String procId = "3fdf8be209b44b31b5d875677b430944";
+        ffProcService.cleanProc(procId);
+    }
+}
