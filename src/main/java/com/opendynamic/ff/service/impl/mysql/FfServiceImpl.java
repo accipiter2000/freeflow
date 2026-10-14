@@ -29,6 +29,8 @@ import javax.el.ValueExpression;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +92,8 @@ import de.odysseus.el.util.SimpleContext;
 public class FfServiceImpl implements FfService, ApplicationContextAware, SmartInitializingSingleton {
     private ApplicationContext applicationContext;
 
+    private static final Logger logger = LoggerFactory.getLogger(FfServiceImpl.class);
+
     private static List<ProcDef> procDefList;
     private static Queue<ProcDef> adjustProcDefList = new ConcurrentLinkedDeque<>();
     private static Map<String, NodeHandler> nodeHandlerMap = new ConcurrentHashMap<>();
@@ -127,7 +131,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     @PostConstruct
     @Override
     public boolean refreshProcDefCache() {
-        System.out.println("Initializing workflow definition...");
+        logger.info("Initializing workflow definition...");
 
         List<Map<String, Object>> procDefList = ffProcDefService.selectProcDef(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1, -1);
         List<ProcDef> latestProcDefList = new ArrayList<>(procDefList.size());
@@ -145,7 +149,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
     }
 
     public void initNodeHandler() {
-        System.out.println("Initializing node handler...");
+        logger.info("Initializing node handler...");
 
         Map<String, NodeHandler> nodeHandlerMap = applicationContext.getBeansOfType(NodeHandler.class);// 装配节点处理器
         for (Map.Entry<String, NodeHandler> entry : nodeHandlerMap.entrySet()) {

@@ -444,8 +444,7 @@ public class CenterForwardTaskNodeHandler implements NodeHandler {
             completeReturn = (String) expression.getValue(simpleContext);
         }
 
-        // 非通知节点需完成判断
-        if (FfService.BOOLEAN_FALSE.equals(inform) && !nodeVarMap.get("TOTAL").equals(0)) {
+        if (FfService.BOOLEAN_FALSE.equals(inform) && ((Number) nodeVarMap.get("TOTAL")).doubleValue() != 0) {// 非通知节点需完成判断
             expression = ffExpressionFactory.createValueExpression(simpleContext, node.getCompleteExpression(), Boolean.class);// 判断是否满足节点完成表达式
             if (Boolean.FALSE.equals(expression.getValue(simpleContext))) {
                 return ffResult;
