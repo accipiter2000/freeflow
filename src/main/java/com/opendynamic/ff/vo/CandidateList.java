@@ -30,7 +30,7 @@ public class CandidateList extends ArrayList<Candidate> {
             // 已存在合并CandidateList
             List<FfUser> candidateAssigneeList = existCandidate.getCandidateAssigneeList();
             for (FfUser ffUser : candidate.getCandidateAssigneeList()) {
-                if (!candidateAssigneeList.contains(ffUser)) {
+                if (ffUser != null && ffUser.getUserId() != null && !candidateAssigneeList.contains(ffUser)) {
                     candidateAssigneeList.add(ffUser);
                     changed = true;
                 }
@@ -72,7 +72,7 @@ public class CandidateList extends ArrayList<Candidate> {
 
     /**
      * 转化成Json。
-     * 
+     *
      * @return Json字符串。
      */
     public String toJson() {
@@ -81,7 +81,7 @@ public class CandidateList extends ArrayList<Candidate> {
 
     /**
      * 根据节点编码获取候选。
-     * 
+     *
      * @param nodeCode
      *        节点编码。
      * @return 候选。
@@ -106,7 +106,7 @@ public class CandidateList extends ArrayList<Candidate> {
 
     /**
      * 根据子流程路径和节点编码获取候选。
-     * 
+     *
      * @param subProcPath
      *        子流程路径。
      * @param nodeCode
@@ -127,7 +127,7 @@ public class CandidateList extends ArrayList<Candidate> {
 
     /**
      * 根据子流程路径获取其下面的候选列表。
-     * 
+     *
      * @param subProcPath
      *        子流程路径。
      * @return 候选列表。
