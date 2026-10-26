@@ -137,7 +137,6 @@ html, body {
 				<li><a href="#5.8" class="navigation">5.8 获取下一个运行期节点定义</a></li>
 				<li><a href="#5.9" class="navigation">5.9 获取流程定义图</a></li>
 				<li><a href="#5.10" class="navigation">5.10 获取动态流程图</a></li>
-				<li><a href="#5.11" class="navigation">5.11 FreeFlow演示项目</a></li>
 			</ul>
 		</ul>
 	</div>
@@ -151,7 +150,7 @@ html, body {
 <dependency>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>6.0.1-RELEASE</version>
+    <version>7.0.0-RELEASE</version>
 </dependency>
 		</textarea>
 		<p class="subTitle">JAR</p>
@@ -564,21 +563,21 @@ html, body {
 		<p>TOTAL：节点下已完成任务数。</p>
 		<p class="title" id="4">4 系统配置</p>
 		<p class="subTitle" id="4.1">4.1 JAR设置</p>
-		<p class="content">将freeflow-6.0.1-RELEASE.jar放置于classpath中。</p>
+		<p class="content">将freeflow-7.0.0-RELEASE.jar放置于classpath中。</p>
 		<p class="content"><a href="https://github.com/accipiter2000/freeflow/tree/main/release">https://github.com/accipiter2000/freeflow/tree/main/release</a></p>
 		<p class="content">或通过maven配置</p>
 		<textarea name="textarea" cols="160" rows="8" readonly="readonly" class="code">
 <dependency>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>6.0.1-RELEASE</version>
+    <version>7.0.0-RELEASE</version>
 </dependency>
 		</textarea>
 		<p class="subTitle" id="4.2">4.2 数据库表</p>
 		<p class="content">建表语句见dbScript目录下的相关文件。</p>
 		<p class="content"><a href="https://github.com/accipiter2000/freeflow/tree/main/release">https://github.com/accipiter2000/freeflow/tree/main/dbScript</a></p>
 		<p class="subTitle" id="4.3">4.3 spring配置</p>
-		<p class="content">spring配置包括ffDataSource、ffJdbcTemplate和FfHelper接口的实现类。</p>
+		<p class="content">spring配置包括ffDataSource和ffJdbcTemplate接口的实现类。</p>
 		<p class="content">如果流程数据库表单独建立在一个数据库用户下，需要配置分布式事务。</p>
 		<textarea name="textarea" cols="160" rows="40" readonly="readonly" class="code">
 	<context:component-scan base-package="com.opendynamic">
@@ -609,7 +608,6 @@ html, body {
 			<ref local="ffDataSource" />
 		</property>
 	</bean>
-	<bean id="ffHelper" class="xxx.FfHelperImpl" />
 	<context:component-scan base-package="com.opendynamic.ff">
 		<context:exclude-filter type="regex" expression="com.opendynamic.ff.service.impl.oracle.*" />
 	</context:component-scan>
@@ -644,7 +642,6 @@ html, body {
 			<ref local="msDataSource" />
 		</property>
 	</bean>
-	<bean id="ffHelper" class="xxx.FfHelperImpl" />
 	<alias name="msDataSource" alias="ffDataSource" />
 	<alias name="msJdbcTemplate" alias="ffJdbcTemplate" />
 	<context:component-scan base-package="com.opendynamic.ff">
@@ -653,7 +650,6 @@ html, body {
 </textarea>
 		<p class="subTitle" id="4.4">4.4 JUEL表达式解析环境设置</p>
 		<p class="content">在系统启动时，需通过ffService.addExternalService将外置spring beans设置到解析环境中。</p>
-		<p class="content">外置spring beans中必须包含FfHelper接口的实现。</p>
 		<p class="content">例如。</p>
 		<textarea name="textarea" cols="160" rows="20" readonly="readonly" class="code">
 @Service
@@ -661,13 +657,10 @@ public class InitServiceImpl implements InitService {
     @Autowired
     private FfService ffService;
     @Autowired
-    private FfHelper ffHelper;
-    @Autowired
     private FfOmService ffOmService;
 
     @PostConstruct
     public void initFfServiceExternalService() {
-        ffService.addExternalService("ffHelper", ffHelper);
         ffService.addExternalService("ffOmService", ffOmService);
     }
 }
@@ -875,10 +868,6 @@ public class InitServiceImpl implements InitService {
         String json = new GsonBuilder().setPrettyPrinting().create().toJson(runningProcDef);
         System.out.println(json);
 </textarea>
-<p class="content"></p>
-<p class="subTitle" id="5.11">5.11 FreeFlow演示项目</p>
-		<p class="content">项目下载地址：<a href="https://github.com/accipiter2000/doc">https://github.com/accipiter2000/doc</a></p>
-		<p class="content">项目部署：根据<a href="https://github.com/accipiter2000/doc">https://github.com/accipiter2000/doc/tree/main/build</a>中的文件，在MYSQL8数据库中创建用户DOC，导入dump文件，在Tomcat中部署war包，即可运行。</p>
 	</div>
 </body>
 </html>
