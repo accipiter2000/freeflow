@@ -45,7 +45,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取用户ID。
-     *
+     * 
      * @return 用户ID。
      */
     public String getUserId() {
@@ -54,7 +54,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置用户ID。
-     *
+     * 
      * @param userId
      *        用户ID。
      */
@@ -65,7 +65,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取用户编码。
-     *
+     * 
      * @return 用户编码。
      */
     public String getUserCode() {
@@ -74,7 +74,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置用户编码。
-     *
+     * 
      * @param userCode
      *        用户编码。
      */
@@ -85,7 +85,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取用户名称。
-     *
+     * 
      * @return 用户名称。
      */
     public String getUserName() {
@@ -94,7 +94,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置用户名称。
-     *
+     * 
      * @param userName
      *        用户名称。
      */
@@ -105,7 +105,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取角色ID。
-     *
+     * 
      * @return 角色ID。
      */
     public String getRoleId() {
@@ -114,7 +114,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置角色ID。
-     *
+     * 
      * @param roleId
      *        角色ID。
      */
@@ -125,7 +125,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取角色编码。
-     *
+     * 
      * @return 角色编码。
      */
     public String getRoleCode() {
@@ -134,7 +134,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置角色编码。
-     *
+     * 
      * @param roleCode
      *        角色编码。
      */
@@ -145,7 +145,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取角色名称。
-     *
+     * 
      * @return 角色名称。
      */
     public String getRoleName() {
@@ -154,7 +154,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置角色名称。
-     *
+     * 
      * @param roleName
      *        角色名称。
      */
@@ -165,7 +165,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取机构ID。
-     *
+     * 
      * @return 机构ID。
      */
     public String getOrgId() {
@@ -174,7 +174,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置机构ID。
-     *
+     * 
      * @param orgId
      *        机构ID。
      */
@@ -185,7 +185,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取机构编码。
-     *
+     * 
      * @return 机构编码。
      */
     public String getOrgCode() {
@@ -194,7 +194,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置机构编码。
-     *
+     * 
      * @param orgCode
      *        机构编码。
      */
@@ -205,7 +205,7 @@ public class FfUser implements Serializable {
 
     /**
      * 获取机构名称。
-     *
+     * 
      * @return 机构名称。
      */
     public String getOrgName() {
@@ -214,7 +214,7 @@ public class FfUser implements Serializable {
 
     /**
      * 设置机构名称。
-     *
+     * 
      * @param orgName
      *        机构名称。
      */

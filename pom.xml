@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>7.0.0-RELEASE</version>
+    <version>7.0.1-RELEASE</version>
     <packaging>jar</packaging>
     <name>freeflow</name>
     <description>a flexible workflow engine</description>
@@ -108,6 +108,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>5.3.39</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
         </dependency>
         <!-- fasterxml.jackson -->
         <dependency>
