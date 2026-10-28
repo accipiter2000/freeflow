@@ -109,11 +109,6 @@
             <artifactId>spring-tx</artifactId>
             <version>5.3.39</version>
         </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
         <!-- fasterxml.jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

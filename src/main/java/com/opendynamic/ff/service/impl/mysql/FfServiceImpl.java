@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.annotation.PostConstruct;
+import javax.annotation.PostConstruct;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.imageio.ImageIO;
