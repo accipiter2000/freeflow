@@ -566,9 +566,6 @@ public class FfOperationServiceImpl implements FfOperationService {
                 if (UNDO_PROC_STATUS_.equals(FfService.NODE_STATUS_ACTIVE)) {
                     ffResult.addActivateProc(proc);
                 }
-                if (UNDO_PROC_STATUS_.equals(FfService.NODE_STATUS_SUSPEND)) {
-                    ffResult.addSuspendProc(proc);
-                }
                 if (UNDO_PROC_STATUS_.equals(FfService.NODE_STATUS_COMPLETE)) {
                     ffResult.addCompleteProc(proc);
                 }
@@ -615,9 +612,6 @@ public class FfOperationServiceImpl implements FfOperationService {
                 if (UNDO_NODE_STATUS_.equals(FfService.NODE_STATUS_ACTIVE)) {
                     ffResult.addActivateNode(node);
                 }
-                if (UNDO_NODE_STATUS_.equals(FfService.NODE_STATUS_SUSPEND)) {
-                    ffResult.addSuspendNode(node);
-                }
                 if (UNDO_NODE_STATUS_.equals(FfService.NODE_STATUS_COMPLETE)) {
                     ffResult.addCompleteNode(node);
                 }
@@ -663,9 +657,6 @@ public class FfOperationServiceImpl implements FfOperationService {
             if (!CURRENT_TASK_STATUS_.equals(UNDO_TASK_STATUS_)) {
                 if (UNDO_TASK_STATUS_.equals(FfService.NODE_STATUS_ACTIVE)) {
                     ffResult.addActivateTask(task);
-                }
-                if (UNDO_TASK_STATUS_.equals(FfService.NODE_STATUS_SUSPEND)) {
-                    ffResult.addSuspendTask(task);
                 }
                 if (UNDO_TASK_STATUS_.equals(FfService.NODE_STATUS_COMPLETE)) {
                     ffResult.addCompleteTask(task);

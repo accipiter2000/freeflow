@@ -1168,53 +1168,8 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
     @Override
     @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
-    public FfResult suspendProc(String procId, String taskId, FfUser executor) {
-        FfResult ffResult = new FfResult();
-
-        List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_ACTIVE).queryForObjectList();
-        for (Task task : taskList) {
-            Date COMPLETE_DATE_ = new Date();
-            ffTaskService.updateTaskStatus(task.getTaskId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.TASK_STATUS_SUSPEND);
-            task.setTaskEndUser(executor.getUserId());
-            task.setTaskEndUserName(executor.getUserName());
-            task.setTaskEndDate(COMPLETE_DATE_);
-            task.setTaskStatus(FfService.TASK_STATUS_SUSPEND);
-            ffResult.addSuspendTask(task);
-        }
-        List<Node> nodeList = createNodeQuery().setProcId(procId).setNodeStatus(FfService.NODE_STATUS_ACTIVE).queryForObjectList();
-        for (Node node : nodeList) {
-            Date COMPLETE_DATE_ = new Date();
-            ffNodeService.updateNodeStatus(node.getNodeId(), executor.getUserId(), executor.getUserName(), COMPLETE_DATE_, FfService.NODE_STATUS_SUSPEND);
-            node.setNodeEndUser(executor.getUserId());
-            node.setNodeEndUserName(executor.getUserName());
-            node.setNodeEndDate(COMPLETE_DATE_);
-            node.setNodeStatus(FfService.NODE_STATUS_SUSPEND);
-            ffResult.addSuspendNode(node);
-        }
-
-        ffProcService.updateProcStatus(procId, executor.getUserId(), executor.getUserName(), new Date(), FfService.PROC_STATUS_SUSPEND);
-        ffResult.addSuspendProc(loadProc(procId));
-
-        return ffResult;
-    }
-
-    @Override
-    @FfOperation(procId = "${procId}", taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
     public FfResult activateProc(String procId, String taskId, FfUser executor) {
         FfResult ffResult = new FfResult();
-
-        List<Task> taskList = createTaskQuery().setProcId(procId).setTaskStatus(FfService.TASK_STATUS_SUSPEND).queryForObjectList();
-        for (Task task : taskList) {
-            ffTaskService.updateTaskStatus(task.getTaskId(), FfService.TASK_STATUS_ACTIVE);
-            task.setTaskStatus(FfService.TASK_STATUS_ACTIVE);
-            ffResult.addActivateTask(task);
-        }
-        List<Node> nodeList = createNodeQuery().setProcId(procId).setNodeStatus(FfService.NODE_STATUS_SUSPEND).queryForObjectList();
-        for (Node node : nodeList) {
-            ffNodeService.updateNodeStatus(node.getNodeId(), FfService.NODE_STATUS_ACTIVE);
-            node.setNodeStatus(FfService.NODE_STATUS_ACTIVE);
-            ffResult.addActivateNode(node);
-        }
 
         ffProcService.updateProcStatus(procId, FfService.PROC_STATUS_ACTIVE);
         ffResult.addActivateProc(loadProc(procId));
@@ -1493,17 +1448,6 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
         FfResult ffResult = new FfResult();
 
         ffTaskService.updateTaskAssignee(taskId, assignee.getUserId(), assignee.getUserName());
-
-        return ffResult;
-    }
-
-    @Override
-    @FfOperation(taskId = "${taskId}", operator = "${executor.userId}", operatorName = "${executor.userName}")
-    public FfResult suspendTask(String taskId, FfUser executor) {
-        FfResult ffResult = new FfResult();
-
-        ffTaskService.updateTaskStatus(taskId, executor.getUserId(), executor.getUserName(), new Date(), FfService.TASK_STATUS_SUSPEND);
-        ffResult.addSuspendTask(loadTask(taskId));
 
         return ffResult;
     }
@@ -1952,7 +1896,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
         if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             Node node = createNodeQuery().setNodeId(task.getNodeId()).queryForObject();
-            List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
+            List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
 
             String exclusive = node.getExclusive();
             if (exclusive != null && exclusive.contains("${")) {// JUEL解析
@@ -2019,7 +1963,7 @@ public class FfServiceImpl implements FfService, ApplicationContextAware, SmartI
 
         if (task.getAssignee().equals(executor.getUserId()) || isDelegator(task.getAssignee(), executor.getUserId())) {
             Node node = createNodeQuery().setNodeId(task.getNodeId()).queryForObject();
-            List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
+            List<Task> taskList = createTaskQuery().setNodeId(task.getNodeId()).setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_COMPLETE)).queryForObjectList();
 
             String exclusive = node.getExclusive();
             if (exclusive != null && exclusive.contains("${")) {// JUEL解析

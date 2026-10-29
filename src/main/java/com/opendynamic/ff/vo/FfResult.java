@@ -13,21 +13,18 @@ public class FfResult implements Serializable {
     private String operationId;// 操作ID。
 
     private List<Proc> createProcList;// 新增流程列表。
-    private List<Proc> suspendProcList;// 挂起流程列表。
     private List<Proc> activateProcList;// 激活流程列表。
     private List<Proc> completeProcList;// 正常完成流程列表。
     private List<Proc> terminateProcList;// 异常完成流程列表。
     private List<Proc> deleteProcList;// 删除流程列表。
 
     private List<Node> createNodeList;// 新增节点列表。
-    private List<Node> suspendNodeList;// 挂起节点列表。
     private List<Node> activateNodeList;// 激活节点列表。
     private List<Node> completeNodeList;// 正常完成节点列表。
     private List<Node> terminateNodeList;// 异常完成节点列表。
     private List<Node> deleteNodeList;// 删除节点列表。
 
     private List<Task> createTaskList;// 新增任务列表。
-    private List<Task> suspendTaskList;// 挂起任务列表。
     private List<Task> activateTaskList;// 激活任务列表。
     private List<Task> completeTaskList;// 正常完成任务列表。
     private List<Task> terminateTaskList;// 异常完成任务列表。
@@ -39,21 +36,18 @@ public class FfResult implements Serializable {
 
     public FfResult() {
         this.createProcList = new ArrayList<>();
-        this.suspendProcList = new ArrayList<>();
         this.activateProcList = new ArrayList<>();
         this.completeProcList = new ArrayList<>();
         this.terminateProcList = new ArrayList<>();
         this.deleteProcList = new ArrayList<>();
 
         this.createNodeList = new ArrayList<>();
-        this.suspendNodeList = new ArrayList<>();
         this.activateNodeList = new ArrayList<>();
         this.completeNodeList = new ArrayList<>();
         this.terminateNodeList = new ArrayList<>();
         this.deleteNodeList = new ArrayList<>();
 
         this.createTaskList = new ArrayList<>();
-        this.suspendTaskList = new ArrayList<>();
         this.activateTaskList = new ArrayList<>();
         this.completeTaskList = new ArrayList<>();
         this.terminateTaskList = new ArrayList<>();
@@ -90,15 +84,6 @@ public class FfResult implements Serializable {
      */
     public List<Proc> getCreateProcList() {
         return createProcList;
-    }
-
-    /**
-     * 获取挂起流程列表。
-     * 
-     * @return 挂起流程列表。
-     */
-    public List<Proc> getSuspendProcList() {
-        return suspendProcList;
     }
 
     /**
@@ -147,15 +132,6 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 获取挂起节点列表。
-     * 
-     * @return 挂起节点列表。
-     */
-    public List<Node> getSuspendNodeList() {
-        return suspendNodeList;
-    }
-
-    /**
      * 获取激活节点列表。
      * 
      * @return 激活节点列表。
@@ -198,15 +174,6 @@ public class FfResult implements Serializable {
      */
     public List<Task> getCreateTaskList() {
         return createTaskList;
-    }
-
-    /**
-     * 获取挂起任务列表。
-     * 
-     * @return 挂起任务列表。
-     */
-    public List<Task> getSuspendTaskList() {
-        return suspendTaskList;
     }
 
     /**
@@ -296,18 +263,6 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添加挂起流程。
-     * 
-     * @param proc
-     *        挂起流程。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addSuspendProc(Proc proc) {
-        sequenceList.add(proc);
-        return suspendProcList.add(proc);
-    }
-
-    /**
      * 添加激活流程。
      * 
      * @param proc
@@ -368,18 +323,6 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添加挂起节点。
-     * 
-     * @param node
-     *        挂起节点。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addSuspendNode(Node node) {
-        sequenceList.add(node);
-        return suspendNodeList.add(node);
-    }
-
-    /**
      * 添加激活节点。
      * 
      * @param node
@@ -437,18 +380,6 @@ public class FfResult implements Serializable {
     public boolean addCreateTask(Task task) {
         sequenceList.add(task);
         return createTaskList.add(task);
-    }
-
-    /**
-     * 添加挂起任务。
-     * 
-     * @param task
-     *        挂起任务。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addSuspendTask(Task task) {
-        sequenceList.add(task);
-        return suspendTaskList.add(task);
     }
 
     /**
@@ -536,18 +467,6 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添加挂起流程列表。
-     * 
-     * @param procList
-     *        挂起流程列表。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addAllSuspendProc(List<Proc> procList) {
-        sequenceList.addAll(procList);
-        return suspendProcList.addAll(procList);
-    }
-
-    /**
      * 添加激活流程列表。
      * 
      * @param procList
@@ -608,18 +527,6 @@ public class FfResult implements Serializable {
     }
 
     /**
-     * 添加挂起节点列表。
-     * 
-     * @param nodeList
-     *        挂起节点列表。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addAllSuspendNode(List<Node> nodeList) {
-        sequenceList.addAll(nodeList);
-        return suspendNodeList.addAll(nodeList);
-    }
-
-    /**
      * 添加激活节点列表。
      * 
      * @param nodeList
@@ -677,18 +584,6 @@ public class FfResult implements Serializable {
     public boolean addAllCreateTask(List<Task> taskList) {
         sequenceList.addAll(taskList);
         return createTaskList.addAll(taskList);
-    }
-
-    /**
-     * 添加挂起任务列表。
-     * 
-     * @param taskList
-     *        挂起任务列表。
-     * @return 成功返回true，否则返回false。
-     */
-    public boolean addAllSuspendTask(List<Task> taskList) {
-        sequenceList.addAll(taskList);
-        return suspendTaskList.addAll(taskList);
     }
 
     /**
@@ -772,21 +667,18 @@ public class FfResult implements Serializable {
      */
     public boolean addAll(FfResult result) {
         addAllCreateProc(result.getCreateProcList());
-        addAllSuspendProc(result.getSuspendProcList());
         addAllActivateProc(result.getActivateProcList());
         addAllCompleteProc(result.getCompleteProcList());
         addAllTerminateProc(result.getTerminateProcList());
         addAllDeleteProc(result.getDeleteProcList());
 
         addAllCreateNode(result.getCreateNodeList());
-        addAllSuspendNode(result.getSuspendNodeList());
         addAllActivateNode(result.getActivateNodeList());
         addAllCompleteNode(result.getCompleteNodeList());
         addAllTerminateNode(result.getTerminateNodeList());
         addAllDeleteNode(result.getDeleteNodeList());
 
         addAllCreateTask(result.getCreateTaskList());
-        addAllSuspendTask(result.getSuspendTaskList());
         addAllActivateTask(result.getActivateTaskList());
         addAllCompleteTask(result.getCompleteTaskList());
         addAllTerminateTask(result.getTerminateTaskList());
@@ -808,13 +700,6 @@ public class FfResult implements Serializable {
         if (!createProcList.isEmpty()) {
             result.append("createProcList: ");
             for (Proc proc : createProcList) {
-                result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
-            }
-            result.append("\r\n");
-        }
-        if (!suspendProcList.isEmpty()) {
-            result.append("suspendProcList: ");
-            for (Proc proc : suspendProcList) {
                 result.append(proc.getProcId()).append(":").append(getSequence(proc)).append(" ");
             }
             result.append("\r\n");
@@ -855,13 +740,6 @@ public class FfResult implements Serializable {
             }
             result.append("\r\n");
         }
-        if (!suspendNodeList.isEmpty()) {
-            result.append("suspendNodeList: ");
-            for (Node node : suspendNodeList) {
-                result.append(node.getNodeId()).append(":").append(getSequence(node)).append(" ");
-            }
-            result.append("\r\n");
-        }
         if (!activateNodeList.isEmpty()) {
             result.append("activateNodeList: ");
             for (Node node : activateNodeList) {
@@ -894,13 +772,6 @@ public class FfResult implements Serializable {
         if (!createTaskList.isEmpty()) {
             result.append("createTaskList: ");
             for (Task task : createTaskList) {
-                result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
-            }
-            result.append("\r\n");
-        }
-        if (!suspendTaskList.isEmpty()) {
-            result.append("suspendTaskList: ");
-            for (Task task : suspendTaskList) {
                 result.append(task.getTaskId()).append(":").append(getSequence(task)).append(" ");
             }
             result.append("\r\n");

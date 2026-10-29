@@ -59,10 +59,6 @@ public interface FfService {
      */
     public static final String PROC_STATUS_ACTIVE = "1";
     /**
-     * 流程状态-挂起中。
-     */
-    public static final String PROC_STATUS_SUSPEND = "7";
-    /**
      * 流程状态-异常完成。
      */
     public static final String PROC_STATUS_TERMINATE = "8";
@@ -79,10 +75,6 @@ public interface FfService {
      */
     public static final String NODE_STATUS_ACTIVE = "1";
     /**
-     * 节点状态-挂起中。
-     */
-    public static final String NODE_STATUS_SUSPEND = "7";
-    /**
      * 节点状态-异常完成。
      */
     public static final String NODE_STATUS_TERMINATE = "8";
@@ -98,10 +90,6 @@ public interface FfService {
      * 任务状态-运行中。
      */
     public static final String TASK_STATUS_ACTIVE = "1";
-    /**
-     * 任务状态-挂起中。
-     */
-    public static final String TASK_STATUS_SUSPEND = "7";
     /**
      * 任务状态-异常完成。
      */
@@ -771,20 +759,6 @@ public interface FfService {
     public FfResult restartProcToNode(String procId, String subProcPath, String nodeCode, FfUser procStartUser, Map<String, Object> nodeVarMap, CandidateList candidateList);
 
     /**
-     * 挂起流程。
-     * 
-     * @param procId
-     *        流程ID。
-     * @param taskId
-     *        发起该操作的任务ID。仅记录到操作中。可以为null。
-     * @param executor
-     *        执行人。
-     * @return 所有变化的流程，节点和任务。
-     */
-    @FfOperation
-    public FfResult suspendProc(String procId, String taskId, FfUser executor);
-
-    /**
      * 激活流程。
      * 
      * @param procId
@@ -970,18 +944,6 @@ public interface FfService {
      */
     @FfOperation
     public FfResult updateTaskAssignee(String taskId, FfUser assignee, FfUser executor);
-
-    /**
-     * 挂起任务。
-     * 
-     * @param taskId
-     *        任务ID。
-     * @param executor
-     *        执行人。
-     * @return 所有变化的任务，节点和任务。
-     */
-    @FfOperation
-    public FfResult suspendTask(String taskId, FfUser executor);
 
     /**
      * 激活任务。

@@ -209,7 +209,7 @@ public class ServiceTaskNodeHandler implements NodeHandler {
         operationContext.addNodeHandlerOperation(new NodeHandlerOperation(FfService.NODE_HANDLER_OPERATION_ACTIVATE, node));
 
         // 有并发下级节点不能驳回
-        if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_SUSPEND, FfService.NODE_STATUS_COMPLETE)).count() > 1) {
+        if (ffService.createNodeQuery().setParentNodeId(node.getParentNodeId()).setPreviousNodeIds(node.getPreviousNodeIds()).setNodeStatusList(Arrays.asList(FfService.NODE_STATUS_ACTIVE, FfService.NODE_STATUS_COMPLETE)).count() > 1) {
             throw new RuntimeException("errors.cannotRejectInParallel");
         }
 

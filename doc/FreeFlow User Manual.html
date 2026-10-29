@@ -95,17 +95,16 @@ html, body {
 				<li><a href="#2.13" class="navigation">2.13 认领任务</a></li>
 				<li><a href="#2.14" class="navigation">2.14 排他任务</a></li>
 				<li><a href="#2.15" class="navigation">2.15 转发任务</a></li>
-				<li><a href="#2.16" class="navigation">2.16 挂起</a></li>
-				<li><a href="#2.17" class="navigation">2.17 激活</a></li>
-				<li><a href="#2.18" class="navigation">2.18 取消操作</a></li>
-				<li><a href="#2.19" class="navigation">2.19 FfResult对象</a></li>
-				<li><a href="#2.20" class="navigation">2.20 等待完成节点</a></li>
-				<li><a href="#2.21" class="navigation">2.21 自动完成相同办理人任务</a></li>
-				<li><a href="#2.22" class="navigation">2.22 自动完成空节点</a></li>
-				<li><a href="#2.23" class="navigation">2.23 通知</a></li>
-				<li><a href="#2.24" class="navigation">2.24 调整流程定义</a></li>
-				<li><a href="#2.25" class="navigation">2.25 代理</a></li>
-				<li><a href="#2.26" class="navigation">2.26 执行上下文</a></li>
+				<li><a href="#2.17" class="navigation">2.16 激活</a></li>
+				<li><a href="#2.18" class="navigation">2.17 取消操作</a></li>
+				<li><a href="#2.19" class="navigation">2.18 FfResult对象</a></li>
+				<li><a href="#2.20" class="navigation">2.19 等待完成节点</a></li>
+				<li><a href="#2.21" class="navigation">2.20 自动完成相同办理人任务</a></li>
+				<li><a href="#2.22" class="navigation">2.21 自动完成空节点</a></li>
+				<li><a href="#2.23" class="navigation">2.22 通知</a></li>
+				<li><a href="#2.24" class="navigation">2.23 调整流程定义</a></li>
+				<li><a href="#2.25" class="navigation">2.24 代理</a></li>
+				<li><a href="#2.26" class="navigation">2.25 执行上下文</a></li>
 			</ul>
 			<li><a href="#3" class="navigation">3 流程定义配置</a></li>
 			<ul>
@@ -238,29 +237,27 @@ html, body {
 		<p class="content">
 			当任务被设置属性可转发时，该任务的办理人可生成转发任务发送给其它人，此时该任务的状态变更为转发处理中。转发任务全部完成后，该任务的状态变更为转发处理完成。<br /> 转发任务如具有可转发属性，可继续转发。
 		</p>
-		<p class="subTitle" id="2.16">2.16 挂起 suspendTask()</p>
-		<p class="content">流程，节点，任务临时无法处理时，可选择挂起。挂起逻辑等同于异常完成，但可被重新激活。</p>
-		<p class="subTitle" id="2.17">2.17 激活 activateTask()</p>
+		<p class="subTitle" id="2.17">2.16 激活 activateTask()</p>
 		<p class="content">被挂起的流程，节点，任务可被重新激活，变更为运行中状态。</p>
-		<p class="subTitle" id="2.18">2.18 取消操作 undo()</p>
+		<p class="subTitle" id="2.18">2.17 取消操作 undo()</p>
 		<p class="content">
 			所有的流程操作，如有问题，且后续任务未被处理时，该操作可被取消。<br /> 当有后续任务已被处理时，该操作不能被取消。但如果取消了该后续任务的操作，则该操作可恢复为可取消。
 		</p>
-		<p class="subTitle" id="2.19">2.19 FfResult对象</p>
+		<p class="subTitle" id="2.19">2.18 FfResult对象</p>
 		<p class="content">所有的流程操作接口调用均返回FfResult对象。该对象中包含在本次操作中所有变化的流程，节点和任务的信息。</p>
-		<p class="subTitle" id="2.20">2.20 等待完成节点 waitingForCompleteNode</p>
+		<p class="subTitle" id="2.20">2.19 等待完成节点 waitingForCompleteNode</p>
 		<p class="content">节点可设置属性等待完成节点，此时，该节点下的任务完成不会触发节点完成。如需完成节点需要额外调用节点完成接口。该设置对任务节点、中心转发任务节点、服务任务节点、阶段节点、子流程节点、独立子流程节点有效。</p>
-		<p class="subTitle" id="2.21">2.21 自动完成相同办理人任务 autoCompleteSameAssignee</p>
+		<p class="subTitle" id="2.21">2.20 自动完成相同办理人任务 autoCompleteSameAssignee</p>
 		<p class="content">节点可设置属性自动完成相同办理人任务，此时，该节点下的任务，如果其办理人已经在同一个流程中办理过其它任务，可自动完成。</p>
-		<p class="subTitle" id="2.22">2.22 自动完成空节点 autoCompleteEmptyAssignee</p>
+		<p class="subTitle" id="2.22">2.21 自动完成空节点 autoCompleteEmptyAssignee</p>
 		<p class="content">节点可设置属性自动完成空节点，此时，该节点下如因未找到办理人而未生成任何任务时，可自动完成。</p>
-		<p class="subTitle" id="2.23">2.23 通知 inform</p>
+		<p class="subTitle" id="2.23">2.22 通知 inform</p>
 		<p class="content">节点可设置属性通知，此时，该节点自动完成，不会等待其下的任务完成。其下的任务可在任何时候完成，并且不影响已完成的流程。</p>
-		<p class="subTitle" id="2.24">2.24 调整流程定义 adjustBranchProcDef()</p>
+		<p class="subTitle" id="2.24">2.23 调整流程定义 adjustBranchProcDef()</p>
 		<p class="content">某流程在运行时，可动态调整其流程定义。调整后，该流程将按照新的流程定义继续流转。该调整不会影响其它流程。</p>
-		<p class="subTitle" id="2.25">2.25 代理 delegateService</p>
+		<p class="subTitle" id="2.25">2.24 代理 delegateService</p>
 		<p class="content">审批人可设置其代理人，代理人在允许的范围内可办理该审批人的任务。</p>
-		<p class="subTitle" id="2.26">2.26 执行上下文 operationContext</p>
+		<p class="subTitle" id="2.26">2.25 执行上下文 operationContext</p>
 		<p class="content">执行上下文为运行流程命令时在表达式解析环境中预置的变量，内含本次操作的上下文，如初始命令，初始节点变量，初始候选人列表，初始执行人等等。用于在表达式中获取所需的变量。</p>
 		<p class="title" id="3">3 流程定义配置</p>
 		<p class="content">流程定义为JSON格式的文本，内含流程定义属性、节点定义、流转定义、注释定义、流程变量定义、图形显示样式等信息。</p>
@@ -828,7 +825,7 @@ public class InitServiceImpl implements InitService {
 		<p class="content">查询类有若干设置查询条件的方法，用来设置对象的查询值、数据范围和分页。</p>
 		<p class="content">查询类有5个查询方法，分别为查询对象列表，对象格式为Map；查询单个对象，对象格式为Map；查询对象列表，对象格式为实体类；查询单个对象，对象格式为实体类；查询总数。</p>
 		<textarea name="textarea" cols="160" rows="10" readonly="readonly" class="code">
-        List<Task> taskList = ffService.createTaskQuery().setProcId("43cf7729c2524288862a4fa5d31905fe").setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE, FfService.TASK_STATUS_SUSPEND)).setDataScope(FfService.DATA_SCOPE_PROC).queryForObjectList();
+        List<Task> taskList = ffService.createTaskQuery().setProcId("43cf7729c2524288862a4fa5d31905fe").setTaskStatusList(Arrays.asList(FfService.TASK_STATUS_ACTIVE)).setDataScope(FfService.DATA_SCOPE_PROC).queryForObjectList();
         for (Task task : taskList) {
             System.out.println(task.getCreationDate());
         }
