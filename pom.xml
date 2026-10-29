@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.accipiter2000</groupId>
     <artifactId>freeflow</artifactId>
-    <version>7.0.1-RELEASE</version>
+    <version>7.1.0-RELEASE</version>
     <packaging>jar</packaging>
     <name>freeflow</name>
     <description>a flexible workflow engine</description>
